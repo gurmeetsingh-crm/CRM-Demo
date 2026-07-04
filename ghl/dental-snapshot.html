@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summit Family Dental — GoHighLevel Snapshot Demo</title>
+<style>
+:root{
+  --gl-blue:#1873f3; --gl-blue-dark:#0f5cc7; --gl-blue-tint:#eef4ff;
+  --gl-bg:#f4f6fa; --gl-card:#ffffff; --gl-border:#e2e7f0; --gl-border-2:#eceff5;
+  --gl-text:#2a3342; --gl-text2:#5b6b83; --gl-text3:#8b97ab;
+  --gl-green:#2f9e6e; --gl-green-bg:#e9f7f0; --gl-red:#d9414f; --gl-red-bg:#fdeeef;
+  --gl-yellow:#b97f14; --gl-yellow-bg:#fdf6e7;
+  --viz-accent:#2a78d6; --viz-grid:#e7ebf2;
+  --demo-dark:#101d30; --radius:8px;
+  --shadow:0 1px 4px rgba(31,45,70,.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;background:var(--gl-bg);color:var(--gl-text);font-size:14px;line-height:1.45;}
+button{font-family:inherit;cursor:pointer;}
+a{color:var(--gl-blue);text-decoration:none;}
+h1,h2,h3,h4{font-weight:600;color:var(--gl-text);}
+
+/* demo control bar */
+#demo-bar{background:var(--demo-dark);color:#fff;display:flex;align-items:center;gap:14px;padding:8px 18px;font-size:13px;position:relative;z-index:60;flex-wrap:wrap;}
+#demo-bar .db-brand{display:flex;align-items:center;gap:9px;font-weight:600;}
+#demo-bar .db-dot{width:8px;height:8px;border-radius:50%;background:#3aa0ff;box-shadow:0 0 8px #3aa0ff;}
+#demo-bar .db-sub{color:#93a5c0;font-weight:400;}
+#demo-bar .db-actions{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.db-btn{background:var(--gl-blue);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:13px;font-weight:600;}
+.db-btn:hover{background:var(--gl-blue-dark);}
+.db-btn.ghost{background:transparent;border:1px solid #33507a;color:#c9d6ea;font-weight:400;}
+.db-btn.ghost:hover{border-color:#93a5c0;background:rgba(255,255,255,.06);}
+.switch-wrap{display:flex;align-items:center;gap:8px;color:#c9d6ea;}
+
+/* app shell: sidebar + main */
+.app{display:flex;min-height:calc(100vh - 42px);}
+.sidebar{width:222px;background:var(--gl-card);border-right:1px solid var(--gl-border);flex:0 0 auto;padding-bottom:20px;}
+.loc-block{display:flex;gap:10px;align-items:center;padding:14px 14px;border-bottom:1px solid var(--gl-border-2);}
+.loc-avatar{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#f09ab0,#c76b9d);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto;}
+.loc-block b{font-size:13.5px;display:block;line-height:1.2;}
+.loc-block span{font-size:11px;color:var(--gl-text3);}
+.side-menu{padding:10px 8px;display:flex;flex-direction:column;gap:2px;}
+.side-item{display:flex;align-items:center;gap:11px;background:none;border:none;border-radius:7px;padding:9px 12px;font-size:13.5px;color:var(--gl-text2);text-align:left;width:100%;}
+.side-item:hover{background:var(--gl-bg);color:var(--gl-text);}
+.side-item.active{background:var(--gl-blue-tint);color:var(--gl-blue);font-weight:600;}
+.side-item .si-ico{width:18px;text-align:center;font-size:15px;}
+.side-item .flag{margin-left:auto;background:var(--gl-red);color:#fff;font-size:10px;font-weight:700;border-radius:8px;padding:1px 6px;}
+.main-area{flex:1;min-width:0;}
+.topbar{background:var(--gl-card);border-bottom:1px solid var(--gl-border);display:flex;align-items:center;gap:14px;padding:10px 22px;}
+.topbar .tb-search{background:var(--gl-bg);border:1px solid var(--gl-border);border-radius:7px;color:var(--gl-text3);font-size:13px;padding:7px 14px;min-width:220px;}
+.topbar .tb-right{margin-left:auto;display:flex;align-items:center;gap:12px;color:var(--gl-text2);}
+.avatar{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex:0 0 auto;background:#7a5fb5;}
+main{max-width:1180px;margin:0 auto;padding:22px 22px 60px;}
+
+/* views & generic */
+.view{display:none;}
+.view.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
+.view-head h1{font-size:21px;}
+.view-head .sub{color:var(--gl-text2);font-size:13px;margin-top:3px;max-width:660px;}
+.card{background:var(--gl-card);border:1px solid var(--gl-border);border-radius:var(--radius);box-shadow:var(--shadow);}
+.card-pad{padding:16px 18px;}
+.card h3{font-size:14px;margin-bottom:10px;}
+.btn{background:var(--gl-blue);color:#fff;border:none;border-radius:7px;padding:9px 20px;font-size:14px;font-weight:600;}
+.btn:hover{background:var(--gl-blue-dark);}
+.btn.secondary{background:#fff;color:var(--gl-text);border:1px solid var(--gl-border);font-weight:400;}
+.btn.secondary:hover{background:var(--gl-bg);}
+.btn.sm{padding:5px 12px;font-size:12px;}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:600;white-space:nowrap;}
+.pill.booked{background:var(--gl-green-bg);color:#1f7a52;}
+.pill.qual{background:var(--gl-blue-tint);color:var(--gl-blue-dark);}
+.pill.nurt{background:#f0f7e9;color:#4c7a2b;}
+.pill.staff{background:#f4effb;color:#7a55b8;}
+.pill.spam{background:#edf0f5;color:var(--gl-text2);}
+.night-chip{display:inline-flex;align-items:center;gap:4px;background:#eef1fb;color:#4a5b9b;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;}
+.money-chip{display:inline-flex;align-items:center;gap:4px;background:var(--gl-green-bg);color:#1f7a52;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;}
+
+/* console */
+.console-grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start;}
+.console-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+.mode-toggle{display:flex;border:1px solid var(--gl-border);border-radius:7px;overflow:hidden;background:#fff;}
+.mode-btn{background:#fff;border:none;padding:8px 16px;font-size:13px;color:var(--gl-text2);display:flex;align-items:center;gap:7px;}
+.mode-btn.active{background:var(--demo-dark);color:#fff;font-weight:600;}
+.mode-note{font-size:12px;color:var(--gl-text2);max-width:440px;}
+.pipeline{position:relative;padding-left:6px;}
+.pl-step{display:flex;gap:13px;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease;padding-bottom:18px;position:relative;}
+.pl-step.in{opacity:1;transform:none;}
+.pl-step::before{content:"";position:absolute;left:16px;top:36px;bottom:2px;width:2px;background:var(--gl-border-2);}
+.pl-step:last-child::before{display:none;}
+.pl-ico{width:34px;height:34px;border-radius:50%;background:var(--gl-blue-tint);color:var(--gl-blue-dark);display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 auto;z-index:1;}
+.pl-step.done .pl-ico{background:var(--gl-green-bg);color:#1f7a52;}
+.pl-step.gated .pl-ico{background:var(--gl-yellow-bg);color:var(--gl-yellow);}
+.pl-body{flex:1;min-width:0;}
+.pl-time{font-size:11px;font-weight:700;color:var(--gl-text3);letter-spacing:.3px;}
+.pl-title{font-size:13.5px;font-weight:600;margin-top:1px;}
+.pl-sub{font-size:12.5px;color:var(--gl-text2);margin-top:2px;line-height:1.45;}
+.why-link{background:none;border:none;color:var(--gl-blue);font-size:12px;padding:2px 0;font-weight:600;}
+.why-link:hover{text-decoration:underline;}
+.why-box{display:none;background:var(--gl-bg);border-left:3px solid var(--gl-blue);border-radius:3px;padding:9px 12px;font-size:12.5px;color:var(--gl-text2);margin-top:6px;line-height:1.5;}
+.why-box.show{display:block;}
+.why-box b{color:var(--gl-text);}
+.conf-pill{display:inline-flex;align-items:center;gap:5px;background:var(--gl-green-bg);color:#1f7a52;border-radius:12px;padding:1px 10px;font-size:11.5px;font-weight:700;}
+
+/* SMS thread */
+.thread{display:flex;flex-direction:column;gap:10px;min-height:300px;}
+.chan-line{text-align:center;font-size:11px;color:var(--gl-text3);margin:2px 0;}
+.sms{max-width:88%;border-radius:16px;padding:9px 14px;font-size:13.5px;line-height:1.5;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease;}
+.sms.in{opacity:1;transform:none;}
+.sms .s-meta{font-size:10.5px;margin-bottom:3px;font-weight:600;opacity:.75;}
+.sms.lead{background:#eceff5;color:var(--gl-text);align-self:flex-start;border-bottom-left-radius:5px;}
+.sms.ai{background:var(--gl-blue);color:#fff;align-self:flex-end;border-bottom-right-radius:5px;}
+.sms.ai a{color:#fff;text-decoration:underline;}
+.sms.draft{background:var(--gl-yellow-bg);color:var(--gl-text);border:1.5px dashed #e2b96a;}
+.sms .s-foot{font-size:10px;opacity:.75;margin-top:7px;padding-top:6px;border-top:1px solid rgba(255,255,255,.25);}
+.sms.lead .s-foot,.sms.draft .s-foot{border-top-color:rgba(42,51,66,.15);}
+.approve-row{display:flex;gap:8px;margin-top:9px;}
+.typing{display:inline-flex;gap:4px;align-self:flex-end;padding:11px 16px;background:var(--gl-blue);border-radius:16px;border-bottom-right-radius:5px;}
+.typing i{width:7px;height:7px;border-radius:50%;background:#fff;animation:blink 1.1s infinite;}
+.typing i:nth-child(2){animation-delay:.2s;}
+.typing i:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,70%,100%{opacity:.3;}35%{opacity:1;}}
+.mini-card{border:1px solid var(--gl-border);border-radius:9px;background:#fff;color:var(--gl-text);padding:10px 13px;margin-top:9px;display:flex;gap:11px;align-items:center;}
+.mini-card .bc-date{background:var(--demo-dark);color:#fff;border-radius:7px;text-align:center;padding:5px 10px;line-height:1.15;}
+.mini-card .bc-date b{font-size:17px;display:block;}
+.mini-card .bc-date span{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;}
+.pay-chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--gl-border);border-radius:8px;padding:7px 12px;margin-top:9px;color:var(--gl-text);font-weight:600;font-size:12.5px;}
+
+/* queue */
+.hs-table{width:100%;border-collapse:collapse;font-size:13px;}
+.hs-table th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--gl-text2);background:#f8fafc;padding:9px 14px;border-bottom:1px solid var(--gl-border);font-weight:600;white-space:nowrap;}
+.hs-table td{padding:11px 14px;border-bottom:1px solid var(--gl-border-2);vertical-align:middle;}
+.hs-table tbody tr{cursor:pointer;}
+.hs-table tbody tr:hover{background:#f5f8fd;}
+tr.q-details td{background:var(--gl-bg);font-size:12.5px;color:var(--gl-text2);line-height:1.5;padding:12px 16px 14px;}
+tr.q-details .qd-inner{border-left:3px solid var(--gl-blue);padding:2px 0 2px 12px;}
+.stack-wrap{padding:16px 18px;margin-bottom:14px;}
+.stackbar{display:flex;height:26px;border-radius:7px;overflow:hidden;gap:2px;margin:12px 0 10px;}
+.stackbar>div{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;min-width:30px;}
+.stack-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--gl-text2);}
+.stack-legend .sw{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:6px;}
+
+/* reporting */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.kpi{padding:14px 16px;}
+.kpi .k-label{font-size:12px;color:var(--gl-text2);}
+.kpi .k-value{font-size:28px;font-weight:600;margin-top:4px;}
+.kpi .k-delta{font-size:12px;font-weight:600;margin-top:3px;color:#1f7a52;}
+.kpi .k-delta .vs{color:var(--gl-text3);font-weight:400;}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.chart-card{padding:16px 18px 12px;}
+.chart-card .c-sub{font-size:12px;color:var(--gl-text2);margin:2px 0 12px;}
+.chart-card svg{display:block;width:100%;height:auto;}
+.chart-card svg text{font-family:inherit;}
+.chart-foot{display:flex;justify-content:flex-end;margin-top:6px;}
+.data-toggle{background:none;border:none;color:var(--gl-blue);font-size:12px;padding:4px 2px;}
+.data-toggle:hover{text-decoration:underline;}
+.data-table{display:none;margin-top:8px;}
+.data-table.show{display:block;}
+.data-table table{width:100%;border-collapse:collapse;font-size:12px;}
+.data-table th,.data-table td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--gl-border-2);}
+.data-table th{color:var(--gl-text2);font-weight:600;}
+.data-table td.num,.data-table th.num{text-align:right;font-variant-numeric:tabular-nums;}
+#viz-tip{position:fixed;z-index:90;background:var(--demo-dark);color:#fff;font-size:12px;border-radius:6px;padding:6px 10px;pointer-events:none;display:none;box-shadow:0 4px 14px rgba(16,29,48,.3);white-space:nowrap;}
+#viz-tip .t-sub{color:#93a5c0;}
+
+/* automation view */
+.flow-wrap{display:flex;gap:8px;min-width:1050px;align-items:stretch;}
+.node{background:#fff;border:1px solid var(--gl-border);border-radius:9px;padding:12px 14px;box-shadow:var(--shadow);flex:1;}
+.node .n-ico{font-size:17px;}
+.node .n-title{font-weight:600;font-size:13px;margin-top:4px;line-height:1.3;}
+.node .n-sub{font-size:11.5px;color:var(--gl-text2);margin-top:3px;line-height:1.4;}
+.flow-arr{align-self:center;color:#a8b6cb;font-size:16px;flex:0 0 auto;}
+.guard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.guard{display:flex;gap:11px;background:#fff;border:1px solid var(--gl-border);border-radius:var(--radius);padding:13px 15px;font-size:13px;align-items:flex-start;box-shadow:var(--shadow);}
+.guard .g-ico{font-size:17px;flex:0 0 auto;}
+.guard b{display:block;margin-bottom:2px;}
+.guard .g-sub{color:var(--gl-text2);font-size:12.5px;line-height:1.45;}
+.cta-band{margin-top:20px;background:linear-gradient(100deg,var(--demo-dark),#1a3050);color:#fff;border-radius:12px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+.cta-band h3{color:#fff;font-size:17px;margin-bottom:4px;}
+.cta-band p{color:#aebfd6;font-size:13px;max-width:560px;}
+
+/* tour + toast */
+#tour-hl{position:absolute;z-index:100;border-radius:8px;box-shadow:0 0 0 4px rgba(24,115,243,.9),0 0 0 9999px rgba(16,29,48,.62);pointer-events:none;display:none;transition:all .35s ease;}
+#tour-tip{position:absolute;z-index:101;width:330px;max-width:calc(100vw - 32px);background:#fff;border-radius:10px;box-shadow:0 10px 40px rgba(16,29,48,.4);padding:18px 20px;display:none;}
+#tour-tip .t-step{font-size:11px;font-weight:700;color:var(--gl-blue);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+#tour-tip h4{font-size:15px;margin-bottom:7px;}
+#tour-tip p{font-size:13px;color:var(--gl-text2);line-height:1.55;}
+#tour-tip .t-btns{display:flex;align-items:center;gap:8px;margin-top:15px;}
+#tour-tip .t-skip{margin-right:auto;background:none;border:none;color:var(--gl-text3);font-size:12px;}
+#tour-tip.centered{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:400px;}
+#toast-wrap{position:fixed;left:18px;bottom:18px;z-index:120;display:flex;flex-direction:column;gap:8px;}
+.toast{background:var(--demo-dark);color:#fff;border-radius:8px;padding:11px 16px;font-size:13px;max-width:360px;box-shadow:0 6px 20px rgba(16,29,48,.35);display:flex;gap:9px;align-items:flex-start;animation:toastIn .3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);font-size:11.5px;text-align:center;}
+
+@media (max-width:1020px){
+  .app{flex-direction:column;}
+  .sidebar{width:100%;display:flex;overflow-x:auto;padding-bottom:0;}
+  .loc-block{border-bottom:none;flex:0 0 auto;}
+  .side-menu{flex-direction:row;padding:8px;}
+  .side-item{white-space:nowrap;}
+  .console-grid,.charts-grid,.guard-grid{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+}
+
+/* ============================================================
+   Snapshot demo — additional components
+   ============================================================ */
+.counts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.count-tile{background:var(--gl-card);border:1px solid var(--gl-border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);}
+.count-tile b{font-size:26px;display:block;}
+.count-tile span{font-size:12.5px;color:var(--gl-text2);}
+.deploy-strip{display:flex;gap:8px;align-items:stretch;overflow-x:auto;padding:4px 0;}
+.dep-step{background:var(--gl-card);border:1px solid var(--gl-border);border-radius:9px;padding:13px 15px;flex:1;min-width:170px;box-shadow:var(--shadow);}
+.dep-step .d-n{font-size:11px;font-weight:700;color:var(--gl-blue);letter-spacing:.08em;}
+.dep-step b{display:block;font-size:13.5px;margin:5px 0 3px;}
+.dep-step span{font-size:12px;color:var(--gl-text2);line-height:1.4;}
+.dep-arr{align-self:center;color:#a8b6cb;flex:0 0 auto;}
+/* journey map */
+.map-outer{position:relative;}
+.map-scroll{overflow-x:auto;}
+.map-canvas{position:relative;min-width:1150px;padding:10px 6px 18px;}
+#edge-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.map-lanes{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:26px;z-index:1;}
+.lane-title{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gl-text3);text-align:center;margin-bottom:14px;}
+.lane{display:flex;flex-direction:column;gap:22px;}
+.mnode{background:#fff;border:1px solid var(--gl-border);border-radius:9px;padding:11px 13px;box-shadow:var(--shadow);cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+.mnode:hover{box-shadow:0 3px 12px rgba(31,45,70,.15);border-color:#a8b6cb;}
+.mnode.sel{border-color:var(--gl-blue);box-shadow:0 0 0 2px rgba(24,115,243,.22);}
+.mnode .n-ico{font-size:16px;}
+.mnode .n-title{font-weight:600;font-size:13px;margin-top:3px;line-height:1.3;}
+.mnode .n-sub{font-size:11px;color:var(--gl-text2);margin-top:2px;}
+.map-explain{margin-top:16px;}
+.map-explain h4{font-size:14px;margin-bottom:6px;}
+.map-explain .ex-what{font-size:13px;margin-bottom:8px;}
+.map-explain .ex-why{font-size:13px;color:var(--gl-text2);background:var(--gl-bg);border-left:3px solid var(--gl-blue);padding:9px 12px;border-radius:3px;}
+/* funnel preview */
+.funnel-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start;}
+.browser{border:1px solid var(--gl-border);border-radius:12px;overflow:hidden;background:#fff;box-shadow:var(--shadow);}
+.browser-bar{background:#eef1f6;border-bottom:1px solid var(--gl-border);padding:8px 14px;display:flex;gap:6px;align-items:center;font-size:11px;color:var(--gl-text3);}
+.browser-bar i{width:9px;height:9px;border-radius:50%;display:inline-block;}
+.lp{padding:0 0 26px;}
+.lp-head{background:#0e2a4a;color:#fff;padding:12px 22px;display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;}
+.lp-head span{color:#7fc0ff;}
+.lp-hero{background:linear-gradient(140deg,#12395f,#0e2a4a);color:#fff;padding:30px 26px;}
+.lp-hero .lp-badge{display:inline-block;background:#2f9e6e;color:#fff;font-size:11px;font-weight:700;border-radius:5px;padding:3px 10px;letter-spacing:.06em;margin-bottom:12px;}
+.lp-hero h2{color:#fff;font-size:24px;line-height:1.2;max-width:20ch;}
+.lp-hero p{color:#b7cbe0;font-size:13.5px;margin-top:8px;max-width:44ch;}
+.lp-body{padding:22px 26px 0;}
+.lp-points{list-style:none;margin-bottom:18px;}
+.lp-points li{font-size:13px;padding:4px 0 4px 24px;position:relative;color:var(--gl-text2);}
+.lp-points li::before{content:"✓";position:absolute;left:2px;color:#2f9e6e;font-weight:700;}
+.lp-form{display:flex;flex-direction:column;gap:9px;max-width:340px;}
+.lp-form input{border:1px solid var(--gl-border);border-radius:7px;padding:10px 13px;font-size:13.5px;font-family:inherit;background:#fff;color:var(--gl-text);}
+.lp-form .btn{margin-top:4px;}
+.lp-cal{padding:22px 26px 0;}
+.lp-cal h3{font-size:16px;margin-bottom:4px;}
+.lp-cal .c-sub{font-size:12.5px;color:var(--gl-text2);margin-bottom:14px;}
+.slot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:380px;}
+.slot{border:1px solid var(--gl-border);border-radius:7px;background:#fff;padding:9px 6px;font-size:12.5px;font-weight:600;color:var(--gl-blue-dark);}
+.slot:hover{border-color:var(--gl-blue);background:var(--gl-blue-tint);}
+.lp-done{padding:34px 26px 8px;text-align:center;}
+.lp-done .big{font-size:40px;}
+.lp-done h3{font-size:18px;margin:8px 0 6px;}
+.lp-done p{font-size:13px;color:var(--gl-text2);max-width:40ch;margin:0 auto;}
+.funnel-steps .pl-step{padding-bottom:14px;}
+/* workflow cards */
+.wf-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.wf-card{background:#fff;border:1px solid var(--gl-border);border-radius:var(--radius);box-shadow:var(--shadow);}
+.wf-head{display:flex;align-items:center;gap:11px;padding:14px 16px;cursor:pointer;}
+.wf-head .w-ico{font-size:18px;}
+.wf-head b{font-size:13.5px;flex:1;}
+.wf-head .w-tag{font-size:10.5px;font-weight:700;color:var(--gl-text3);letter-spacing:.05em;text-transform:uppercase;}
+.wf-head .w-chev{color:var(--gl-text3);transition:transform .2s;}
+.wf-card.open .w-chev{transform:rotate(180deg);}
+.wf-body{display:none;border-top:1px solid var(--gl-border-2);padding:13px 16px 15px;}
+.wf-card.open .wf-body{display:block;}
+.wf-trigger{font-size:12px;font-weight:700;color:var(--gl-blue-dark);background:var(--gl-blue-tint);border-radius:5px;display:inline-block;padding:2px 9px;margin-bottom:9px;}
+.wf-steps{list-style:none;}
+.wf-steps li{font-size:12.5px;color:var(--gl-text2);padding:3px 0 3px 20px;position:relative;line-height:1.45;}
+.wf-steps li::before{content:"↳";position:absolute;left:2px;color:var(--gl-blue);}
+.wf-why{font-size:12px;color:var(--gl-text2);background:var(--gl-bg);border-left:3px solid var(--gl-green);padding:8px 11px;border-radius:3px;margin-top:9px;}
+/* pipeline board */
+.board-wrap{overflow-x:auto;padding-bottom:8px;}
+.board{display:flex;gap:12px;min-width:1000px;}
+.stage-col{flex:1;min-width:180px;}
+.stage-head{background:#fff;border:1px solid var(--gl-border);border-radius:var(--radius);padding:10px 12px;margin-bottom:10px;}
+.stage-head h4{font-size:13px;}
+.stage-head .st-sub{font-size:11px;color:var(--gl-text2);margin-top:2px;}
+.deal-card{background:#fff;border:1px solid var(--gl-border);border-radius:var(--radius);padding:10px 12px;margin-bottom:9px;box-shadow:var(--shadow);}
+.deal-card .dl-name{font-weight:600;font-size:13px;color:var(--gl-blue-dark);}
+.deal-card .dl-sub{font-size:11px;color:var(--gl-text3);margin-top:2px;}
+.deal-card .dl-amt{font-size:12.5px;font-weight:700;margin-top:5px;}
+/* templates */
+.tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+.tpl-sms{background:var(--gl-card);border:1px solid var(--gl-border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);}
+.tpl-sms h5{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--gl-text2);margin-bottom:9px;}
+.tpl-bubble{background:var(--gl-blue);color:#fff;border-radius:14px;border-bottom-right-radius:5px;padding:9px 13px;font-size:13px;line-height:1.5;max-width:95%;}
+.tpl-note{font-size:11px;color:var(--gl-text3);margin-top:8px;}
+@media (max-width:1020px){
+  .counts-grid{grid-template-columns:repeat(2,1fr);}
+  .funnel-grid,.wf-list,.tpl-grid{grid-template-columns:1fr;}
+}
+
+</style>
+</head>
+<body>
+
+<div id="demo-bar">
+  <div class="db-brand"><span class="db-dot"></span><span>Dental Snapshot Demo — GoHighLevel</span>
+    <span class="db-sub" id="db-by"></span></div>
+  <div class="db-actions">
+    <a class="db-btn ghost" id="xlink" href="index.html" style="text-decoration:none;">← All demos</a>
+    <button class="db-btn" id="tour-start">▶ Start guided tour</button>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="loc-block">
+      <span class="loc-avatar" style="background:linear-gradient(135deg,#5aa9e6,#2b6cb0);">SD</span>
+      <div><b>Summit Family Dental</b><span>Snapshot preview · Boise, ID</span></div>
+    </div>
+    <nav class="side-menu" id="side-menu">
+      <button class="side-item active" data-view="overview"><span class="si-ico">📦</span>What's Inside</button>
+      <button class="side-item" data-view="journey"><span class="si-ico">🗺️</span>Patient Journey</button>
+      <button class="side-item" data-view="funnel"><span class="si-ico">🧲</span>New-Patient Funnel</button>
+      <button class="side-item" data-view="automations"><span class="si-ico">⚙️</span>Automations</button>
+      <button class="side-item" data-view="pipeline"><span class="si-ico">🎯</span>Pipeline &amp; Templates</button>
+      <button class="side-item locked"><span class="si-ico">📅</span>Calendars</button>
+      <button class="side-item locked"><span class="si-ico">💳</span>Payments</button>
+      <button class="side-item locked"><span class="si-ico">⭐</span>Reputation</button>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <div class="topbar">
+      <span class="tb-search">🔍 Search the snapshot…</span>
+      <div class="tb-right"><span>🔔</span><span>❓</span><span class="avatar">GS</span></div>
+    </div>
+    <main>
+
+      <!-- OVERVIEW -->
+      <section class="view active" id="view-overview">
+        <div class="view-head">
+          <div>
+            <h1>One snapshot. A complete dental practice system.</h1>
+            <div class="sub">A <b>snapshot</b> is a pre-built GoHighLevel setup that loads into any sub-account in minutes — funnels, automations, pipelines, templates, tags, all wired together. This one runs a dental practice's entire patient engine. Explore each piece in the sidebar, or take the tour.</div>
+          </div>
+        </div>
+        <div class="counts-grid" id="counts-grid"></div>
+        <div class="card card-pad" style="margin-bottom:16px;">
+          <h3>From loaded to live in about a week</h3>
+          <div style="font-size:12px;color:var(--gl-text2);margin-bottom:13px;">What deploying this snapshot into a real practice looks like.</div>
+          <div class="deploy-strip" id="deploy-strip"></div>
+        </div>
+        <div class="card card-pad">
+          <h3>Who this is for</h3>
+          <div style="font-size:13px;color:var(--gl-text2);line-height:1.6;">
+            <b style="color:var(--gl-text);">Agencies:</b> load it into every dental client's sub-account and deliver a proven system on day one, white-labeled as yours.<br>
+            <b style="color:var(--gl-text);">Practices:</b> get the whole engine — new patients in, no-shows rescued, reviews flowing, recalls booked — without assembling it piece by piece.<br>
+            <span style="font-size:12px;color:var(--gl-text3);">Same architecture re-skins for med spas, chiropractors, vets, salons and home services.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- JOURNEY -->
+      <section class="view" id="view-journey">
+        <div class="view-head">
+          <div>
+            <h1>The patient journey — end to end</h1>
+            <div class="sub">Every piece of the snapshot on one map, from the Google ad to the 6-month recall. <b>Click any step</b> for what it does and why it's there.</div>
+          </div>
+        </div>
+        <div class="card card-pad map-outer">
+          <div class="map-scroll"><div class="map-canvas" id="map-canvas">
+            <svg id="edge-svg"></svg>
+            <div class="map-lanes" id="map-lanes"></div>
+          </div></div>
+        </div>
+        <div class="card card-pad map-explain" id="map-explain">
+          <div style="color:var(--gl-text2);font-size:13px;">👆 Click any step above to see what it does and why it matters.</div>
+        </div>
+      </section>
+
+      <!-- FUNNEL -->
+      <section class="view" id="view-funnel">
+        <div class="view-head">
+          <div>
+            <h1>The $99 new-patient funnel</h1>
+            <div class="sub">The snapshot's front door: a landing page wired straight to real calendars. <b>Try it</b> — fill nothing, just click the buttons and watch the right panel track what fires behind the scenes.</div>
+          </div>
+          <button class="btn secondary" id="funnel-reset">↺ Reset preview</button>
+        </div>
+        <div class="funnel-grid">
+          <div class="browser">
+            <div class="browser-bar"><i style="background:#f28b82;"></i><i style="background:#fdd663;"></i><i style="background:#81c995;"></i>&nbsp; summitfamilydental.com/new-patient</div>
+            <div class="lp" id="lp"></div>
+          </div>
+          <div class="card card-pad funnel-steps">
+            <h3>What fires behind the page</h3>
+            <div style="font-size:12px;color:var(--gl-text2);margin-bottom:14px;">Live log — updates as you click through the page.</div>
+            <div class="pipeline" id="funnel-log"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUTOMATIONS -->
+      <section class="view" id="view-automations">
+        <div class="view-head">
+          <div>
+            <h1>Eight automations, zero babysitting</h1>
+            <div class="sub">The workflows included in the snapshot — each one written out in plain English. <b>Click a card</b> to see exactly what it does, step by step.</div>
+          </div>
+        </div>
+        <div class="wf-list" id="wf-list"></div>
+      </section>
+
+      <!-- PIPELINE & TEMPLATES -->
+      <section class="view" id="view-pipeline">
+        <div class="view-head">
+          <div>
+            <h1>Pipeline &amp; message templates</h1>
+            <div class="sub">The New Patients pipeline the front desk actually works from, and a sample of the 14 pre-written SMS/email templates — all editable, all branded to the practice during setup.</div>
+          </div>
+        </div>
+        <div class="card card-pad" style="margin-bottom:16px;">
+          <h3>New Patients pipeline</h3>
+          <div style="font-size:12px;color:var(--gl-text2);margin-bottom:13px;">Cards move automatically as patients book, show, and accept treatment plans.</div>
+          <div class="board-wrap"><div class="board" id="board"></div></div>
+        </div>
+        <div class="tpl-grid" id="tpl-grid"></div>
+        <div class="cta-band">
+          <div><h3>Want this loaded into your account?</h3><p id="cta-p"></p></div>
+          <button class="btn" id="cta-book">Book a walkthrough</button>
+        </div>
+      </section>
+
+    </main>
+    <footer>
+      Fictional practice &amp; sample data for demonstration. Independent portfolio demo replicating the GoHighLevel user experience — not affiliated with or endorsed by HighLevel Inc.
+      <span id="foot-brand"></span>
+    </footer>
+  </div>
+</div>
+
+<div id="viz-tip"></div>
+<div id="tour-hl"></div>
+<div id="tour-tip"></div>
+<div id="toast-wrap"></div>
+
+<script>
+
+const BRAND = {
+  consultant: "Gurmeet Singh",
+  title: "GoHighLevel Expert",
+  ctaLine: "I load this snapshot into your GoHighLevel account, swap in your branding, connect your number and calendars, and hand it over with a guided tour. Dental is shown here — the same engine re-skins for med spas, chiro, vets, salons and home services."
+};
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const state = {view:"overview"};
+
+function toast(msg, ico="✅"){
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerHTML = `<span>${ico}</span><span>${msg}</span>`;
+  $("#toast-wrap").appendChild(t);
+  setTimeout(()=>{t.style.opacity="0"; t.style.transition="opacity .4s";}, 4200);
+  setTimeout(()=>t.remove(), 4700);
+}
+function switchView(name){
+  state.view = name;
+  $$(".view").forEach(v=>v.classList.remove("active"));
+  $("#view-"+name).classList.add("active");
+  $$(".side-item").forEach(b=>b.classList.toggle("active", b.dataset.view===name));
+  if(name==="journey") requestAnimationFrame(drawEdges);
+  window.scrollTo({top:0});
+}
+
+/* ================= Overview ================= */
+const COUNTS = [
+  {n:"3", l:"funnels — new patient, implants, whitening"},
+  {n:"8", l:"automations, written in plain English"},
+  {n:"2", l:"pipelines — New Patients & Recall"},
+  {n:"14", l:"SMS & email templates, pre-written"},
+  {n:"4", l:"calendars — per provider, with buffers"},
+  {n:"40+", l:"tags & custom fields, pre-wired"},
+  {n:"1", l:"review engine with unhappy-patient catch"},
+  {n:"~1 wk", l:"from snapshot load to go-live"}
+];
+const DEPLOY = [
+  {t:"Load the snapshot", s:"Minutes. Everything lands wired together in the sub-account."},
+  {t:"Connect the practice", s:"Phone number, provider calendars, Google Business Profile."},
+  {t:"Brand swap", s:"Logo, colors, offer price, provider names, office voice."},
+  {t:"A2P & test pass", s:"SMS registration, then every workflow test-fired end to end."},
+  {t:"Go live + handoff", s:"Guided tour for the front desk, docs, 30 days of support."}
+];
+function renderOverview(){
+  $("#counts-grid").innerHTML = COUNTS.map(c=>
+    `<div class="count-tile"><b>${c.n}</b><span>${c.l}</span></div>`).join("");
+  $("#deploy-strip").innerHTML = DEPLOY.map((d,i)=>
+    `<div class="dep-step"><div class="d-n">STEP ${i+1}</div><b>${d.t}</b><span>${d.s}</span></div>` +
+    (i<DEPLOY.length-1?`<div class="dep-arr">→</div>`:"")).join("");
+}
+
+/* ================= Journey map ================= */
+const LANES = [
+  {title:"1 · Attract", nodes:[
+    {id:"ads", ico:"📣", t:"Google Ads → offer page", s:"$99 new-patient special",
+     what:"Ad clicks land on the snapshot's offer page with campaign tracking captured, so every booked patient traces back to the ad that paid for them.",
+     why:"Practices spend on ads without knowing what returns. This closes the loop from click to chair."},
+    {id:"gmb", ico:"📍", t:"Google Business Profile", s:"Calls + messages connected",
+     what:"Calls and messages from the practice's Google listing flow into the same GHL inbox as everything else.",
+     why:"For local search, the Google listing IS the storefront. Nothing from it should land in a separate silo."},
+    {id:"ref", ico:"🤝", t:"Referral links", s:"From the referral automation",
+     what:"Existing patients get personal referral links (see the Grow column) that land friends on the offer page, tagged to the referrer.",
+     why:"Referred patients close at the highest rate and cost nothing — the snapshot makes referring effortless."}
+  ]},
+  {title:"2 · Book", nodes:[
+    {id:"funnel", ico:"🧲", t:"$99 new-patient funnel", s:"Page → form → calendar",
+     what:"The landing page you can try in the Funnel tab: offer, trust points, short form, then straight into live calendar slots.",
+     why:"Every extra step between interest and a booked slot loses patients. This funnel has exactly one."},
+    {id:"sched", ico:"📅", t:"Online scheduling", s:"Real provider calendars",
+     what:"Slots come from per-provider GHL calendars with service durations and buffers — patients self-book without calling.",
+     why:"Half of bookings happen when the front desk is busy or the office is closed. Self-booking captures them."},
+    {id:"mctb", ico:"📵", t:"Missed-call text-back", s:"9-second SMS rescue",
+     what:"Unanswered calls trigger an instant text so the conversation continues even when nobody could pick up.",
+     why:"A missed call usually means the patient dials the next practice on Google. This is the safety net — see my AI Employee demo for the full version."}
+  ]},
+  {title:"3 · Remind", nodes:[
+    {id:"ladder", ico:"⏰", t:"Reminder ladder", s:"48h email · 24h SMS · 2h SMS",
+     what:"Three escalating reminders with a one-tap confirm link. Confirmations update the calendar and the pipeline card.",
+     why:"No-shows are mostly forgetfulness, not flakiness. A reminder ladder cuts them dramatically before they happen."},
+    {id:"noshow", ico:"🪑", t:"No-show rescue", s:"Empathetic + automatic",
+     what:"A no-show triggers a warm 'life happens — want to rebook?' text within 10 minutes, with a self-booking link. No response → a front-desk call task the next day.",
+     why:"An empty chair costs the practice real money. Rescued no-shows are the cheapest appointments you'll ever fill."}
+  ]},
+  {title:"4 · Treat", nodes:[
+    {id:"pipe", ico:"🎯", t:"New Patients pipeline", s:"Inquiry → Completed",
+     what:"Every patient moves across the board automatically as they book, show and accept treatment — see the Pipeline tab.",
+     why:"The front desk works from one board instead of sticky notes. Nobody falls through between visits."},
+    {id:"tplan", ico:"🦷", t:"Treatment-plan follow-up", s:"Unaccepted plans nurtured",
+     what:"Presented-but-unaccepted treatment plans get a gentle three-touch follow-up with financing info, then a call task.",
+     why:"Unaccepted treatment is the biggest pile of silent revenue in any practice. Someone has to follow up — this makes sure something does."}
+  ]},
+  {title:"5 · Grow", nodes:[
+    {id:"review", ico:"⭐", t:"Review engine", s:"Google reviews, protected",
+     what:"Three hours after a completed visit: a review request. Happy patients route to Google; unhappy ones route to a private feedback form that alerts the office manager.",
+     why:"Local search is won on review count and rating. The private catch protects the rating while problems get fixed personally."},
+    {id:"refer", ico:"🎁", t:"Referral ask", s:"After the 5-star moment",
+     what:"Patients who left a great review get a referral offer — credit for them and the friend — with a personal link back to the offer page.",
+     why:"The best time to ask for a referral is the moment someone publicly said they love you. The snapshot catches that moment automatically."},
+    {id:"recall", ico:"🔁", t:"6-month recall", s:"The revenue engine",
+     what:"5½ months after a cleaning, the recall sequence starts: email, then two texts, each with self-booking. Unbooked after 3 weeks → front-desk call task.",
+     why:"Hygiene recall is the recurring revenue of dentistry. Run manually it leaks badly; run automatically it compounds."},
+    {id:"react", ico:"💤", t:"12-month reactivation", s:"Win-back for lapsed patients",
+     what:"Patients with no visit in a year enter a three-touch win-back with a comeback offer. Opt-outs honored instantly.",
+     why:"A practice's old patient list is an asset most offices never touch. Reactivation mines it respectfully."}
+  ]}
+];
+const EDGES = [
+  ["ads","funnel"],["ref","funnel"],["gmb","mctb"],["mctb","sched"],["funnel","sched"],
+  ["sched","ladder"],["ladder","noshow"],["ladder","pipe"],["pipe","tplan"],
+  ["pipe","review"],["review","refer"],["tplan","recall"],["recall","react"]
+];
+function renderMap(){
+  $("#map-lanes").innerHTML = LANES.map(lane=>`
+    <div><div class="lane-title">${lane.title}</div><div class="lane">
+      ${lane.nodes.map(n=>`
+        <div class="mnode" data-node="${n.id}">
+          <span class="n-ico">${n.ico}</span>
+          <div class="n-title">${n.t}</div>
+          <div class="n-sub">${n.s}</div>
+        </div>`).join("")}
+    </div></div>`).join("");
+  $$("#map-lanes .mnode").forEach(nd=>nd.addEventListener("click", ()=>selectNode(nd.dataset.node)));
+}
+function findNode(id){ for(const l of LANES){ const n = l.nodes.find(n=>n.id===id); if(n) return n; } }
+function selectNode(id){
+  $$("#map-lanes .mnode").forEach(n=>n.classList.toggle("sel", n.dataset.node===id));
+  const n = findNode(id);
+  $("#map-explain").innerHTML = `<h4>${n.ico} ${n.t}</h4>
+    <div class="ex-what"><b>What it does:</b> ${n.what}</div>
+    <div class="ex-why"><b>Why it's in the snapshot:</b> ${n.why}</div>`;
+}
+function drawEdges(){
+  const svg = $("#edge-svg"), canvas = $("#map-canvas");
+  if(!canvas.offsetParent) return;
+  const cr = canvas.getBoundingClientRect();
+  svg.setAttribute("width", canvas.scrollWidth);
+  svg.setAttribute("height", canvas.scrollHeight);
+  let out = `<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#a8b6cb"/></marker></defs>`;
+  EDGES.forEach(([a,b])=>{
+    const na = canvas.querySelector(`[data-node="${a}"]`), nb = canvas.querySelector(`[data-node="${b}"]`);
+    if(!na||!nb) return;
+    const ra = na.getBoundingClientRect(), rb = nb.getBoundingClientRect();
+    const ax = ra.left-cr.left, ay = ra.top-cr.top, bx = rb.left-cr.left, by = rb.top-cr.top;
+    let d;
+    if(bx > ax + ra.width - 6){
+      const sx = ax+ra.width, sy = ay+ra.height/2, tx = bx-2, ty = by+rb.height/2;
+      const c = Math.max(24,(tx-sx)/2);
+      d = `M${sx},${sy} C${sx+c},${sy} ${tx-c},${ty} ${tx},${ty}`;
+    } else if(Math.abs(bx-ax) < 40 && by > ay){
+      const sx = ax+ra.width/2, sy = ay+ra.height, tx = bx+rb.width/2, ty = by-2;
+      d = `M${sx},${sy} C${sx},${sy+16} ${tx},${ty-16} ${tx},${ty}`;
+    } else {
+      const sx = ax, sy = ay+ra.height/2, tx = bx-2, ty = by+rb.height/2;
+      d = `M${sx},${sy} C${sx-52},${sy} ${tx-52},${ty} ${tx},${ty}`;
+    }
+    out += `<path d="${d}" fill="none" stroke="#a8b6cb" stroke-width="1.6" marker-end="url(#arr)"/>`;
+  });
+  svg.innerHTML = out;
+}
+window.addEventListener("resize", ()=>{ if(state.view==="journey") drawEdges(); });
+
+/* ================= Funnel preview ================= */
+function logStep({ico,title,sub}){
+  const d = document.createElement("div");
+  d.className = "pl-step done";
+  d.innerHTML = `<span class="pl-ico">${ico}</span><div class="pl-body">
+    <div class="pl-title">${title}</div>${sub?`<div class="pl-sub">${sub}</div>`:""}</div>`;
+  $("#funnel-log").appendChild(d);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add("in")));
+}
+function renderFunnel(stage){
+  const lp = $("#lp");
+  const head = `<div class="lp-head">🦷 Summit <span>Family Dental</span></div>`;
+  if(stage===0){
+    lp.innerHTML = head + `
+      <div class="lp-hero"><span class="lp-badge">NEW PATIENT SPECIAL</span>
+        <h2>$99 Exam, X-Rays &amp; Cleaning</h2>
+        <p>Everything a new patient needs for a healthy start — normally $324. Gentle care, same-week appointments, insurance friendly.</p></div>
+      <div class="lp-body">
+        <ul class="lp-points">
+          <li>Same-week appointments, early &amp; evening slots</li>
+          <li>4.9★ from 380+ Google reviews</li>
+          <li>0% financing available on treatment plans</li>
+        </ul>
+        <div class="lp-form">
+          <input placeholder="Full name" value="Sarah Bennett">
+          <input placeholder="Mobile number" value="(208) 555-0164">
+          <input placeholder="Email" value="sarah.b@example.com">
+          <button class="btn" id="lp-submit">Claim my $99 visit →</button>
+        </div>
+      </div>`;
+    $("#lp-submit").addEventListener("click", ()=>{
+      renderFunnel(1);
+      logStep({ico:"📇", title:"Contact created — Sarah Bennett", sub:"Tagged “new-patient-99” · source: Google Ads · pipeline: New Inquiry"});
+      logStep({ico:"✉️", title:"Instant confirmation queued", sub:"SMS + email fire the moment she books — no waiting on the front desk."});
+    });
+  } else if(stage===1){
+    lp.innerHTML = head + `
+      <div class="lp-cal">
+        <h3>Pick your time, Sarah 👋</h3>
+        <div class="c-sub">Live availability — Dr. Patel &amp; hygiene team. No phone call needed.</div>
+        <div class="slot-grid">
+          <button class="slot">Sat · 9:00 AM</button><button class="slot" data-pick="1">Sat · 10:30 AM</button><button class="slot">Sat · 11:15 AM</button>
+          <button class="slot">Mon · 8:00 AM</button><button class="slot">Mon · 2:30 PM</button><button class="slot">Tue · 4:00 PM</button>
+        </div>
+      </div>`;
+    $$(".slot").forEach(s=>s.addEventListener("click", ()=>{
+      renderFunnel(2);
+      logStep({ico:"📅", title:"Appointment booked — Sat 10:30 AM, Dr. Patel", sub:"A real calendar slot with service duration and buffer respected."});
+      logStep({ico:"⏰", title:"Reminder ladder armed", sub:"48h email · 24h SMS · 2h SMS, each with one-tap confirm."});
+      logStep({ico:"🎯", title:"Pipeline card moved: New Inquiry → Booked", sub:"Front desk notified. Nobody typed anything."});
+      toast("That's the whole funnel — ad click to booked chair, zero phone calls. Every step you just saw is in the snapshot.", "🎉");
+    }));
+  } else {
+    lp.innerHTML = head + `
+      <div class="lp-done">
+        <div class="big">🎉</div>
+        <h3>You're booked, Sarah!</h3>
+        <p>Saturday, Jul 11 at 10:30 AM with Dr. Patel. We just texted your confirmation — reply anytime, a human (or our assistant) is on the line.</p>
+      </div>
+      <div class="lp-body" style="max-width:360px;margin:18px auto 0;">
+        <div class="tpl-bubble">Hi Sarah! You're all set for Sat, Jul 11 at 10:30 AM at Summit Family Dental (map: smmt.dental/map). Reply C to confirm or R to reschedule. 🦷</div>
+      </div>`;
+  }
+}
+function resetFunnel(){ $("#funnel-log").innerHTML = ""; renderFunnel(0);
+  logStep({ico:"👀", title:"Page view tracked", sub:"UTM captured: google / cpc / “99-special” — attribution starts at the first click."});
+}
+
+/* ================= Automations ================= */
+const WORKFLOWS = [
+  {ico:"📵", t:"Missed-call text-back", tag:"Capture", trig:"Trigger: incoming call not answered",
+   steps:["Wait 30 seconds (in case the front desk calls right back)","SMS: “Sorry we missed you! How can we help?”","Conversation continues in the unified inbox","Pairs with the AI Employee for full auto-booking"],
+   why:"The single highest-ROI automation for any local business — it rescues customers who were about to call your competitor."},
+  {ico:"⏰", t:"Appointment reminder ladder", tag:"Show rate", trig:"Trigger: appointment booked",
+   steps:["48h before: email with visit details + what to bring","24h before: SMS with one-tap confirm link","2h before: SMS with parking note + door code","Confirmations update the calendar and pipeline card"],
+   why:"Cuts no-shows dramatically before they happen. Confirmed patients show."},
+  {ico:"🪑", t:"No-show rescue", tag:"Show rate", trig:"Trigger: appointment marked no-show",
+   steps:["10 min after: warm “life happens — want to rebook?” SMS with self-booking link","No response by next morning: call task for front desk","Rebooked patients re-enter the reminder ladder automatically"],
+   why:"An empty chair is pure lost revenue. A same-day rescue text rebooks a surprising share of no-shows."},
+  {ico:"⭐", t:"Review engine", tag:"Reputation", trig:"Trigger: visit completed",
+   steps:["3h after: “How was your visit?” SMS","Happy → straight to the Google review page","Not happy → private feedback form, office manager alerted same day","Review left → contact tagged “promoter” (feeds the referral ask)"],
+   why:"Local search is won on reviews. The unhappy-patient catch protects the rating while problems get fixed personally."},
+  {ico:"🔁", t:"6-month hygiene recall", tag:"Revenue", trig:"Trigger: 5½ months after last cleaning",
+   steps:["Email: “time for your cleaning” with self-booking link","1 week later: SMS nudge","2 weeks later: final SMS with early/evening slots highlighted","Still unbooked after 3 weeks: call task for front desk"],
+   why:"Recall is the recurring revenue of dentistry. Automated, it compounds; manual, it leaks."},
+  {ico:"💤", t:"12-month reactivation", tag:"Revenue", trig:"Trigger: no visit in 12 months",
+   steps:["Three-touch win-back over 3 weeks with a comeback offer","Books → back into the normal journey","No response → tagged “cold” and left alone; STOP honored instantly"],
+   why:"Every practice sits on a list of lapsed patients nobody calls. This mines it — respectfully."},
+  {ico:"🎂", t:"Birthday touch", tag:"Goodwill", trig:"Trigger: patient's birthday",
+   steps:["Morning SMS: happy birthday + a small whitening treat, valid 30 days","Redemptions tagged so the offer's ROI is measurable"],
+   why:"Cheap, human, and remembered — and the whitening offer quietly pays for the whole workflow."},
+  {ico:"🤝", t:"Referral ask", tag:"Growth", trig:"Trigger: 5★ review left + treatment completed",
+   steps:["SMS: “$50 credit for you and any friend you send our way” with a personal link","Friend books through the link → both credits applied, referrer thanked","Referred patients tagged to the referrer for attribution"],
+   why:"Asks for the referral at the exact moment someone publicly said they love the practice."}
+];
+function renderWorkflows(){
+  $("#wf-list").innerHTML = WORKFLOWS.map((w,i)=>`
+    <div class="wf-card" data-wf="${i}">
+      <div class="wf-head"><span class="w-ico">${w.ico}</span><b>${w.t}</b><span class="w-tag">${w.tag}</span><span class="w-chev">▾</span></div>
+      <div class="wf-body">
+        <div class="wf-trigger">⚡ ${w.trig}</div>
+        <ul class="wf-steps">${w.steps.map(s=>`<li>${s}</li>`).join("")}</ul>
+        <div class="wf-why"><b>Why it's here:</b> ${w.why}</div>
+      </div>
+    </div>`).join("");
+  $$(".wf-card .wf-head").forEach(h=>h.addEventListener("click", ()=>h.parentElement.classList.toggle("open")));
+}
+
+/* ================= Pipeline & templates ================= */
+const STAGES = [
+  {name:"New Inquiry", deals:[["Sarah Bennett","$99 special · Google Ads"],["Mike Torres","Implant consult · referral"],["Lena Park","GMB message"]]},
+  {name:"Booked", deals:[["Ava Collins","Sat 9:00 · Dr. Patel"],["Sam Reed","Mon 8:00 · hygiene"],["Nora Diaz","Tue 4:00 · Dr. Patel"],["Eli Watts","Sat 11:15 · hygiene"]]},
+  {name:"Showed", deals:[["Jon Casey","Comprehensive exam done"],["Mia Flores","Cleaning + x-rays done"],["Ray Chen","Consult complete"]]},
+  {name:"Treatment Plan", deals:[["Dana Ellis","Crown + filling · $2,340"],["Omar Sy","Invisalign · $4,800"],["Kat Boone","2 implants · $7,200"]]},
+  {name:"Completed", deals:[["Priya Nair","Review left ⭐ 5"],["Tom Hale","Recall armed · Jan"],["Ivy Sun","Referral link sent"],["Ben Ortiz","Recall armed · Feb"]]}
+];
+const TEMPLATES = [
+  {h:"24-hour reminder (SMS)", b:"Hi {{first_name}}! Reminder: your visit at Summit Family Dental is tomorrow at {{appt_time}}. Reply C to confirm or R to reschedule. 🦷", n:"One-tap confirm updates the calendar + pipeline automatically."},
+  {h:"Review request (SMS)", b:"Thanks for coming in today, {{first_name}}! How did we do? It takes 20 seconds and helps our small practice a lot: {{review_link}} 💙", n:"Happy patients → Google. Unhappy → private form, manager alerted."},
+  {h:"6-month recall (SMS)", b:"Hi {{first_name}}, it's almost time for your cleaning! Dr. Patel has early + evening slots — grab one here: {{booking_link}}", n:"Third touch in the recall sequence; unbooked → call task."},
+  {h:"No-show rescue (SMS)", b:"Hey {{first_name}}, we missed you today — life happens! 😊 Want to grab a new time? {{booking_link}} — no need to call.", n:"Sends 10 minutes after a no-show. Rescued patients re-enter reminders."}
+];
+function renderPipeline(){
+  $("#board").innerHTML = STAGES.map(st=>`
+    <div class="stage-col">
+      <div class="stage-head"><h4>${st.name}</h4><div class="st-sub">${st.deals.length} patients</div></div>
+      ${st.deals.map(([n,s])=>`<div class="deal-card"><div class="dl-name">${n}</div><div class="dl-sub">${s}</div></div>`).join("")}
+    </div>`).join("");
+  $("#tpl-grid").innerHTML = TEMPLATES.map(t=>`
+    <div class="tpl-sms"><h5>${t.h}</h5><div class="tpl-bubble">${t.b}</div><div class="tpl-note">${t.n}</div></div>`).join("")
+    + `<div class="tpl-sms" style="display:flex;align-items:center;justify-content:center;text-align:center;color:var(--gl-text2);font-size:13px;">…plus 10 more — every email and SMS in the journey, pre-written and editable.</div>`;
+  $("#cta-p").textContent = BRAND.ctaLine;
+  $("#cta-book").addEventListener("click", ()=>toast("In your live version this button links to your real booking calendar.", "📅"));
+}
+
+/* ================= Tour ================= */
+const TOUR = [
+  {center:true, title:"What's a snapshot — and why agencies pay for good ones 👋",
+   body:`A <b>snapshot</b> is a complete, pre-built GoHighLevel system that loads into any account in minutes: funnels, automations, pipelines, templates, all wired together.<br><br>This one runs a dental practice's entire patient engine. Two minutes and you'll have seen all of it — and everything here re-skins for med spas, chiro, vets, salons and home services.`},
+  {view:"overview", target:"#counts-grid", title:"Everything in the box",
+   body:"Three funnels, eight automations, two pipelines, fourteen pre-written messages, four provider calendars — wired together, not a parts list. That's the difference between a snapshot and a pile of templates."},
+  {view:"overview", target:"#deploy-strip", title:"Loaded to live in about a week",
+   body:"Load, connect the practice's number and calendars, swap the branding, register SMS, test-fire everything, hand off with a guided tour. That's the whole engagement."},
+  {view:"journey", target:"#map-canvas", title:"The patient journey, on one page",
+   body:"From the Google ad to the 6-month recall — every snapshot piece in one map. Click any step for what it does and <i>why it's there</i>. Clients never get this view from a settings screen; it's how I explain every build."},
+  {view:"funnel", target:"#lp", title:"Try the funnel yourself",
+   body:"This is the snapshot's front door. Click <b>“Claim my $99 visit”</b>, pick a slot, and watch the right-hand log — contact created, reminders armed, pipeline updated, front desk notified. Nobody typed anything.",
+   pre:()=>resetFunnel()},
+  {view:"automations", target:"#wf-list", title:"Eight automations, in plain English",
+   body:"Every workflow spelled out step by step — I've opened the <b>review engine</b>: happy patients go to Google, unhappy ones go to a private form and the manager's phone. The <b>6-month recall</b> below it is the quiet revenue engine of the whole snapshot.",
+   pre:()=>{ const c = $$(".wf-card")[3]; if(c && !c.classList.contains("open")) c.classList.add("open"); }},
+  {view:"pipeline", target:"#board", title:"The board the front desk lives on",
+   body:"Patients move across automatically as they book, show and accept treatment. Dana's $2,340 crown isn't a sticky note — it's a card that follows up on itself."},
+  {view:"pipeline", target:"#tpl-grid", title:"Every message, pre-written",
+   body:"Fourteen SMS and email templates in the practice's voice — reminders, reviews, recalls, rescues. Swap the branding and they're yours."},
+  {center:true, title:"That's the snapshot 🙌",
+   body:`One load, one week of setup, and a practice runs on this. Keep exploring — the journey map and the funnel preview are the fun parts.<br><br>Want it for your niche? The same engine re-skins for med spas, chiropractors, vets, salons and home services.`}
+];
+let tourIdx = -1;
+const hl = $("#tour-hl"), tip = $("#tour-tip");
+function tourShow(i){
+  if(i<0 || i>=TOUR.length) return tourEnd();
+  tourIdx = i;
+  const st = TOUR[i];
+  if(st.view && state.view!==st.view) switchView(st.view);
+  if(st.pre) st.pre();
+  setTimeout(()=>{
+    const btns = `<div class="t-btns">
+      <button class="t-skip" id="t-skip">End tour</button>
+      ${i>0?'<button class="btn secondary sm" id="t-back">Back</button>':""}
+      <button class="btn sm" id="t-next">${i===TOUR.length-1?"Finish ✓":"Next →"}</button></div>`;
+    tip.innerHTML = `<div class="t-step">Step ${i+1} of ${TOUR.length}</div><h4>${st.title}</h4><p>${st.body}</p>${btns}`;
+    if(st.center){
+      hl.style.display = "block";
+      hl.style.boxShadow = "0 0 0 9999px rgba(16,29,48,.62)";
+      hl.style.left = "50%"; hl.style.top = "40%"; hl.style.width = "0"; hl.style.height = "0";
+      tip.classList.add("centered");
+      tip.style.left = ""; tip.style.top = "";
+      tip.style.display = "block";
+    } else {
+      tip.classList.remove("centered");
+      const el = document.querySelector(st.target);
+      if(!el){ return tourShow(i+1); }
+      el.scrollIntoView({block:"center", behavior:"instant"});
+      const r = el.getBoundingClientRect();
+      hl.style.display = "block";
+      hl.style.boxShadow = "0 0 0 4px rgba(24,115,243,.9), 0 0 0 9999px rgba(16,29,48,.62)";
+      hl.style.left = (r.left+scrollX-6)+"px"; hl.style.top = (r.top+scrollY-6)+"px";
+      hl.style.width = (r.width+12)+"px"; hl.style.height = (r.height+12)+"px";
+      tip.style.display = "block";
+      const tw = 330, th = tip.offsetHeight || 200;
+      let tx = Math.min(Math.max(12, r.left+scrollX), scrollX+document.documentElement.clientWidth-tw-16);
+      let ty = r.bottom + scrollY + 16;
+      if(r.bottom + th + 30 > innerHeight){
+        ty = r.top + scrollY - th - 16;
+        if(ty < scrollY + 8) ty = r.bottom + scrollY + 16;
+      }
+      tip.style.left = tx+"px"; tip.style.top = ty+"px";
+    }
+    $("#t-next").onclick = ()=>tourShow(tourIdx+1===TOUR.length?-1:tourIdx+1);
+    const bb = $("#t-back"); if(bb) bb.onclick = ()=>tourShow(tourIdx-1);
+    $("#t-skip").onclick = tourEnd;
+  }, st.view ? 350 : 60);
+}
+function tourEnd(){ tourIdx = -1; hl.style.display="none"; tip.style.display="none"; }
+document.addEventListener("keydown", e=>{
+  if(tourIdx<0) return;
+  if(e.key==="Escape") tourEnd();
+  if(e.key==="ArrowRight") tourShow(Math.min(tourIdx+1, TOUR.length-1));
+  if(e.key==="ArrowLeft") tourShow(Math.max(tourIdx-1, 0));
+});
+window.addEventListener("resize", ()=>{ if(tourIdx>=0) tourShow(tourIdx); });
+
+/* ================= Init ================= */
+function init(){
+  $("#db-by").textContent = `— prepared by ${BRAND.consultant} · ${BRAND.title}`;
+  $("#foot-brand").textContent = ` Demo prepared by ${BRAND.consultant}, ${BRAND.title}.`;
+  $("#cta-book").textContent = `Book a walkthrough with ${BRAND.consultant.split(" ")[0]}`;
+  $$(".side-item[data-view]").forEach(b=>b.addEventListener("click", ()=>switchView(b.dataset.view)));
+  $$(".side-item.locked").forEach(b=>b.addEventListener("click", ()=>
+    toast("Not wired into this demo — in a real deployment this section is configured too (calendars, payments, reputation are all part of the snapshot).", "🔒")));
+  $("#tour-start").addEventListener("click", ()=>tourShow(0));
+  $("#funnel-reset").addEventListener("click", resetFunnel);
+  renderOverview(); renderMap(); renderWorkflows(); renderPipeline(); resetFunnel();
+  setTimeout(()=>toast(`This is a live snapshot preview — everything is clickable. For the two-minute story, hit <b>“▶ Start guided tour”</b>.`, "👋"), 1200);
+}
+init();
+
+</script>
+</body>
+</html>

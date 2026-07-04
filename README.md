@@ -11,6 +11,7 @@ in the top control bar.
 |---|---|---|
 | `ghl/index.html` | **GoHighLevel** | **Demo hub** — Gurmeet's one-page portfolio site linking all GHL demos, services and booking CTA |
 | `ghl/ai-employee.html` | **GoHighLevel** | **AI Employee for local business** — missed-call text-back at a med spa: books a real calendar slot, takes a deposit by text-to-pay, routes medical questions to humans |
+| `ghl/dental-snapshot.html` | **GoHighLevel** | **Dental practice snapshot** — a complete pre-built system: interactive $99 new-patient funnel, clickable patient-journey map, 8 plain-English automations, pipeline and message templates |
 | `index.html` | HubSpot | **Full portal build** — CRM, pipeline, automation map, lead scoring, reports, audit mode |
 | `ai-speed-to-lead.html` | HubSpot | **AI Speed-to-Lead / AI SDR** — an AI answers, qualifies and books an inbound lead in seconds, with human-approval mode and guardrails |
 
