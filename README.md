@@ -1,11 +1,16 @@
-# BrightDesk — Interactive HubSpot Portal Demo
+# BrightDesk — Interactive HubSpot Demos
 
-A fully clickable, pixel-faithful replica of a **completely built-out HubSpot portal** for a
-fictional B2B software company (BrightDesk). Built as a client-facing portfolio piece: attach it
-to a proposal and prospects can *see* the finished product before they hire you.
+Client-facing portfolio demos built around one fictional B2B software company (BrightDesk).
+Attach them to a proposal and prospects can *see* the finished product before they hire you.
 
-**Everything is one file — `index.html`. No dependencies, no build step, no server.**
-Double-click it, email it, or host it anywhere.
+**Each demo is one self-contained file. No dependencies, no build step, no server.**
+Double-click it, email it, or host it anywhere. The two demos cross-link via the button
+in the top control bar.
+
+| File | Demo |
+|---|---|
+| `index.html` | **Full HubSpot portal build** — CRM, pipeline, automation map, lead scoring, reports, audit mode |
+| `ai-speed-to-lead.html` | **AI Speed-to-Lead / AI SDR** — watch an AI answer, qualify and book an inbound lead in seconds, with human-approval mode and guardrails |
 
 ## What's inside
 
@@ -19,6 +24,15 @@ Double-click it, email it, or host it anywhere.
 | **Reports** | KPI row, lifecycle funnel, revenue by source, monthly trend and rep leaderboard — hoverable charts, each with a "view data" table |
 | **Audit mode** | A toggle that flips the whole portal into its "unmaintained" state — duplicates, dead workflows, stalled deals — plus a graded audit report with a prioritized 30-day fix plan |
 | **Guided tour** | A 13-step spotlight walkthrough that sells the whole build in ~2 minutes |
+
+## What's inside `ai-speed-to-lead.html`
+
+| Screen | What it demonstrates |
+|---|---|
+| **Live Console** | An inbound lead handled end-to-end in real time: enrichment, intent scoring, ICP fit, a personalized draft — each step with an expandable "Why?" showing the AI's reasoning. **Copilot mode** pauses for a human "Approve & send"; **Autopilot** sends in seconds |
+| **Lead Queue** | Nine leads triaged by AI — booked, qualified, nurtured, binned as spam, or routed to a human (legal question). Click any row for the reasoning |
+| **Results** | Before/after KPIs (42 min → 28 sec first response) and charts with a go-live annotation |
+| **How It Works** | The HubSpot plumbing (workflow → webhook → AI agent → CRM writes) plus six plain-English guardrails — the objection killer |
 
 ## Re-branding it
 

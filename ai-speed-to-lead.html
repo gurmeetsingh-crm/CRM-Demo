@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrightDesk — AI Speed-to-Lead Demo</title>
+<style>
+/* ============================================================
+   HubSpot-flavored design tokens
+   ============================================================ */
+:root{
+  --hs-nav:#33475b;
+  --hs-nav-hover:#2d3e50;
+  --hs-bg:#f5f8fa;
+  --hs-card:#ffffff;
+  --hs-border:#cbd6e2;
+  --hs-border-light:#dfe3eb;
+  --hs-text:#33475b;
+  --hs-text-2:#516f90;
+  --hs-text-3:#7c98b6;
+  --hs-link:#0091ae;
+  --hs-orange:#ff7a59;
+  --hs-orange-dark:#e66e50;
+  --hs-teal:#00a4bd;
+  --hs-green:#00bda5;
+  --hs-green-dark:#007a63;
+  --hs-red:#f2545b;
+  --hs-red-bg:#fdedee;
+  --hs-yellow:#f5c26b;
+  --hs-yellow-bg:#fef8f0;
+  /* chart tokens (validated ordinal ramp + accent) */
+  --viz-1:#59bccd; --viz-2:#33a9bd; --viz-3:#0091ae; --viz-4:#00758c; --viz-5:#005a6b;
+  --viz-accent:#0091ae;
+  --viz-grid:#e5ebf1;
+  --viz-axis:#516f90;
+  --demo-dark:#182a3a;
+  --radius:3px;
+  --shadow:0 1px 5px rgba(51,71,91,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+  background:var(--hs-bg); color:var(--hs-text);
+  font-size:14px; line-height:1.45;
+}
+button{font-family:inherit;cursor:pointer;}
+a{color:var(--hs-link);text-decoration:none;}
+a:hover{text-decoration:underline;}
+h1,h2,h3,h4{font-weight:600;color:var(--hs-text);}
+
+/* ============================================================
+   Demo control bar (the consultant's chrome, above HubSpot's)
+   ============================================================ */
+#demo-bar{
+  background:var(--demo-dark); color:#fff;
+  display:flex; align-items:center; gap:14px;
+  padding:8px 18px; font-size:13px; position:relative; z-index:60;
+  flex-wrap:wrap;
+}
+#demo-bar .db-brand{display:flex;align-items:center;gap:9px;font-weight:600;}
+#demo-bar .db-brand .db-dot{width:8px;height:8px;border-radius:50%;background:var(--hs-orange);box-shadow:0 0 8px var(--hs-orange);}
+#demo-bar .db-sub{color:#9fb3c8;font-weight:400;}
+#demo-bar .db-actions{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.db-btn{
+  background:var(--hs-orange); color:#fff; border:none; border-radius:var(--radius);
+  padding:7px 16px; font-size:13px; font-weight:600;
+}
+.db-btn:hover{background:var(--hs-orange-dark);}
+.db-btn.ghost{background:transparent;border:1px solid #4a617a;color:#dbe5ee;font-weight:400;}
+.db-btn.ghost:hover{border-color:#9fb3c8;background:rgba(255,255,255,.06);}
+/* audit switch */
+.switch-wrap{display:flex;align-items:center;gap:8px;color:#dbe5ee;}
+.switch{position:relative;width:38px;height:20px;background:#4a617a;border-radius:20px;border:none;transition:background .2s;flex:0 0 auto;}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s;}
+.switch.on{background:var(--hs-red);}
+.switch.on::after{left:20px;}
+
+/* ============================================================
+   HubSpot top navigation
+   ============================================================ */
+#hs-nav{
+  background:var(--hs-nav); color:#fff; display:flex; align-items:center;
+  padding:0 14px; height:52px; gap:4px; position:relative; z-index:50;
+}
+#hs-nav .logo{display:flex;align-items:center;gap:8px;margin-right:14px;font-weight:700;font-size:15px;color:#fff;letter-spacing:.2px;}
+#hs-nav .logo svg{display:block;}
+#hs-nav .nav-items{display:flex;height:100%;}
+.nav-item{
+  background:none;border:none;color:#cbd6e2;font-size:14px;padding:0 14px;height:100%;
+  display:flex;align-items:center;gap:6px;border-bottom:3px solid transparent;border-top:3px solid transparent;
+}
+.nav-item:hover{background:var(--hs-nav-hover);color:#fff;}
+.nav-item.active{color:#fff;border-bottom-color:var(--hs-orange);background:var(--hs-nav-hover);}
+.nav-item .flag{background:var(--hs-red);color:#fff;font-size:10px;font-weight:700;border-radius:8px;padding:1px 6px;}
+#hs-nav .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
+.nav-search{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius);
+  color:#cbd6e2;font-size:13px;padding:6px 12px;min-width:170px;display:flex;align-items:center;gap:8px;
+}
+.nav-ico{color:#cbd6e2;font-size:16px;background:none;border:none;padding:4px;}
+.avatar{
+  width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;flex:0 0 auto;
+}
+.av-a{background:#7a5fb5;} .av-b{background:#00a4bd;} .av-c{background:#e2856e;} .av-d{background:#5b9e63;} .av-e{background:#4a76a8;}
+
+/* ============================================================
+   Layout & generic components
+   ============================================================ */
+main{max-width:1280px;margin:0 auto;padding:22px 22px 60px;}
+.view{display:none;}
+.view.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
+.view-head h1{font-size:22px;}
+.view-head .sub{color:var(--hs-text-2);font-size:13px;margin-top:3px;max-width:640px;}
+.card{background:var(--hs-card);border:1px solid var(--hs-border);border-radius:var(--radius);box-shadow:var(--shadow);}
+.card-pad{padding:16px 18px;}
+.card h3{font-size:14px;margin-bottom:10px;}
+.btn{
+  background:var(--hs-orange);color:#fff;border:none;border-radius:var(--radius);
+  padding:9px 20px;font-size:14px;font-weight:600;
+}
+.btn:hover{background:var(--hs-orange-dark);}
+.btn.secondary{background:#fff;color:var(--hs-text);border:1px solid var(--hs-border);font-weight:400;}
+.btn.secondary:hover{background:var(--hs-bg);}
+.btn.sm{padding:5px 12px;font-size:12px;}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:600;white-space:nowrap;}
+.pill.lead{background:#e5f5f8;color:#00758c;}
+.pill.mql{background:#e5f8f6;color:var(--hs-green-dark);}
+.pill.sql{background:#fef8f0;color:#b88217;}
+.pill.customer{background:#eaf0f6;color:var(--hs-text-2);}
+.pill.opp{background:#f2ebfa;color:#7a5fb5;}
+.pill.missing{background:var(--hs-red-bg);color:#c02b33;}
+.pill.warn{background:var(--hs-yellow-bg);color:#b88217;}
+.pill.ok{background:#e5f8f6;color:var(--hs-green-dark);}
+.flag-chip{display:inline-flex;align-items:center;gap:5px;background:var(--hs-red-bg);color:#c02b33;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;}
+.warn-chip{display:inline-flex;align-items:center;gap:5px;background:var(--hs-yellow-bg);color:#b88217;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;}
+.audit-only{display:none !important;}
+body.audit .audit-only{display:revert !important;}
+body.audit .audit-only.flex{display:inline-flex !important;}
+body.audit .clean-only{display:none !important;}
+.audit-banner{
+  background:var(--hs-red-bg);border:1px solid #f5b5b8;border-radius:var(--radius);
+  color:#8f2027;padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start;
+}
+.audit-banner b{color:#8f2027;}
+
+/* tables */
+.hs-table{width:100%;border-collapse:collapse;font-size:13px;}
+.hs-table th{
+  text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--hs-text-2);
+  background:var(--hs-bg);padding:9px 14px;border-bottom:1px solid var(--hs-border);font-weight:600;white-space:nowrap;
+}
+.hs-table td{padding:11px 14px;border-bottom:1px solid var(--hs-border-light);vertical-align:middle;}
+.hs-table tr:last-child td{border-bottom:none;}
+.hs-table tbody tr{cursor:pointer;}
+.hs-table tbody tr:hover{background:#f0f6fa;}
+.hs-table .cname{color:var(--hs-link);font-weight:600;}
+.hs-table tr.dup-row{background:var(--hs-red-bg);}
+.hs-table tr.dup-row:hover{background:#fbdfe1;}
+.cell-missing{color:#c02b33;font-weight:600;}
+
+/* ============================================================
+   Contact record (3 columns)
+   ============================================================ */
+.record-grid{display:grid;grid-template-columns:300px minmax(0,1fr) 330px;gap:16px;align-items:start;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;margin-bottom:12px;background:none;border:none;color:var(--hs-link);}
+.back-link:hover{text-decoration:underline;}
+.rec-left .id-block{text-align:center;padding:22px 18px 16px;}
+.big-avatar{width:72px;height:72px;border-radius:50%;background:#7a5fb5;color:#fff;font-size:26px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.rec-left h2{font-size:18px;}
+.rec-left .jobline{color:var(--hs-text-2);font-size:13px;margin-top:2px;}
+.action-row{display:flex;justify-content:center;gap:14px;padding:14px 8px 18px;border-bottom:1px solid var(--hs-border-light);}
+.action-btn{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:none;color:var(--hs-text-2);font-size:11px;}
+.action-btn .circ{width:34px;height:34px;border-radius:50%;border:1px solid var(--hs-border);display:flex;align-items:center;justify-content:center;font-size:14px;background:#fff;color:var(--hs-text-2);transition:all .15s;}
+.action-btn:hover .circ{border-color:var(--hs-link);color:var(--hs-link);}
+.about-sec{padding:14px 18px 18px;}
+.about-sec h4{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--hs-text-2);margin-bottom:10px;}
+.prop{margin-bottom:11px;}
+.prop .plabel{font-size:11px;color:var(--hs-text-2);margin-bottom:1px;}
+.prop .pvalue{font-size:13px;}
+.prop .pvalue a{font-weight:600;}
+/* timeline */
+.rec-tabs{display:flex;gap:2px;border-bottom:1px solid var(--hs-border);padding:0 6px;background:#fff;border-radius:var(--radius) var(--radius) 0 0;}
+.rec-tab{background:none;border:none;padding:12px 13px;font-size:13px;color:var(--hs-text-2);border-bottom:3px solid transparent;}
+.rec-tab.active{color:var(--hs-text);font-weight:600;border-bottom-color:var(--hs-teal);}
+.tl-filter{padding:10px 16px;color:var(--hs-text-2);font-size:12px;border-bottom:1px solid var(--hs-border-light);background:#fff;}
+.tl-body{padding:14px 16px;background:var(--hs-bg);border-radius:0 0 var(--radius) var(--radius);}
+.tl-month{font-size:12px;font-weight:700;color:var(--hs-text-2);text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px;}
+.tl-month:first-child{margin-top:0;}
+.tl-item{background:#fff;border:1px solid var(--hs-border-light);border-radius:var(--radius);padding:11px 14px;margin-bottom:8px;display:flex;gap:11px;box-shadow:0 1px 2px rgba(51,71,91,.05);}
+.tl-ico{width:30px;height:30px;border-radius:50%;background:#eaf0f6;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto;}
+.tl-item .tl-title{font-size:13px;font-weight:600;}
+.tl-item .tl-title .who{color:var(--hs-link);}
+.tl-item .tl-meta{font-size:11px;color:var(--hs-text-3);margin-top:1px;}
+.tl-item .tl-snip{font-size:12px;color:var(--hs-text-2);margin-top:5px;background:var(--hs-bg);border-left:2px solid var(--hs-border);padding:6px 9px;border-radius:2px;}
+.tl-gap{border:1px dashed #e9a2a6;background:var(--hs-red-bg);color:#8f2027;font-size:12px;font-weight:600;text-align:center;padding:9px;border-radius:var(--radius);margin-bottom:8px;}
+/* right column cards */
+.rc-card{margin-bottom:14px;}
+.rc-head{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--hs-border-light);}
+.rc-head h4{font-size:13px;}
+.rc-head .count{color:var(--hs-text-2);font-weight:400;}
+.rc-body{padding:13px 15px;}
+.rc-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;gap:10px;}
+.rc-row .k{color:var(--hs-text-2);}
+.rc-row .v{font-weight:600;text-align:right;}
+.custom-tag{display:inline-flex;align-items:center;gap:4px;background:#e5f5f8;color:#00758c;font-size:10px;font-weight:700;border-radius:3px;padding:2px 7px;text-transform:uppercase;letter-spacing:.3px;}
+.rc-deal{border:1px solid var(--hs-border-light);border-radius:var(--radius);padding:10px 12px;}
+.rc-deal .dname{color:var(--hs-link);font-weight:600;font-size:13px;}
+.rc-deal .dmeta{font-size:12px;color:var(--hs-text-2);margin-top:3px;}
+.health-bar{height:6px;background:#eaf0f6;border-radius:3px;overflow:hidden;margin-top:4px;}
+.health-bar>div{height:100%;background:var(--hs-green);border-radius:3px;}
+
+/* ============================================================
+   Deal pipeline board
+   ============================================================ */
+.board-wrap{overflow-x:auto;padding-bottom:10px;}
+.board{display:flex;gap:12px;min-width:1080px;}
+.stage-col{flex:1 1 0;min-width:200px;}
+.stage-head{background:#fff;border:1px solid var(--hs-border);border-radius:var(--radius);padding:10px 12px;margin-bottom:10px;}
+.stage-head .st-top{display:flex;align-items:center;gap:6px;}
+.stage-head h4{font-size:13px;flex:1;}
+.zap-btn{background:#fff7f0;border:1px solid #ffd6c2;color:#d35730;border-radius:50%;width:24px;height:24px;font-size:12px;display:flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto;}
+.zap-btn:hover{background:#ffe9dd;}
+.stage-head .st-sub{font-size:11px;color:var(--hs-text-2);margin-top:3px;}
+.deal-card{background:#fff;border:1px solid var(--hs-border);border-radius:var(--radius);padding:11px 12px;margin-bottom:9px;box-shadow:0 1px 2px rgba(51,71,91,.06);cursor:pointer;position:relative;}
+.deal-card:hover{box-shadow:0 2px 8px rgba(51,71,91,.14);}
+.deal-card.stalled{border-left:3px solid var(--hs-red);}
+.deal-card .dl-name{color:var(--hs-link);font-weight:600;font-size:13px;line-height:1.3;}
+.deal-card .dl-co{font-size:11px;color:var(--hs-text-3);margin-top:2px;}
+.deal-card .dl-amt{font-size:13px;font-weight:700;margin-top:6px;}
+.deal-card .dl-foot{display:flex;align-items:center;justify-content:space-between;margin-top:7px;font-size:11px;color:var(--hs-text-2);}
+.deal-card .avatar{width:22px;height:22px;font-size:9px;}
+.date-bad{color:#c02b33;font-weight:700;}
+.deal-chips{margin-top:7px;display:flex;gap:5px;flex-wrap:wrap;}
+/* popover */
+#popover{
+  position:absolute;z-index:80;max-width:320px;background:var(--hs-nav);color:#fff;border-radius:6px;
+  padding:13px 15px;font-size:13px;line-height:1.5;box-shadow:0 6px 24px rgba(23,38,52,.35);display:none;
+}
+#popover.show{display:block;animation:fadeIn .18s ease;}
+#popover h5{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#ffb59e;margin-bottom:6px;display:flex;gap:6px;align-items:center;}
+#popover .pop-arrow{position:absolute;top:-6px;left:24px;width:12px;height:12px;background:var(--hs-nav);transform:rotate(45deg);}
+
+/* ============================================================
+   Automation map
+   ============================================================ */
+.map-outer{position:relative;}
+.map-scroll{overflow-x:auto;}
+.map-canvas{position:relative;min-width:1150px;padding:10px 6px 18px;}
+#edge-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.map-lanes{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:26px;z-index:1;}
+.lane-title{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--hs-text-3);text-align:center;margin-bottom:14px;}
+.lane{display:flex;flex-direction:column;gap:22px;align-items:stretch;}
+.node{
+  background:#fff;border:1px solid var(--hs-border);border-radius:6px;padding:11px 13px;position:relative;
+  box-shadow:0 1px 3px rgba(51,71,91,.08);cursor:pointer;transition:box-shadow .15s,border-color .15s;
+}
+.node:hover{box-shadow:0 3px 12px rgba(51,71,91,.16);border-color:#9fb3c8;}
+.node.sel{border-color:var(--hs-teal);box-shadow:0 0 0 2px rgba(0,164,189,.25);}
+.node .n-ico{font-size:16px;}
+.node .n-title{font-weight:600;font-size:13px;margin-top:3px;line-height:1.3;}
+.node .n-sub{font-size:11px;color:var(--hs-text-2);margin-top:2px;}
+.node.diamond{border-color:#b7a4dd;background:#faf7ff;}
+.node .n-badge{position:absolute;top:-9px;right:-7px;}
+.map-explain{margin-top:16px;}
+.map-explain .ex-empty{color:var(--hs-text-2);font-size:13px;}
+.map-explain h4{font-size:14px;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.map-explain .ex-what{font-size:13px;margin-bottom:8px;}
+.map-explain .ex-why{font-size:13px;color:var(--hs-text-2);background:var(--hs-bg);border-left:3px solid var(--hs-teal);padding:9px 12px;border-radius:2px;}
+
+/* ============================================================
+   Lead scoring view
+   ============================================================ */
+.score-grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;align-items:start;}
+.score-hero{text-align:center;padding:24px 18px 20px;}
+.score-num{font-size:52px;font-weight:700;line-height:1;transition:color .3s;}
+.score-num.hot{color:var(--hs-green-dark);}
+.score-cap{font-size:12px;color:var(--hs-text-2);margin-top:4px;}
+.stage-flip{margin-top:12px;}
+.thresh-wrap{margin:18px 4px 6px;}
+.thresh-track{height:10px;background:#eaf0f6;border-radius:6px;position:relative;overflow:visible;}
+.thresh-fill{height:100%;border-radius:6px;background:var(--viz-accent);width:0%;transition:width .5s ease;}
+.thresh-mark{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--hs-text-2);left:50%;}
+.thresh-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--hs-text-2);margin-top:6px;}
+.rules-list{list-style:none;}
+.rules-list li{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:7px 0;border-bottom:1px solid var(--hs-border-light);}
+.rules-list li:last-child{border-bottom:none;}
+.rules-list .pts{font-weight:700;color:var(--hs-green-dark);}
+.rules-list .pts.neg{color:#c02b33;}
+.feed{min-height:280px;}
+.feed-item{
+  display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--hs-border-light);
+  border-radius:var(--radius);padding:11px 14px;margin-bottom:8px;opacity:0;transform:translateY(8px);
+  transition:opacity .35s ease,transform .35s ease;
+}
+.feed-item.in{opacity:1;transform:none;}
+.feed-item .f-ico{width:30px;height:30px;border-radius:50%;background:#eaf0f6;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto;}
+.feed-item .f-txt{flex:1;}
+.feed-item .f-title{font-size:13px;font-weight:600;}
+.feed-item .f-meta{font-size:11px;color:var(--hs-text-3);}
+.pts-chip{font-size:13px;font-weight:700;color:var(--hs-green-dark);background:#e5f8f6;border-radius:12px;padding:3px 11px;flex:0 0 auto;}
+.pts-chip.neg{color:#c02b33;background:var(--hs-red-bg);}
+.feed-item.milestone{border-color:var(--hs-green);background:#f2fbfa;}
+
+/* ============================================================
+   Reports dashboard
+   ============================================================ */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.kpi{padding:14px 16px;}
+.kpi .k-label{font-size:12px;color:var(--hs-text-2);}
+.kpi .k-value{font-size:28px;font-weight:600;margin-top:4px;}
+.kpi .k-delta{font-size:12px;font-weight:600;margin-top:3px;}
+.kpi .k-delta.up{color:var(--hs-green-dark);}
+.kpi .k-delta.down{color:#c02b33;}
+.kpi .k-delta .vs{color:var(--hs-text-3);font-weight:400;}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.chart-card{padding:16px 18px 12px;}
+.chart-card h3{font-size:14px;}
+.chart-card .c-sub{font-size:12px;color:var(--hs-text-2);margin:2px 0 12px;}
+.chart-card svg{display:block;width:100%;height:auto;}
+.chart-card svg text{font-family:inherit;}
+.chart-foot{display:flex;justify-content:flex-end;margin-top:6px;}
+.data-toggle{background:none;border:none;color:var(--hs-link);font-size:12px;padding:4px 2px;}
+.data-toggle:hover{text-decoration:underline;}
+.data-table{display:none;margin-top:8px;}
+.data-table.show{display:block;}
+.data-table table{width:100%;border-collapse:collapse;font-size:12px;}
+.data-table th,.data-table td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--hs-border-light);}
+.data-table th{color:var(--hs-text-2);font-weight:600;}
+.data-table td.num,.data-table th.num{text-align:right;font-variant-numeric:tabular-nums;}
+.lb-bar{height:8px;border-radius:4px;background:#eaf0f6;overflow:hidden;min-width:90px;}
+.lb-bar>div{height:100%;background:var(--viz-accent);border-radius:4px;}
+#viz-tip{
+  position:fixed;z-index:90;background:var(--hs-nav);color:#fff;font-size:12px;border-radius:4px;
+  padding:6px 10px;pointer-events:none;display:none;box-shadow:0 4px 14px rgba(23,38,52,.3);white-space:nowrap;
+}
+#viz-tip b{color:#fff;}
+#viz-tip .t-sub{color:#9fb3c8;}
+
+/* ============================================================
+   Audit report view
+   ============================================================ */
+.audit-intro{max-width:560px;margin:40px auto;text-align:center;padding:36px 30px;}
+.audit-intro .big-ico{font-size:40px;margin-bottom:10px;}
+.audit-intro p{color:var(--hs-text-2);margin:10px 0 20px;}
+.audit-head{display:grid;grid-template-columns:170px minmax(0,1fr);gap:22px;align-items:center;padding:20px 22px;margin-bottom:16px;}
+.grade-ring{position:relative;width:140px;height:140px;margin:0 auto;}
+.grade-ring svg{transform:rotate(-90deg);}
+.grade-ring .g-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.grade-ring .g-num{font-size:32px;font-weight:700;line-height:1;}
+.grade-ring .g-of{font-size:11px;color:var(--hs-text-2);}
+.audit-head h2{font-size:19px;margin-bottom:5px;}
+.audit-head .a-sub{color:var(--hs-text-2);font-size:13px;max-width:620px;}
+.grade-letter{display:inline-flex;background:var(--hs-red-bg);color:#c02b33;font-weight:700;border-radius:3px;padding:2px 10px;margin-left:8px;font-size:14px;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:18px;}
+.cat-card{padding:15px 17px;}
+.cat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.cat-top h4{font-size:13px;}
+.cat-score{font-weight:700;font-size:15px;}
+.cat-bar{height:7px;background:#eaf0f6;border-radius:4px;overflow:hidden;margin-bottom:10px;}
+.cat-bar>div{height:100%;border-radius:4px;}
+.cat-find{font-size:12.5px;color:var(--hs-text-2);padding:5px 0 5px 2px;display:flex;gap:8px;align-items:flex-start;line-height:1.4;}
+.cat-find .sev{flex:0 0 auto;margin-top:1px;}
+.sev{width:8px;height:8px;border-radius:50%;display:inline-block;}
+.sev.hi{background:var(--hs-red);} .sev.med{background:var(--hs-yellow);} .sev.lo{background:#9fb3c8;}
+.fix-table th:first-child{width:46%;}
+.impact-hi{color:#c02b33;font-weight:700;} .impact-med{color:#b88217;font-weight:700;}
+.effort{color:var(--hs-text-2);}
+.cta-band{
+  margin-top:20px;background:linear-gradient(100deg,var(--hs-nav),#1f3448);color:#fff;border-radius:6px;
+  padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+}
+.cta-band h3{color:#fff;font-size:17px;margin-bottom:4px;}
+.cta-band p{color:#b7c8d8;font-size:13px;max-width:560px;}
+
+/* ============================================================
+   Tour, toast, footer
+   ============================================================ */
+#tour-hl{position:absolute;z-index:100;border-radius:6px;box-shadow:0 0 0 4px rgba(255,122,89,.9),0 0 0 9999px rgba(24,42,58,.62);pointer-events:none;display:none;transition:all .35s ease;}
+#tour-tip{
+  position:absolute;z-index:101;width:330px;max-width:calc(100vw - 32px);background:#fff;border-radius:8px;
+  box-shadow:0 10px 40px rgba(23,38,52,.4);padding:18px 20px;display:none;
+}
+#tour-tip .t-step{font-size:11px;font-weight:700;color:var(--hs-orange);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+#tour-tip h4{font-size:15px;margin-bottom:7px;}
+#tour-tip p{font-size:13px;color:var(--hs-text-2);line-height:1.55;}
+#tour-tip .t-btns{display:flex;align-items:center;gap:8px;margin-top:15px;}
+#tour-tip .t-skip{margin-right:auto;background:none;border:none;color:var(--hs-text-3);font-size:12px;}
+#tour-tip .t-skip:hover{color:var(--hs-text);}
+#tour-tip.centered{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:400px;}
+#toast-wrap{position:fixed;left:18px;bottom:18px;z-index:120;display:flex;flex-direction:column;gap:8px;}
+.toast{
+  background:var(--hs-nav);color:#fff;border-radius:6px;padding:11px 16px;font-size:13px;max-width:360px;
+  box-shadow:0 6px 20px rgba(23,38,52,.35);display:flex;gap:9px;align-items:flex-start;
+  animation:toastIn .3s ease;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+footer{max-width:1280px;margin:0 auto;padding:0 22px 30px;color:var(--hs-text-3);font-size:11.5px;text-align:center;}
+
+/* responsive */
+@media (max-width:1020px){
+  .record-grid{grid-template-columns:1fr;}
+  .score-grid{grid-template-columns:1fr;}
+  .charts-grid{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+  .audit-head{grid-template-columns:1fr;text-align:center;}
+  #hs-nav{overflow-x:auto;}
+  .nav-search{display:none;}
+}
+
+/* ============================================================
+   AI Speed-to-Lead — additional components
+   ============================================================ */
+.console-grid{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:16px;align-items:start;}
+.console-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+.mode-toggle{display:flex;border:1px solid var(--hs-border);border-radius:var(--radius);overflow:hidden;background:#fff;}
+.mode-btn{background:#fff;border:none;padding:8px 16px;font-size:13px;color:var(--hs-text-2);display:flex;align-items:center;gap:7px;}
+.mode-btn.active{background:var(--hs-nav);color:#fff;font-weight:600;}
+.mode-note{font-size:12px;color:var(--hs-text-2);max-width:420px;}
+/* pipeline */
+.pipeline{position:relative;padding-left:6px;}
+.pl-step{display:flex;gap:13px;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease;padding-bottom:18px;position:relative;}
+.pl-step.in{opacity:1;transform:none;}
+.pl-step::before{content:"";position:absolute;left:16px;top:36px;bottom:2px;width:2px;background:var(--hs-border-light);}
+.pl-step:last-child::before{display:none;}
+.pl-ico{width:34px;height:34px;border-radius:50%;background:#e5f5f8;color:#00758c;display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 auto;z-index:1;}
+.pl-step.done .pl-ico{background:#e5f8f6;color:var(--hs-green-dark);}
+.pl-step.gated .pl-ico{background:var(--hs-yellow-bg);color:#b88217;}
+.pl-body{flex:1;min-width:0;}
+.pl-time{font-size:11px;font-weight:700;color:var(--hs-text-3);letter-spacing:.3px;}
+.pl-title{font-size:13.5px;font-weight:600;margin-top:1px;}
+.pl-sub{font-size:12.5px;color:var(--hs-text-2);margin-top:2px;line-height:1.45;}
+.why-link{background:none;border:none;color:var(--hs-link);font-size:12px;padding:2px 0;font-weight:600;}
+.why-link:hover{text-decoration:underline;}
+.why-box{display:none;background:var(--hs-bg);border-left:3px solid var(--hs-teal);border-radius:2px;padding:9px 12px;font-size:12.5px;color:var(--hs-text-2);margin-top:6px;line-height:1.5;}
+.why-box.show{display:block;}
+.why-box b{color:var(--hs-text);}
+.conf-pill{display:inline-flex;align-items:center;gap:5px;background:#e5f8f6;color:var(--hs-green-dark);border-radius:12px;padding:1px 10px;font-size:11.5px;font-weight:700;}
+/* chat thread */
+.thread{display:flex;flex-direction:column;gap:12px;min-height:300px;}
+.bubble{max-width:92%;border-radius:8px;padding:11px 14px;font-size:13px;line-height:1.55;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease;}
+.bubble.in{opacity:1;transform:none;}
+.bubble .b-meta{font-size:11px;color:var(--hs-text-3);margin-bottom:5px;font-weight:600;}
+.bubble.inbound{background:var(--hs-bg);border:1px solid var(--hs-border-light);align-self:flex-start;}
+.bubble.ai{background:#fff;border:1px solid #9ad4de;align-self:flex-end;box-shadow:0 1px 4px rgba(0,145,174,.10);}
+.bubble.ai .b-meta{color:#00758c;}
+.bubble.draft{border-style:dashed;border-color:#e2b96a;background:var(--hs-yellow-bg);}
+.bubble .b-foot{font-size:10.5px;color:var(--hs-text-3);border-top:1px solid var(--hs-border-light);margin-top:9px;padding-top:7px;}
+.approve-row{display:flex;gap:8px;margin-top:10px;}
+.typing{display:inline-flex;gap:4px;align-self:flex-end;padding:10px 16px;background:#fff;border:1px solid #9ad4de;border-radius:8px;}
+.typing i{width:7px;height:7px;border-radius:50%;background:#33a9bd;animation:blink 1.1s infinite;}
+.typing i:nth-child(2){animation-delay:.2s;}
+.typing i:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,70%,100%{opacity:.25;}35%{opacity:1;}}
+.booking-card{border:1px solid var(--hs-border);border-radius:6px;background:#fff;padding:10px 13px;margin-top:9px;display:flex;gap:11px;align-items:center;}
+.booking-card .bc-date{background:var(--hs-nav);color:#fff;border-radius:5px;text-align:center;padding:5px 10px;line-height:1.15;}
+.booking-card .bc-date b{font-size:17px;display:block;}
+.booking-card .bc-date span{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;}
+/* verdict pills */
+.pill.hot{background:#fdeee9;color:#c2410c;}
+.pill.qual{background:#e5f5f8;color:#00758c;}
+.pill.nurt{background:#eef7e9;color:#3f6f2d;}
+.pill.spam{background:#eaf0f6;color:var(--hs-text-2);}
+.pill.human{background:#f2ebfa;color:#7a5fb5;}
+.night-chip{display:inline-flex;align-items:center;gap:4px;background:#eef1fb;color:#4a5b9b;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;}
+tr.q-details td{background:var(--hs-bg);font-size:12.5px;color:var(--hs-text-2);line-height:1.5;padding:12px 16px 14px;}
+tr.q-details .qd-inner{border-left:3px solid var(--hs-teal);padding:2px 0 2px 12px;}
+/* stacked verdict bar */
+.stack-wrap{padding:16px 18px;margin-bottom:14px;}
+.stackbar{display:flex;height:26px;border-radius:5px;overflow:hidden;gap:2px;margin:12px 0 10px;}
+.stackbar>div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;min-width:34px;}
+.stack-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--hs-text-2);}
+.stack-legend .sw{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:6px;}
+/* flow row (how it works) */
+.flow-row{display:grid;grid-template-columns:repeat(6,1fr);gap:30px;position:relative;min-width:1050px;}
+.flow-arrow{position:absolute;top:50%;font-size:15px;color:#9fb3c8;transform:translateY(-50%);}
+.guard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.guard{display:flex;gap:11px;background:#fff;border:1px solid var(--hs-border);border-radius:var(--radius);padding:13px 15px;font-size:13px;align-items:flex-start;box-shadow:var(--shadow);}
+.guard .g-ico{font-size:17px;flex:0 0 auto;}
+.guard b{display:block;margin-bottom:2px;}
+.guard .g-sub{color:var(--hs-text-2);font-size:12.5px;line-height:1.45;}
+@media (max-width:1020px){
+  .console-grid{grid-template-columns:1fr;}
+  .guard-grid{grid-template-columns:1fr;}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ================= Demo control bar ================= -->
+<div id="demo-bar">
+  <div class="db-brand"><span class="db-dot"></span><span id="db-name">AI Speed-to-Lead Demo</span>
+    <span class="db-sub" id="db-by"></span></div>
+  <div class="db-actions">
+    <a class="db-btn ghost" id="xlink" href="index.html" style="text-decoration:none;">Full portal demo →</a>
+    <button class="db-btn" id="tour-start">▶ Start guided tour</button>
+  </div>
+</div>
+
+<!-- ================= HubSpot chrome ================= -->
+<header id="hs-nav">
+  <span class="logo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="3.4" fill="#ff7a59"/>
+      <g stroke="#ff7a59" stroke-width="2.4" stroke-linecap="round">
+        <line x1="12" y1="1.5" x2="12" y2="5.5"/><line x1="12" y1="18.5" x2="12" y2="22.5"/>
+        <line x1="1.5" y1="12" x2="5.5" y2="12"/><line x1="18.5" y1="12" x2="22.5" y2="12"/>
+        <line x1="4.6" y1="4.6" x2="7.4" y2="7.4"/><line x1="16.6" y1="16.6" x2="19.4" y2="19.4"/>
+        <line x1="4.6" y1="19.4" x2="7.4" y2="16.6"/><line x1="16.6" y1="7.4" x2="19.4" y2="4.6"/>
+      </g>
+    </svg>
+    BrightDesk · AI SDR
+  </span>
+  <nav class="nav-items" id="nav-items">
+    <button class="nav-item active" data-view="console">Live Console</button>
+    <button class="nav-item" data-view="queue">Lead Queue</button>
+    <button class="nav-item" data-view="results">Results</button>
+    <button class="nav-item" data-view="how">How It Works</button>
+  </nav>
+  <div class="nav-right">
+    <span class="nav-search">🔍 Search</span>
+    <button class="nav-ico" title="Settings">⚙️</button>
+    <button class="nav-ico" title="Notifications">🔔</button>
+    <span class="avatar av-c">DO</span>
+  </div>
+</header>
+
+<main>
+  <!-- ================= LIVE CONSOLE ================= -->
+  <section class="view active" id="view-console">
+    <div class="view-head">
+      <div>
+        <h1>Live console — watch the AI answer a lead</h1>
+        <div class="sub">A real inbound lead, handled end-to-end: enriched, qualified, answered and booked — <b>while the visitor is still on the website</b>. Every step shows its reasoning.</div>
+      </div>
+      <button class="btn" id="sim-btn">▶ Simulate an inbound lead</button>
+    </div>
+    <div class="console-controls">
+      <div class="mode-toggle" id="mode-toggle">
+        <button class="mode-btn" data-mode="auto">⚡ Autopilot</button>
+        <button class="mode-btn active" data-mode="copilot">🤝 Copilot</button>
+      </div>
+      <div class="mode-note" id="mode-note"><b>Copilot:</b> the AI drafts everything but nothing is sent until a human clicks approve. Switch to Autopilot to let it send instantly.</div>
+    </div>
+    <div class="console-grid">
+      <div class="card card-pad">
+        <h3>AI pipeline</h3>
+        <div style="font-size:12px;color:var(--hs-text-2);margin-bottom:14px;">Timestamps are seconds after the form submission.</div>
+        <div class="pipeline" id="pipeline"><div style="color:var(--hs-text-2);font-size:13px;" id="pl-empty">Press <b>▶ Simulate an inbound lead</b> to run the pipeline.</div></div>
+      </div>
+      <div class="card card-pad" id="thread-card">
+        <h3>The conversation</h3>
+        <div style="font-size:12px;color:var(--hs-text-2);margin-bottom:14px;">What Rachel (the lead) actually experiences.</div>
+        <div class="thread" id="thread"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LEAD QUEUE ================= -->
+  <section class="view" id="view-queue">
+    <div class="view-head">
+      <div>
+        <h1>Today's inbound — triaged by AI</h1>
+        <div class="sub">Speed is only half the job; <b>judgment</b> is the other half. Hot leads get booked, tire-kickers get nurtured, spam gets binned, and anything sensitive goes to a human. <b>Click a row</b> to see the AI's reasoning.</div>
+      </div>
+    </div>
+    <div class="card stack-wrap" id="verdict-stack">
+      <h3>This week: 47 inbound leads</h3>
+      <div class="stackbar" id="stackbar"></div>
+      <div class="stack-legend" id="stack-legend"></div>
+    </div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="hs-table" id="queue-table"></table>
+    </div>
+  </section>
+
+  <!-- ================= RESULTS ================= -->
+  <section class="view" id="view-results">
+    <div class="view-head">
+      <div>
+        <h1>What changed after go-live</h1>
+        <div class="sub">BrightDesk's numbers, 90 days after switching the AI on (fictional data, realistic magnitudes). The pattern is always the same: response time collapses, and booked meetings follow.</div>
+      </div>
+      <div style="font-size:12px;color:var(--hs-text-2);">AI went live: <b>Apr 2, 2026</b></div>
+    </div>
+    <div class="kpi-row" id="kpi-row"></div>
+    <div class="charts-grid">
+      <div class="card chart-card" id="chart-meetings-card">
+        <h3>Meetings booked per month</h3>
+        <div class="c-sub">Demos booked from inbound leads, Jan – Jun 2026</div>
+        <div id="chart-meetings"></div>
+        <div class="chart-foot"><button class="data-toggle" data-target="dt-meetings">view data</button></div>
+        <div class="data-table" id="dt-meetings"></div>
+      </div>
+      <div class="card chart-card">
+        <h3>Where the recovered leads came from</h3>
+        <div class="c-sub">Extra meetings in June vs the pre-AI baseline, by reason the lead used to be lost</div>
+        <div id="chart-recovered"></div>
+        <div class="chart-foot"><button class="data-toggle" data-target="dt-recovered">view data</button></div>
+        <div class="data-table" id="dt-recovered"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section class="view" id="view-how">
+    <div class="view-head">
+      <div>
+        <h1>How it works — and what it's never allowed to do</h1>
+        <div class="sub">No black box. The flow below is standard HubSpot plumbing plus an AI agent, and the guardrails are configured in plain English. Everything the AI does is logged on the contact timeline.</div>
+      </div>
+    </div>
+    <div class="card card-pad" style="overflow-x:auto;">
+      <div class="flow-row" id="flow-row"></div>
+    </div>
+    <div class="guard-grid" id="guard-grid"></div>
+    <div class="cta-band">
+      <div><h3 id="cta-h">Want this answering your leads?</h3>
+      <p id="cta-p"></p></div>
+      <button class="btn" id="cta-book">Book a walkthrough</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Fictional company &amp; sample data for demonstration. Independent portfolio demo replicating the HubSpot user experience — not affiliated with or endorsed by HubSpot, Inc.
+  <span id="foot-brand"></span>
+</footer>
+
+<div id="popover"><div class="pop-arrow"></div><div id="popover-content"></div></div>
+<div id="viz-tip"></div>
+<div id="tour-hl"></div>
+<div id="tour-tip"></div>
+<div id="toast-wrap"></div>
+
+<script>
+
+/* ============================================================
+   Branding — edit these lines to re-brand the whole demo
+   ============================================================ */
+const BRAND = {
+  consultant: "Gurmeet Singh",
+  title: "HubSpot Expert",
+  clientName: "BrightDesk",
+  ctaLine: "I install this on real HubSpot portals — your forms, your calendar, your approved messaging, your guardrails. Live in about two weeks."
+};
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const state = {view:"console", mode:"copilot", simRan:false, gateResume:null};
+
+function toast(msg, ico="✅"){
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerHTML = `<span>${ico}</span><span>${msg}</span>`;
+  $("#toast-wrap").appendChild(t);
+  setTimeout(()=>{t.style.opacity="0"; t.style.transition="opacity .4s";}, 4200);
+  setTimeout(()=>t.remove(), 4700);
+}
+function switchView(name){
+  state.view = name;
+  $$(".view").forEach(v=>v.classList.remove("active"));
+  $("#view-"+name).classList.add("active");
+  $$(".nav-item").forEach(b=>b.classList.toggle("active", b.dataset.view===name));
+  window.scrollTo({top:0});
+}
+
+/* ============================================================
+   The simulated lead + pipeline
+   ============================================================ */
+const LEAD_MSG = `“We're replacing Zendesk for our 40-agent support team. HIPAA compliance and SSO are must-haves. Can someone walk us through pricing this week?”`;
+
+const AI_REPLY = `Hi Rachel — thanks for reaching out. Since you're moving off Zendesk with a 40-agent team, the migration path matters as much as the product: we do assisted imports of tickets, macros and CSAT history, usually over a single weekend.<br><br>On your must-haves — SSO (Okta, Azure AD, SAML) is standard on the Team plan, and yes, we sign HIPAA BAAs.<br><br>Happy to walk you through pricing this week. Does <b>Thu 2:00 PM</b> or <b>Fri 10:30 AM ET</b> work? These are live slots on our team's calendar.<br><br>— Dana Okafor, BrightDesk`;
+
+const AI_REPLY2 = `Booked! <b>Thursday, Jul 9 at 2:00 PM ET</b> with Dana Okafor — the invite is on its way to your inbox.<br><br>And on BAAs: yes, we sign them on the <b>Team plan and above</b>, which is where a 40-agent team lands anyway. Dana will bring our HIPAA compliance one-pager on Thursday.<br><br>Talk then!`;
+
+let simTimers = [];
+function addStep({t, ico, title, sub, why, cls}){
+  const pl = $("#pipeline");
+  const d = document.createElement("div");
+  d.className = "pl-step " + (cls||"done");
+  d.innerHTML = `<span class="pl-ico">${ico}</span><div class="pl-body">
+    <div class="pl-time">${t}</div>
+    <div class="pl-title">${title}</div>
+    ${sub?`<div class="pl-sub">${sub}</div>`:""}
+    ${why?`<button class="why-link">Why? ▾</button><div class="why-box">${why}</div>`:""}
+  </div>`;
+  pl.appendChild(d);
+  const wl = d.querySelector(".why-link");
+  if(wl) wl.addEventListener("click", ()=>{
+    const box = d.querySelector(".why-box");
+    box.classList.toggle("show");
+    wl.textContent = box.classList.contains("show") ? "Why? ▴" : "Why? ▾";
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add("in")));
+  return d;
+}
+function addBubble({cls, meta, body, foot, extra}){
+  const th = $("#thread");
+  const b = document.createElement("div");
+  b.className = "bubble " + cls;
+  b.innerHTML = `<div class="b-meta">${meta}</div><div>${body}</div>${foot?`<div class="b-foot">${foot}</div>`:""}${extra||""}`;
+  th.appendChild(b);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add("in")));
+  b.scrollIntoView({block:"nearest", behavior:"smooth"});
+  return b;
+}
+function typing(ms){
+  const th = $("#thread");
+  const t = document.createElement("div");
+  t.className = "typing";
+  t.innerHTML = "<i></i><i></i><i></i>";
+  th.appendChild(t);
+  simTimers.push(setTimeout(()=>t.remove(), ms));
+}
+
+function runSim(){
+  simTimers.forEach(clearTimeout); simTimers = [];
+  state.simRan = true; state.gateResume = null;
+  $("#pipeline").innerHTML = ""; $("#thread").innerHTML = "";
+  const auto = state.mode === "auto";
+  let delay = 300;
+  const at = (ms, fn) => simTimers.push(setTimeout(fn, ms));
+
+  at(delay, ()=>{
+    addStep({t:"00.0s", ico:"📥", title:"Form submitted — “Request a demo”",
+      sub:"Rachel Torres · Ops Director · Novaline Health · from /pricing"});
+    addBubble({cls:"inbound", meta:"Rachel Torres · Novaline Health · via demo form · 9:41 AM", body:LEAD_MSG});
+  });
+  at(delay+=950, ()=>addStep({t:"00.8s", ico:"🔎", title:"Enriched from public sources",
+    sub:"Healthcare tech · 180 employees · Denver, CO · Series B · Zendesk detected in their job postings",
+    why:"<b>Sources:</b> company website, LinkedIn company page, public job boards. The Zendesk detection came from two open “Support Ops” roles that list it — which independently confirms what Rachel wrote."}));
+  at(delay+=950, ()=>addStep({t:"01.6s", ico:"🎯", title:`Buying intent: <span class="conf-pill">HIGH · 0.93</span>`,
+    sub:"An active replacement project, not casual research.",
+    why:"<b>Signals:</b> replacing a named incumbent (Zendesk) → active buyer · exact team size given (40 agents) → scoped project · compliance must-haves (HIPAA, SSO) → serious evaluation · “this week” → urgent timeline. Counter-signals: none found."}));
+  at(delay+=950, ()=>addStep({t:"02.4s", ico:"🧭", title:"ICP fit: 88 / 100",
+    sub:"Healthcare vertical ✓ · 100–500 employees ✓ · 40 seats ≈ $21,600/yr ✓ · US timezone ✓",
+    why:"Fit is scored against the profile BrightDesk's team defined — the AI doesn't invent its own idea of a good customer, it applies yours."}));
+  at(delay+=950, ()=>{
+    addStep({t:"03.1s", ico:"✍️", title:"Reply drafted",
+      sub:"Personalized to the Zendesk migration, answers both must-haves, proposes two live slots from Dana's calendar.",
+      why:"<b>Personalization choices:</b> lead migrating from a competitor → address migration effort first · HIPAA + SSO named → answer both explicitly rather than a generic “yes we're secure” · asked about pricing → offer a call with real calendar slots instead of dodging."});
+    if(auto){
+      typing(800);
+      at(850, ()=>{
+        addBubble({cls:"ai", meta:"BrightDesk (AI) → Rachel · 9:41 AM", body:AI_REPLY,
+          foot:"⚡ Sent automatically (Autopilot) · 3 seconds after the form · logged to HubSpot"});
+        afterSend(auto);
+      });
+    } else {
+      addStep({t:"—", ico:"⏸", title:"Waiting for human approval", cls:"gated",
+        sub:"Copilot mode: nothing is sent until someone on the team clicks approve — in the conversation panel, go ahead and click <b>Approve &amp; send</b>."});
+      const draft = addBubble({cls:"ai draft", meta:"DRAFT — awaiting your approval", body:AI_REPLY,
+        extra:`<div class="approve-row"><button class="btn sm" id="approve-btn">✓ Approve &amp; send</button><button class="btn secondary sm" id="edit-btn">Edit draft</button></div>`});
+      $("#approve-btn").addEventListener("click", ()=>{
+        draft.classList.remove("draft");
+        draft.querySelector(".b-meta").textContent = "BrightDesk (AI) → Rachel · 9:41 AM";
+        draft.querySelector(".approve-row").remove();
+        draft.insertAdjacentHTML("beforeend", `<div class="b-foot">🤝 Approved by you · 28 seconds after the form · logged to HubSpot</div>`);
+        const gate = $("#pipeline .pl-step.gated");
+        if(gate){ gate.classList.remove("gated"); gate.classList.add("done");
+          gate.querySelector(".pl-ico").textContent = "✅";
+          gate.querySelector(".pl-title").textContent = "Approved — sent 28s after the form";
+          gate.querySelector(".pl-sub").innerHTML = "Fast enough to feel instant, with a human still in the loop."; }
+        afterSend(auto);
+      });
+      $("#edit-btn").addEventListener("click", ()=>toast("In the live build this opens the draft for editing. For the demo, hit <b>Approve &amp; send</b>.", "✏️"));
+    }
+  });
+
+  function afterSend(auto){
+    let d = 700;
+    const at2 = (ms, fn) => simTimers.push(setTimeout(fn, ms));
+    at2(d, ()=>addStep({t:auto?"04.1s":"29s", ico:"📇", title:"CRM updated — 5 writes",
+      sub:"Contact created · Novaline Health associated · Deal “Novaline — 40 agents” ($21,600) created · Owner: Dana Okafor (round-robin) · Full transcript logged",
+      why:"Every record a rep would have created by hand, created instantly and consistently. Nothing about this conversation lives outside HubSpot."}));
+    at2(d+=1800, ()=>{
+      addBubble({cls:"inbound", meta:"Rachel Torres · 9:47 AM (6 min later)",
+        body:"“Thursday 2pm ET works. One thing — do you sign BAAs on the standard plan, or only enterprise?”"});
+      addStep({t:"9:47 AM", ico:"💬", title:"Reply received — question detected: compliance / pricing",
+        sub:"Guardrail engaged: compliance questions are answered from approved docs only.",
+        why:"<b>Guardrail:</b> the BAA question matches approved answer #14 (“BAAs — Team plan and above”). The AI never improvises legal or pricing terms; if there were no approved answer, this would route to a human instead."});
+    });
+    at2(d+=1400, ()=>{ typing(900); });
+    at2(d+=1000, ()=>{
+      addBubble({cls:"ai", meta:"BrightDesk (AI) → Rachel · 9:47 AM", body:AI_REPLY2,
+        foot:(auto?"⚡ Autopilot":"🤝 Copilot — pre-approved answer, no review needed")+" · booked via the meetings link on Dana's real availability",
+        extra:`<div class="booking-card"><div class="bc-date"><span>Thu</span><b>9</b><span>Jul</span></div>
+          <div><b>BrightDesk demo — Novaline Health</b><div style="font-size:12px;color:var(--hs-text-2);">2:00–2:45 PM ET · Dana Okafor · Google Meet</div></div></div>`});
+      addStep({t:"9:48 AM", ico:"📅", title:"Meeting booked ✓",
+        sub:"Deal moved to “Appointment Scheduled” · invite sent · Dana pinged in Slack with the full context."});
+    });
+    at2(d+=1500, ()=>{
+      addStep({t:"Total", ico:"🏁", title:"Form → booked meeting: 7 minutes",
+        sub:"Median human team: first reply in ~42 minutes, booking after a day of back-and-forth. The lead never had time to email your competitor."});
+      toast("<b>Dana Okafor</b> just got the Slack ping: “Demo booked: Novaline Health (40 agents, $21.6K) — Thu 2 PM. Full context on the deal record.”", "🔔");
+    });
+  }
+}
+
+/* ============================================================
+   Lead queue
+   ============================================================ */
+const QUEUE = [
+  {time:"3:07 AM", night:true, name:"Kenji Mori", co:"Osaka Robotics", src:"Form", msg:"“Evaluating helpdesks for our APAC support team — 25 agents.”",
+   verdict:["hot","🔥 Hot — booked 3:09 AM"], resp:"84s",
+   why:"After-hours lead from a +15h timezone. Intent HIGH (scoped team, active evaluation). Booked against Dana's next-day slots. Pre-AI, this lead would have waited ~9 hours for a reply — with a Japanese competitor's sales team wide awake."},
+  {time:"8:22 AM", name:"Rachel Torres", co:"Novaline Health", src:"Form", msg:"“Replacing Zendesk for 40 agents. HIPAA + SSO must-haves…”",
+   verdict:["hot","🔥 Hot — booked"], resp:"28s",
+   why:"The lead from the Live Console. Intent 0.93, ICP fit 88 — replied, answered the BAA question from approved docs, booked Thursday 2 PM."},
+  {time:"8:41 AM", name:"Ben Ali", co:"Corvex Software", src:"Chat", msg:"“How do you compare to Intercom for a small team?”",
+   verdict:["qual","✓ Qualified — replied"], resp:"19s",
+   why:"Genuine evaluator but early-stage (comparing, no team size, no timeline). Sent the honest comparison guide plus a soft calendar link; created a follow-up task for day 3 instead of pushing a meeting."},
+  {time:"9:03 AM", name:"M. Petrov", co:"—", src:"Form", msg:"“Partnership opportunity — guaranteed 10x ROI for your clients…”",
+   verdict:["spam","🚫 Spam — discarded"], resp:"—",
+   why:"Template solicitation: no company domain, ROI-guarantee language, message unrelated to the product. No reply sent, no CRM record created — reps never see it."},
+  {time:"9:15 AM", name:"Grace Obi", co:"Tallow & Co (student)", src:"Form", msg:"“Researching support tools for a university project — could I ask some questions?”",
+   verdict:["nurt","🌱 Nurture — resources sent"], resp:"22s",
+   why:"Polite, real, but not a buyer. Sent the public resources pack with a friendly note and tagged the contact “student/research” so no sales sequence ever targets her. Costs nothing, protects the brand."},
+  {time:"9:38 AM", name:"Dana Whitfield", co:"Meridian Logistics", src:"Email", msg:"“Legal wants changes to the indemnification clause before we proceed…”",
+   verdict:["human","👤 Human review — routed"], resp:"31s",
+   why:"Guardrail hit: contract-terms / legal topic. The AI did NOT answer — it acknowledged receipt, told Dana a teammate would follow up today, and routed the thread to Marcus with a summary. Legal language is never AI territory."},
+  {time:"10:02 AM", name:"Leo Fernandez", co:"Parcelio", src:"Chat", msg:"“What's pricing for 12 agents?”",
+   verdict:["qual","✓ Qualified — replied"], resp:"12s",
+   why:"Direct pricing question from an existing-customer domain (expansion!). Answered from the public pricing sheet, flagged the account team, offered a call."},
+  {time:"10:26 AM", name:"Ivy Chen", co:"Halcyon Bio", src:"Form", msg:"“Need a demo for a 60-agent team — deciding by Friday.”",
+   verdict:["hot","🔥 Hot — booked 10:31 AM"], resp:"41s",
+   why:"Deadline named, team scoped, biotech = target vertical. Booked same-week and pinged the owner immediately given the Friday deadline."},
+  {time:"10:44 AM", name:"(no name)", co:"gmail.com", src:"Form", msg:"“test”",
+   verdict:["spam","🚫 Spam — discarded"], resp:"—",
+   why:"Single-word submission from a free-mail address with no other fields. Binned. Reps' attention is spent on the eight rows above instead."}
+];
+const VERDICT_MIX = [
+  {label:"Hot — booked", n:9,  color:"#005a6b", ink:"#fff"},
+  {label:"Qualified — replied", n:14, color:"#0091ae", ink:"#fff"},
+  {label:"Nurture", n:18, color:"#59bccd", ink:"#0b3a44"},
+  {label:"Spam — binned", n:6,  color:"#cbd6e2", ink:"#33475b"}
+];
+
+function renderQueue(){
+  const total = VERDICT_MIX.reduce((a,v)=>a+v.n,0);
+  $("#stackbar").innerHTML = VERDICT_MIX.map(v=>
+    `<div style="width:${v.n/total*100}%;background:${v.color};color:${v.ink};">${v.n}</div>`).join("");
+  $("#stack-legend").innerHTML = VERDICT_MIX.map(v=>
+    `<span><span class="sw" style="background:${v.color};"></span>${v.label}</span>`).join("");
+  const tbl = $("#queue-table");
+  tbl.innerHTML = `<thead><tr><th>Time</th><th>Lead</th><th>Source</th><th>Message</th><th>AI verdict</th><th>First response</th></tr></thead>
+    <tbody>${QUEUE.map((q,i)=>`
+      <tr data-q="${i}">
+        <td style="white-space:nowrap;">${q.time} ${q.night?'<span class="night-chip">🌙 after-hours</span>':""}</td>
+        <td><b>${q.name}</b><div style="font-size:11.5px;color:var(--hs-text-3);">${q.co}</div></td>
+        <td>${q.src}</td>
+        <td style="max-width:330px;color:var(--hs-text-2);">${q.msg}</td>
+        <td><span class="pill ${q.verdict[0]}">${q.verdict[1]}</span></td>
+        <td>${q.resp}</td>
+      </tr>
+      <tr class="q-details" style="display:none;" data-qd="${i}"><td colspan="6"><div class="qd-inner"><b>AI reasoning:</b> ${q.why}</div></td></tr>`).join("")}
+    </tbody>`;
+  tbl.querySelectorAll("tr[data-q]").forEach(tr=>{
+    tr.addEventListener("click", ()=>{
+      const det = tbl.querySelector(`tr[data-qd="${tr.dataset.q}"]`);
+      det.style.display = det.style.display==="none" ? "table-row" : "none";
+    });
+  });
+}
+
+/* ============================================================
+   Results — charts (validated teal accent)
+   ============================================================ */
+const ACCENT = "#0091ae";
+const KPIS = [
+  {label:"Median first response", value:"28 sec", delta:"was 42 min", dir:"up", vs:""},
+  {label:"Inbound leads answered", value:"100%", delta:"was 71%", dir:"up", vs:""},
+  {label:"Meetings booked / month", value:"19", delta:"+8", dir:"up", vs:"vs pre-AI (Mar)"},
+  {label:"After-hours leads booked", value:"6", delta:"was 0", dir:"up", vs:"in June"}
+];
+const MEETINGS = [{m:"Jan",v:11},{m:"Feb",v:12},{m:"Mar",v:10},{m:"Apr",v:14},{m:"May",v:17},{m:"Jun",v:19}];
+const RECOVERED = [
+  {name:"After-hours inquiries", v:3},
+  {name:"Follow-up slower than 1h", v:2},
+  {name:"Form fills never contacted", v:2},
+  {name:"Chats abandoned in queue", v:1}
+];
+function roundedRightBar(x,y,w,h,r){
+  w = Math.max(w, r+1);
+  return `M${x},${y} h${w-r} a${r},${r} 0 0 1 ${r},${r} v${h-2*r} a${r},${r} 0 0 1 -${r},${r} h${-(w-r)} z`;
+}
+const vizTip = {
+  el:null,
+  show(html,x,y){ this.el.innerHTML = html; this.el.style.display="block"; this.move(x,y); },
+  move(x,y){ this.el.style.left = Math.min(x+14, innerWidth-170)+"px"; this.el.style.top = (y-34)+"px"; },
+  hide(){ this.el.style.display="none"; }
+};
+function renderResults(){
+  $("#kpi-row").innerHTML = KPIS.map(k=>`
+    <div class="card kpi"><div class="k-label">${k.label}</div><div class="k-value">${k.value}</div>
+    <div class="k-delta ${k.dir}">${k.delta} <span class="vs">${k.vs}</span></div></div>`).join("");
+  // line chart with go-live annotation
+  const W=560,H=225,L=44,R=62,T=18,B=30,yMax=20;
+  const x = i => L + i*(W-L-R)/(MEETINGS.length-1);
+  const y = v => T + (1 - v/yMax)*(H-T-B);
+  let g = "";
+  [0,5,10,15,20].forEach(v=>{
+    g += `<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" stroke="#e5ebf1"/>`;
+    g += `<text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#516f90" font-variant-numeric="tabular-nums">${v}</text>`;
+  });
+  let hits = "";
+  MEETINGS.forEach((d,i)=>{
+    g += `<text x="${x(i)}" y="${H-9}" text-anchor="middle" font-size="11" fill="#516f90">${d.m}</text>`;
+    hits += `<rect x="${x(i)-24}" y="${T}" width="48" height="${H-T-B}" fill="transparent" class="hovpt" data-tip="<b>${d.m} 2026</b><br>${d.v} meetings booked" data-cx="${x(i)}" data-cy="${y(d.v)}"/>`;
+  });
+  const line = MEETINGS.map((d,i)=>`${i?"L":"M"}${x(i)},${y(d.v)}`).join(" ");
+  const gox = x(3);
+  const last = MEETINGS[MEETINGS.length-1];
+  $("#chart-meetings").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Meetings booked per month">
+    ${g}
+    <line x1="${gox}" y1="${T-4}" x2="${gox}" y2="${H-B}" stroke="#7c98b6" stroke-dasharray="4 3"/>
+    <text x="${gox+6}" y="${T+6}" font-size="10.5" fill="#516f90">AI live · Apr 2</text>
+    <line id="trend-xhair" x1="0" y1="${T}" x2="0" y2="${H-B}" stroke="#9fb3c8" style="display:none;"/>
+    <path d="${line}" fill="none" stroke="${ACCENT}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle id="trend-dot" r="5" fill="${ACCENT}" stroke="#fff" stroke-width="2" style="display:none;"/>
+    <circle cx="${x(5)}" cy="${y(last.v)}" r="5" fill="${ACCENT}" stroke="#fff" stroke-width="2"/>
+    <text x="${x(5)+10}" y="${y(last.v)+4}" font-size="12" font-weight="700" fill="#33475b">19</text>
+    ${hits}</svg>`;
+  $("#dt-meetings").innerHTML = `<table><tr><th>Month</th><th class="num">Meetings booked</th></tr>
+    ${MEETINGS.map(d=>`<tr><td>${d.m} 2026</td><td class="num">${d.v}</td></tr>`).join("")}</table>`;
+  // recovered bars
+  const max = Math.max(...RECOVERED.map(d=>d.v));
+  const labW=210, rowH=37, barH=18, plotW=560-labW-56;
+  let rows = "";
+  RECOVERED.forEach((d,i)=>{
+    const yy = 8+i*rowH, w = Math.max(6, d.v/max*plotW);
+    rows += `<text x="${labW-8}" y="${yy+barH/2+4}" text-anchor="end" font-size="12" fill="#33475b">${d.name}</text>`;
+    rows += `<path d="${roundedRightBar(labW,yy,w,barH,4)}" fill="${ACCENT}" class="hovmark" data-tip="<b>${d.name}</b><br>${d.v} extra meeting${d.v>1?"s":""} in June"/>`;
+    rows += `<text x="${labW+w+8}" y="${yy+barH/2+4}" font-size="12" fill="#33475b" font-weight="700">${d.v}</text>`;
+  });
+  $("#chart-recovered").innerHTML = `<svg viewBox="0 0 560 ${12+RECOVERED.length*rowH}" role="img" aria-label="Recovered leads by reason">${rows}</svg>`;
+  $("#dt-recovered").innerHTML = `<table><tr><th>Reason the lead used to be lost</th><th class="num">Extra meetings (June)</th></tr>
+    ${RECOVERED.map(d=>`<tr><td>${d.name}</td><td class="num">${d.v}</td></tr>`).join("")}</table>
+    <div style="font-size:11px;color:var(--hs-text-3);padding:6px 8px;">8 of June's 19 meetings came from leads the old process would have lost.</div>`;
+}
+function bindChartInteractions(){
+  vizTip.el = $("#viz-tip");
+  $$(".hovmark").forEach(m=>{
+    m.addEventListener("mousemove", e=>vizTip.show(m.dataset.tip, e.clientX, e.clientY));
+    m.addEventListener("mouseleave", ()=>vizTip.hide());
+  });
+  $$(".hovpt").forEach(m=>{
+    m.addEventListener("mousemove", e=>{
+      vizTip.show(m.dataset.tip, e.clientX, e.clientY);
+      const xh = $("#trend-xhair"), dot = $("#trend-dot");
+      xh.style.display="block"; xh.setAttribute("x1",m.dataset.cx); xh.setAttribute("x2",m.dataset.cx);
+      dot.style.display="block"; dot.setAttribute("cx",m.dataset.cx); dot.setAttribute("cy",m.dataset.cy);
+    });
+    m.addEventListener("mouseleave", ()=>{
+      vizTip.hide(); $("#trend-xhair").style.display="none"; $("#trend-dot").style.display="none";
+    });
+  });
+  $$(".data-toggle").forEach(b=>b.addEventListener("click", ()=>{
+    const t = $("#"+b.dataset.target);
+    t.classList.toggle("show");
+    b.textContent = t.classList.contains("show") ? "hide data" : "view data";
+  }));
+}
+
+/* ============================================================
+   How it works
+   ============================================================ */
+const FLOW = [
+  {ico:"📋", t:"Lead arrives", s:"Form, live chat or email lands in HubSpot"},
+  {ico:"⚡", t:"Instant trigger", s:"A HubSpot workflow fires a webhook in under a second"},
+  {ico:"🧠", t:"AI agent qualifies", s:"Enriches the company, scores intent and ICP fit"},
+  {ico:"✍️", t:"Drafts the reply", s:"Approved messaging only, live slots from the team calendar"},
+  {ico:"🤝", t:"Copilot gate", s:"A human approves — or Autopilot sends within seconds"},
+  {ico:"📇", t:"CRM writes", s:"Contact, deal, meeting, Slack ping — all logged on the timeline"}
+];
+const GUARDS = [
+  {ico:"💰", t:"Never invents pricing or terms", s:"Answers come from your approved pricing sheet and messaging docs. No approved answer → no answer, a human gets it."},
+  {ico:"⚖️", t:"Legal & security = human territory", s:"Contract terms, security reviews, cancellations: the AI acknowledges, routes to a named teammate, and stays out of it."},
+  {ico:"🌙", t:"Replies, never pesters", s:"It answers instantly whenever a lead writes in — but it never initiates outreach outside your business hours."},
+  {ico:"📜", t:"Everything on the record", s:"Every message, decision and score is logged to the HubSpot timeline. You can audit any conversation, any time."},
+  {ico:"🤝", t:"Copilot mode from day one", s:"Start with human approval on every send. Flip stages to Autopilot only when the drafts have earned it."},
+  {ico:"📬", t:"Weekly digest", s:"Every Monday: what the AI handled, what it booked, what it escalated — so it never becomes a black box."}
+];
+function renderHow(){
+  $("#flow-row").style.display = "flex";
+  $("#flow-row").style.gap = "8px";
+  $("#flow-row").innerHTML = FLOW.map((n,i)=>
+    `<div class="node" style="flex:1;cursor:default;"><span class="n-ico">${n.ico}</span>
+      <div class="n-title">${n.t}</div><div class="n-sub">${n.s}</div></div>` +
+    (i<FLOW.length-1?`<div style="align-self:center;color:#9fb3c8;font-size:16px;flex:0 0 auto;">→</div>`:"")).join("");
+  $("#guard-grid").innerHTML = GUARDS.map(g=>
+    `<div class="guard"><span class="g-ico">${g.ico}</span><div><b>${g.t}</b><div class="g-sub">${g.s}</div></div></div>`).join("");
+  $("#cta-p").textContent = BRAND.ctaLine;
+  $("#cta-book").addEventListener("click", ()=>toast("In your live version this button links to your real meeting scheduler.", "📅"));
+}
+
+/* ============================================================
+   Guided tour (shared engine)
+   ============================================================ */
+const TOUR = [
+  {center:true, title:"The fastest rep on your team isn't a rep 👋",
+   body:`Study after study says the same thing: answer an inbound lead within five minutes and you're several times more likely to win the meeting than if you answer in an hour. Most teams answer in <b>42 minutes — or the next morning</b>.<br><br>This demo shows an AI SDR living inside HubSpot that answers in seconds, with judgment and guardrails. Two minutes, let's go.`},
+  {view:"console", target:"#mode-toggle", title:"Two modes: Copilot and Autopilot",
+   body:"The first question every owner asks: <i>“will this thing email my leads without me?”</i> Only if you want it to. In <b>Copilot</b>, the AI drafts and a human approves every send. You graduate to Autopilot when it's earned your trust."},
+  {view:"console", target:"#pipeline", title:"Watch it handle a real lead",
+   body:"I've started the simulation — Rachel from Novaline Health just submitted the demo form. Watch the pipeline: enrichment, intent scoring, ICP fit, each step with a <b>“Why?”</b> you can expand. Click Next when the draft appears.",
+   pre:()=>runSim()},
+  {view:"console", target:"#thread-card", title:"The draft — read it closely",
+   body:"Notice what it did: led with the <b>Zendesk migration</b> (her actual worry), answered <b>HIPAA and SSO</b> explicitly, and proposed <b>two real slots from Dana's calendar</b>. And it's waiting for approval — click <b>✓ Approve &amp; send</b> and watch the rest: her reply, the guardrailed BAA answer, the booking."},
+  {view:"queue", target:"#verdict-stack", title:"Speed is half the job. This is the other half.",
+   body:"47 leads this week: 9 booked, 14 answered and qualified, 18 politely nurtured, 6 binned as spam. Reps wake up to a triaged queue instead of a raw inbox."},
+  {view:"queue", target:"#queue-table", title:"Judgment, row by row",
+   body:"Click any row for the AI's reasoning. Look at <b>3:07 AM</b> — a Japanese lead booked while everyone slept. And <b>9:38 AM</b> — a legal question the AI refused to touch and routed to a human. That refusal is a feature, not a limitation."},
+  {view:"results", target:"#kpi-row", title:"What actually changes",
+   body:"Response time collapses from 42 minutes to 28 seconds, every lead gets answered, and bookings climb from 11 to 19 a month. The line chart below shows the break at go-live."},
+  {view:"how", target:"#flow-row", title:"No black box",
+   body:"Standard HubSpot plumbing: a workflow webhook, an AI agent, and writes back through HubSpot's own API. Your portal, your data, your calendar — the AI is a team member, not a separate system."},
+  {view:"how", target:"#guard-grid", title:"The guardrails — the part that wins the deal",
+   body:"Never invents pricing. Never touches legal. Never cold-pings at 2 AM. Everything logged. This page is what turns “AI is risky” into “when can we start?”"},
+  {center:true, title:"That's the AI SDR 🙌",
+   body:`Keep playing: flip <b>Autopilot</b> on and re-run the simulation, expand the <b>Why?</b> boxes, click through the queue.<br><br>Everything here installs on a real HubSpot portal — your forms, your messaging, your guardrails.`}
+];
+let tourIdx = -1;
+const hl = $("#tour-hl"), tip = $("#tour-tip");
+function tourShow(i){
+  if(i<0 || i>=TOUR.length) return tourEnd();
+  tourIdx = i;
+  const st = TOUR[i];
+  if(st.view && state.view!==st.view) switchView(st.view);
+  if(st.pre) st.pre();
+  setTimeout(()=>{
+    const btns = `<div class="t-btns">
+      <button class="t-skip" id="t-skip">End tour</button>
+      ${i>0?'<button class="btn secondary sm" id="t-back">Back</button>':""}
+      <button class="btn sm" id="t-next">${i===TOUR.length-1?"Finish ✓":"Next →"}</button></div>`;
+    tip.innerHTML = `<div class="t-step">Step ${i+1} of ${TOUR.length}</div><h4>${st.title}</h4><p>${st.body}</p>${btns}`;
+    if(st.center){
+      hl.style.display = "block";
+      hl.style.boxShadow = "0 0 0 9999px rgba(24,42,58,.62)";
+      hl.style.left = "50%"; hl.style.top = "40%"; hl.style.width = "0"; hl.style.height = "0";
+      tip.classList.add("centered");
+      tip.style.left = ""; tip.style.top = "";
+      tip.style.display = "block";
+    } else {
+      tip.classList.remove("centered");
+      const el = document.querySelector(st.target);
+      if(!el){ return tourShow(i+1); }
+      el.scrollIntoView({block:"center", behavior:"instant"});
+      const r = el.getBoundingClientRect();
+      hl.style.display = "block";
+      hl.style.boxShadow = "0 0 0 4px rgba(255,122,89,.9), 0 0 0 9999px rgba(24,42,58,.62)";
+      hl.style.left = (r.left+scrollX-6)+"px"; hl.style.top = (r.top+scrollY-6)+"px";
+      hl.style.width = (r.width+12)+"px"; hl.style.height = (r.height+12)+"px";
+      tip.style.display = "block";
+      const tw = 330, th = tip.offsetHeight || 200;
+      let tx = Math.min(Math.max(12, r.left+scrollX), scrollX+document.documentElement.clientWidth-tw-16);
+      let ty = r.bottom + scrollY + 16;
+      if(r.bottom + th + 30 > innerHeight){
+        ty = r.top + scrollY - th - 16;
+        if(ty < scrollY + 8) ty = r.bottom + scrollY + 16;
+      }
+      tip.style.left = tx+"px"; tip.style.top = ty+"px";
+    }
+    $("#t-next").onclick = ()=>tourShow(tourIdx+1===TOUR.length?-1:tourIdx+1);
+    const bb = $("#t-back"); if(bb) bb.onclick = ()=>tourShow(tourIdx-1);
+    $("#t-skip").onclick = tourEnd;
+  }, st.view ? 350 : 60);
+}
+function tourEnd(){ tourIdx = -1; hl.style.display="none"; tip.style.display="none"; }
+document.addEventListener("keydown", e=>{
+  if(tourIdx<0) return;
+  if(e.key==="Escape") tourEnd();
+  if(e.key==="ArrowRight") tourShow(Math.min(tourIdx+1, TOUR.length-1));
+  if(e.key==="ArrowLeft") tourShow(Math.max(tourIdx-1, 0));
+});
+window.addEventListener("resize", ()=>{ if(tourIdx>=0) tourShow(tourIdx); });
+
+/* ============================================================
+   Init
+   ============================================================ */
+function init(){
+  $("#db-by").textContent = `— prepared by ${BRAND.consultant} · ${BRAND.title}`;
+  $("#foot-brand").textContent = ` Demo prepared by ${BRAND.consultant}, ${BRAND.title}.`;
+  $("#cta-book").textContent = `Book a walkthrough with ${BRAND.consultant.split(" ")[0]}`;
+  $$(".nav-item").forEach(b=>b.addEventListener("click", ()=>switchView(b.dataset.view)));
+  $("#tour-start").addEventListener("click", ()=>tourShow(0));
+  $("#sim-btn").addEventListener("click", runSim);
+  $$("#mode-toggle .mode-btn").forEach(b=>b.addEventListener("click", ()=>{
+    state.mode = b.dataset.mode;
+    $$("#mode-toggle .mode-btn").forEach(x=>x.classList.toggle("active", x===b));
+    $("#mode-note").innerHTML = state.mode==="auto"
+      ? "<b>Autopilot:</b> qualified replies go out within seconds, automatically. Sensitive topics still route to a human."
+      : "<b>Copilot:</b> the AI drafts everything but nothing is sent until a human clicks approve. Switch to Autopilot to let it send instantly.";
+    toast(`Mode set to <b>${state.mode==="auto"?"Autopilot":"Copilot"}</b> — press ▶ Simulate to run the pipeline again.`, "🎛️");
+  }));
+  renderQueue(); renderResults(); renderHow(); bindChartInteractions();
+  setTimeout(()=>{ runSim(); }, 900);
+  setTimeout(()=>toast(`This is a live simulation — the lead you're watching just submitted the form. For the full story, hit <b>“▶ Start guided tour”</b>.`, "👋"), 1600);
+}
+init();
+
+</script>
+</body>
+</html>
