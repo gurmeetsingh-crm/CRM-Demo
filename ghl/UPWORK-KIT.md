@@ -216,7 +216,54 @@ two minutes. Rough scripts:
 
 ---
 
-## 7. Tactical reminders
+## 7. Personalized links — the move nobody else makes
+
+Every demo reads the prospect's name straight from the URL. Add `?for=Their Business` to any
+demo or hub link and the page greets them by name — a ribbon up top, a personalized headline on
+the hub, and (on the hub) the most relevant demo auto-flagged "Closest to your business." The
+name is carried into any demo they click.
+
+**So your proposal doesn't link to a generic demo — it links to a demo with the client's name
+already on it.** Takes five seconds per proposal.
+
+### The parameters
+
+| Param | Does | Example |
+|---|---|---|
+| `for` | Greets this business by name everywhere | `?for=Sunfield Dental` |
+| `type` | Highlights the closest-matching demo on the hub | `&type=dental` (or `medspa`, `salon`, `realestate`, `home`) |
+| `by` | Swaps your name (for white-label / agency resale) | `&by=Acme Automations` |
+
+Spaces are fine to type; if a tool mangles them, replace each space with `%20`.
+
+### Copy-paste examples (swap in your hosted base URL for `[HUB]` / `[AI_DEMO]` / `[SNAPSHOT_DEMO]`)
+
+- Dental prospect, straight to the hub with their name + the dental demo flagged:
+  `[HUB]?for=Sunfield Dental&type=dental`
+- Med spa prospect, straight into the AI Employee demo:
+  `[AI_DEMO]?for=Radiance Med Spa`
+- Any local business, hub with the AI demo flagged:
+  `[HUB]?for=Bright Smile Co&type=medspa`
+- White-label (reselling as your own agency):
+  `[HUB]?for=Client Name&by=Your Agency`
+
+### How to use it in a proposal
+
+Take Template 1–4, and instead of the plain demo link, paste the personalized one. The client
+clicks, sees **their own business name** on a working system, and you're already ahead of every
+other applicant. Pair it with a line like:
+
+> "I set this demo up with your name on it so you can picture it as *your* system — open it and
+> hit Start guided tour."
+
+### Safe to send
+
+The name only ever renders as plain text (any pasted code/HTML is stripped), so a weird business
+name can't break the page. No name in the URL = the demos look exactly as they do normally.
+
+---
+
+## 8. Tactical reminders
 
 - **Screenshot thumbnails:** use each demo's hero screen (the console, the journey map, the
   funnel) as the portfolio thumbnail — motion in the image gets clicks.

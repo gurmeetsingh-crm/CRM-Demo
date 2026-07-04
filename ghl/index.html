@@ -82,6 +82,12 @@ footer{max-width:960px;margin:0 auto;padding:0 24px 34px;color:var(--ink-3);font
 @media (max-width:820px){
   .demo-grid,.svc-grid,.steps{grid-template-columns:1fr;}
 }
+/* personalization */
+.for-ribbon{background:#0b1626;color:#cfe0f5;font-size:13px;text-align:center;padding:9px 20px;border-bottom:1px solid #22344d;}
+.for-ribbon b{color:#fff;}
+.demo-card.match{border-color:var(--blue);box-shadow:0 0 0 2px rgba(24,115,243,.18),0 6px 20px rgba(24,115,243,.12);position:relative;}
+.demo-card .match-tag{display:none;position:absolute;top:-11px;left:20px;background:var(--blue);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 10px;}
+.demo-card.match .match-tag{display:inline-block;}
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition:none !important;}
 }
@@ -91,9 +97,9 @@ footer{max-width:960px;margin:0 auto;padding:0 24px 34px;color:var(--ink-3);font
 
 <div class="hero">
   <div class="hero-inner">
-    <div class="eyebrow">GoHighLevel Specialist · Upwork</div>
-    <h1>See the GoHighLevel system before you pay for it.</h1>
-    <p class="lede">I'm <b>Gurmeet Singh</b>. Most freelancers describe what they'll build — I hand you a <b>working, clickable demo</b> with a guided tour, so you know exactly what you're buying before the contract starts. Below are live systems you can open right now.</p>
+    <div class="eyebrow" id="hero-eyebrow">GoHighLevel Specialist · Upwork</div>
+    <h1 id="hero-h1">See the GoHighLevel system before you pay for it.</h1>
+    <p class="lede" id="hero-lede">I'm <b>Gurmeet Singh</b>. Most freelancers describe what they'll build — I hand you a <b>working, clickable demo</b> with a guided tour, so you know exactly what you're buying before the contract starts. Below are live systems you can open right now.</p>
     <div class="hero-btns">
       <a class="btn" href="#demos">Open the live demos</a>
       <button class="btn ghost" id="book-btn">Book a call</button>
@@ -112,7 +118,7 @@ footer{max-width:960px;margin:0 auto;padding:0 24px 34px;color:var(--ink-3);font
     <p>Fictional businesses, real functionality. Every demo has a "Start guided tour" button — that's the two-minute version of what I'd build for you.</p>
   </div>
   <div class="demo-grid">
-    <div class="demo-card">
+    <div class="demo-card" data-niche="full clientapp complete">
       <span class="chip flag">Flagship · Full build</span>
       <h3>The complete client app</h3>
       <p>A full-fledged GoHighLevel build, end to end — the demo I send with proposals so clients can explore everything before hiring.</p>
@@ -123,7 +129,7 @@ footer{max-width:960px;margin:0 auto;padding:0 24px 34px;color:var(--ink-3);font
       </ul>
       <a class="btn" id="clientapp-btn" href="#">Open the demo</a>
     </div>
-    <div class="demo-card">
+    <div class="demo-card" data-niche="medspa spa salon aesthetics local ai missedcall call phone chiro vet fitness gym">
       <span class="chip live">Live · New</span>
       <h3>AI Employee for local business</h3>
       <p>A med spa misses a call at 2:47 PM. Nine seconds later the AI texts back — and six minutes later the caller is booked with a paid deposit.</p>
@@ -134,7 +140,7 @@ footer{max-width:960px;margin:0 auto;padding:0 24px 34px;color:var(--ink-3);font
       </ul>
       <a class="btn" href="ai-employee.html">Open the demo</a>
     </div>
-    <div class="demo-card">
+    <div class="demo-card" data-niche="dental dentist orthodontist snapshot practice medical clinic health">
       <span class="chip live">Live · New</span>
       <h3>Dental practice snapshot</h3>
       <p>A complete, pre-built system that loads into any account in minutes — the whole patient engine for a dental practice, ready to deploy.</p>
@@ -214,6 +220,74 @@ function toast(msg, ico="👋"){
   setTimeout(()=>{t.style.opacity="0"; t.style.transition="opacity .4s";}, 4500);
   setTimeout(()=>t.remove(), 5000);
 }
+/* ============================================================
+   URL personalization — ?for=Business  &by=Name  &type=dental
+   Send a prospect a link with their name already on it.
+   ============================================================ */
+function cleanParam(v, max){
+  if(!v) return "";
+  return v.replace(/<[^>]*>/g,"").replace(/[^\p{L}\p{N} &'’.\-]/gu,"").trim().slice(0, max||48);
+}
+function titleCase(s){ return s.replace(/\b\w/g, c=>c.toUpperCase()); }
+function personalize(){
+  const p = new URLSearchParams(location.search);
+  const forName = cleanParam(p.get("for"), 48);
+  const byName  = cleanParam(p.get("by"), 40);
+  const type    = cleanParam(p.get("type") || p.get("niche"), 30).toLowerCase();
+  const consultant = byName || "Gurmeet Singh";
+
+  // consultant name swaps (white-label support)
+  if(byName){
+    document.querySelectorAll(".swap-consultant").forEach(el=>el.textContent = consultant);
+    const b2 = document.querySelector("#book-btn2");
+    if(b2) b2.textContent = "Book a call with " + consultant.split(" ")[0];
+  }
+
+  if(forName){
+    // top ribbon
+    const rib = document.createElement("div");
+    rib.className = "for-ribbon";
+    rib.innerHTML = `Prepared for <b></b> — a live preview by <span class="c-name"></span>. Everything below is interactive.`;
+    rib.querySelector("b").textContent = forName;
+    rib.querySelector(".c-name").textContent = consultant;
+    document.body.insertBefore(rib, document.body.firstChild);
+    // hero
+    const eb = document.querySelector("#hero-eyebrow");
+    if(eb) eb.textContent = `Prepared for ${forName}`;
+    const lede = document.querySelector("#hero-lede");
+    if(lede) lede.innerHTML = `<b>${forName}</b> — here's what I'd build for you, not a pitch about it. I'm <b>${consultant}</b>, and every system below is live and clickable, each with a two-minute guided tour. Open the one closest to your business.`;
+    document.title = `${forName} — GoHighLevel demos by ${consultant}`;
+  }
+
+  // carry the personalization into each demo link
+  if(location.search){
+    document.querySelectorAll('.demo-card a[href$=".html"]').forEach(a=>{
+      a.href = a.getAttribute("href").split("?")[0] + location.search;
+    });
+  }
+
+  // highlight the most relevant demo for the prospect's niche
+  const hint = (type + " " + forName).toLowerCase();
+  if(hint.trim()){
+    const cards = [...document.querySelectorAll(".demo-card")];
+    let best=null, bestScore=0;
+    cards.forEach(card=>{
+      const words = (card.dataset.niche||"").split(/\s+/);
+      let score = 0;
+      words.forEach(w=>{ if(w && hint.includes(w)) score++; });
+      if(score>bestScore){ bestScore=score; best=card; }
+    });
+    if(best && bestScore>0){
+      best.classList.add("match");
+      const tag = document.createElement("span");
+      tag.className = "match-tag";
+      tag.textContent = "Closest to your business";
+      best.insertBefore(tag, best.firstChild);
+    }
+  }
+}
+personalize();
+
 const ca = document.querySelector("#clientapp-btn");
 if(CONFIG.clientAppUrl){ ca.href = CONFIG.clientAppUrl; }
 else ca.addEventListener("click", e=>{ e.preventDefault();
