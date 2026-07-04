@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glow Aesthetics — GoHighLevel AI Employee Demo</title>
+<style>
+:root{
+  --gl-blue:#1873f3; --gl-blue-dark:#0f5cc7; --gl-blue-tint:#eef4ff;
+  --gl-bg:#f4f6fa; --gl-card:#ffffff; --gl-border:#e2e7f0; --gl-border-2:#eceff5;
+  --gl-text:#2a3342; --gl-text2:#5b6b83; --gl-text3:#8b97ab;
+  --gl-green:#2f9e6e; --gl-green-bg:#e9f7f0; --gl-red:#d9414f; --gl-red-bg:#fdeeef;
+  --gl-yellow:#b97f14; --gl-yellow-bg:#fdf6e7;
+  --viz-accent:#2a78d6; --viz-grid:#e7ebf2;
+  --demo-dark:#101d30; --radius:8px;
+  --shadow:0 1px 4px rgba(31,45,70,.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;background:var(--gl-bg);color:var(--gl-text);font-size:14px;line-height:1.45;}
+button{font-family:inherit;cursor:pointer;}
+a{color:var(--gl-blue);text-decoration:none;}
+h1,h2,h3,h4{font-weight:600;color:var(--gl-text);}
+
+/* demo control bar */
+#demo-bar{background:var(--demo-dark);color:#fff;display:flex;align-items:center;gap:14px;padding:8px 18px;font-size:13px;position:relative;z-index:60;flex-wrap:wrap;}
+#demo-bar .db-brand{display:flex;align-items:center;gap:9px;font-weight:600;}
+#demo-bar .db-dot{width:8px;height:8px;border-radius:50%;background:#3aa0ff;box-shadow:0 0 8px #3aa0ff;}
+#demo-bar .db-sub{color:#93a5c0;font-weight:400;}
+#demo-bar .db-actions{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.db-btn{background:var(--gl-blue);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:13px;font-weight:600;}
+.db-btn:hover{background:var(--gl-blue-dark);}
+.db-btn.ghost{background:transparent;border:1px solid #33507a;color:#c9d6ea;font-weight:400;}
+.db-btn.ghost:hover{border-color:#93a5c0;background:rgba(255,255,255,.06);}
+.switch-wrap{display:flex;align-items:center;gap:8px;color:#c9d6ea;}
+
+/* app shell: sidebar + main */
+.app{display:flex;min-height:calc(100vh - 42px);}
+.sidebar{width:222px;background:var(--gl-card);border-right:1px solid var(--gl-border);flex:0 0 auto;padding-bottom:20px;}
+.loc-block{display:flex;gap:10px;align-items:center;padding:14px 14px;border-bottom:1px solid var(--gl-border-2);}
+.loc-avatar{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#f09ab0,#c76b9d);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto;}
+.loc-block b{font-size:13.5px;display:block;line-height:1.2;}
+.loc-block span{font-size:11px;color:var(--gl-text3);}
+.side-menu{padding:10px 8px;display:flex;flex-direction:column;gap:2px;}
+.side-item{display:flex;align-items:center;gap:11px;background:none;border:none;border-radius:7px;padding:9px 12px;font-size:13.5px;color:var(--gl-text2);text-align:left;width:100%;}
+.side-item:hover{background:var(--gl-bg);color:var(--gl-text);}
+.side-item.active{background:var(--gl-blue-tint);color:var(--gl-blue);font-weight:600;}
+.side-item .si-ico{width:18px;text-align:center;font-size:15px;}
+.side-item .flag{margin-left:auto;background:var(--gl-red);color:#fff;font-size:10px;font-weight:700;border-radius:8px;padding:1px 6px;}
+.main-area{flex:1;min-width:0;}
+.topbar{background:var(--gl-card);border-bottom:1px solid var(--gl-border);display:flex;align-items:center;gap:14px;padding:10px 22px;}
+.topbar .tb-search{background:var(--gl-bg);border:1px solid var(--gl-border);border-radius:7px;color:var(--gl-text3);font-size:13px;padding:7px 14px;min-width:220px;}
+.topbar .tb-right{margin-left:auto;display:flex;align-items:center;gap:12px;color:var(--gl-text2);}
+.avatar{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex:0 0 auto;background:#7a5fb5;}
+main{max-width:1180px;margin:0 auto;padding:22px 22px 60px;}
+
+/* views & generic */
+.view{display:none;}
+.view.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
+.view-head h1{font-size:21px;}
+.view-head .sub{color:var(--gl-text2);font-size:13px;margin-top:3px;max-width:660px;}
+.card{background:var(--gl-card);border:1px solid var(--gl-border);border-radius:var(--radius);box-shadow:var(--shadow);}
+.card-pad{padding:16px 18px;}
+.card h3{font-size:14px;margin-bottom:10px;}
+.btn{background:var(--gl-blue);color:#fff;border:none;border-radius:7px;padding:9px 20px;font-size:14px;font-weight:600;}
+.btn:hover{background:var(--gl-blue-dark);}
+.btn.secondary{background:#fff;color:var(--gl-text);border:1px solid var(--gl-border);font-weight:400;}
+.btn.secondary:hover{background:var(--gl-bg);}
+.btn.sm{padding:5px 12px;font-size:12px;}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:600;white-space:nowrap;}
+.pill.booked{background:var(--gl-green-bg);color:#1f7a52;}
+.pill.qual{background:var(--gl-blue-tint);color:var(--gl-blue-dark);}
+.pill.nurt{background:#f0f7e9;color:#4c7a2b;}
+.pill.staff{background:#f4effb;color:#7a55b8;}
+.pill.spam{background:#edf0f5;color:var(--gl-text2);}
+.night-chip{display:inline-flex;align-items:center;gap:4px;background:#eef1fb;color:#4a5b9b;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;}
+.money-chip{display:inline-flex;align-items:center;gap:4px;background:var(--gl-green-bg);color:#1f7a52;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;}
+
+/* console */
+.console-grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start;}
+.console-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+.mode-toggle{display:flex;border:1px solid var(--gl-border);border-radius:7px;overflow:hidden;background:#fff;}
+.mode-btn{background:#fff;border:none;padding:8px 16px;font-size:13px;color:var(--gl-text2);display:flex;align-items:center;gap:7px;}
+.mode-btn.active{background:var(--demo-dark);color:#fff;font-weight:600;}
+.mode-note{font-size:12px;color:var(--gl-text2);max-width:440px;}
+.pipeline{position:relative;padding-left:6px;}
+.pl-step{display:flex;gap:13px;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease;padding-bottom:18px;position:relative;}
+.pl-step.in{opacity:1;transform:none;}
+.pl-step::before{content:"";position:absolute;left:16px;top:36px;bottom:2px;width:2px;background:var(--gl-border-2);}
+.pl-step:last-child::before{display:none;}
+.pl-ico{width:34px;height:34px;border-radius:50%;background:var(--gl-blue-tint);color:var(--gl-blue-dark);display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 auto;z-index:1;}
+.pl-step.done .pl-ico{background:var(--gl-green-bg);color:#1f7a52;}
+.pl-step.gated .pl-ico{background:var(--gl-yellow-bg);color:var(--gl-yellow);}
+.pl-body{flex:1;min-width:0;}
+.pl-time{font-size:11px;font-weight:700;color:var(--gl-text3);letter-spacing:.3px;}
+.pl-title{font-size:13.5px;font-weight:600;margin-top:1px;}
+.pl-sub{font-size:12.5px;color:var(--gl-text2);margin-top:2px;line-height:1.45;}
+.why-link{background:none;border:none;color:var(--gl-blue);font-size:12px;padding:2px 0;font-weight:600;}
+.why-link:hover{text-decoration:underline;}
+.why-box{display:none;background:var(--gl-bg);border-left:3px solid var(--gl-blue);border-radius:3px;padding:9px 12px;font-size:12.5px;color:var(--gl-text2);margin-top:6px;line-height:1.5;}
+.why-box.show{display:block;}
+.why-box b{color:var(--gl-text);}
+.conf-pill{display:inline-flex;align-items:center;gap:5px;background:var(--gl-green-bg);color:#1f7a52;border-radius:12px;padding:1px 10px;font-size:11.5px;font-weight:700;}
+
+/* SMS thread */
+.thread{display:flex;flex-direction:column;gap:10px;min-height:300px;}
+.chan-line{text-align:center;font-size:11px;color:var(--gl-text3);margin:2px 0;}
+.sms{max-width:88%;border-radius:16px;padding:9px 14px;font-size:13.5px;line-height:1.5;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease;}
+.sms.in{opacity:1;transform:none;}
+.sms .s-meta{font-size:10.5px;margin-bottom:3px;font-weight:600;opacity:.75;}
+.sms.lead{background:#eceff5;color:var(--gl-text);align-self:flex-start;border-bottom-left-radius:5px;}
+.sms.ai{background:var(--gl-blue);color:#fff;align-self:flex-end;border-bottom-right-radius:5px;}
+.sms.ai a{color:#fff;text-decoration:underline;}
+.sms.draft{background:var(--gl-yellow-bg);color:var(--gl-text);border:1.5px dashed #e2b96a;}
+.sms .s-foot{font-size:10px;opacity:.75;margin-top:7px;padding-top:6px;border-top:1px solid rgba(255,255,255,.25);}
+.sms.lead .s-foot,.sms.draft .s-foot{border-top-color:rgba(42,51,66,.15);}
+.approve-row{display:flex;gap:8px;margin-top:9px;}
+.typing{display:inline-flex;gap:4px;align-self:flex-end;padding:11px 16px;background:var(--gl-blue);border-radius:16px;border-bottom-right-radius:5px;}
+.typing i{width:7px;height:7px;border-radius:50%;background:#fff;animation:blink 1.1s infinite;}
+.typing i:nth-child(2){animation-delay:.2s;}
+.typing i:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,70%,100%{opacity:.3;}35%{opacity:1;}}
+.mini-card{border:1px solid var(--gl-border);border-radius:9px;background:#fff;color:var(--gl-text);padding:10px 13px;margin-top:9px;display:flex;gap:11px;align-items:center;}
+.mini-card .bc-date{background:var(--demo-dark);color:#fff;border-radius:7px;text-align:center;padding:5px 10px;line-height:1.15;}
+.mini-card .bc-date b{font-size:17px;display:block;}
+.mini-card .bc-date span{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;}
+.pay-chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--gl-border);border-radius:8px;padding:7px 12px;margin-top:9px;color:var(--gl-text);font-weight:600;font-size:12.5px;}
+
+/* queue */
+.hs-table{width:100%;border-collapse:collapse;font-size:13px;}
+.hs-table th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--gl-text2);background:#f8fafc;padding:9px 14px;border-bottom:1px solid var(--gl-border);font-weight:600;white-space:nowrap;}
+.hs-table td{padding:11px 14px;border-bottom:1px solid var(--gl-border-2);vertical-align:middle;}
+.hs-table tbody tr{cursor:pointer;}
+.hs-table tbody tr:hover{background:#f5f8fd;}
+tr.q-details td{background:var(--gl-bg);font-size:12.5px;color:var(--gl-text2);line-height:1.5;padding:12px 16px 14px;}
+tr.q-details .qd-inner{border-left:3px solid var(--gl-blue);padding:2px 0 2px 12px;}
+.stack-wrap{padding:16px 18px;margin-bottom:14px;}
+.stackbar{display:flex;height:26px;border-radius:7px;overflow:hidden;gap:2px;margin:12px 0 10px;}
+.stackbar>div{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;min-width:30px;}
+.stack-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--gl-text2);}
+.stack-legend .sw{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:6px;}
+
+/* reporting */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.kpi{padding:14px 16px;}
+.kpi .k-label{font-size:12px;color:var(--gl-text2);}
+.kpi .k-value{font-size:28px;font-weight:600;margin-top:4px;}
+.kpi .k-delta{font-size:12px;font-weight:600;margin-top:3px;color:#1f7a52;}
+.kpi .k-delta .vs{color:var(--gl-text3);font-weight:400;}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.chart-card{padding:16px 18px 12px;}
+.chart-card .c-sub{font-size:12px;color:var(--gl-text2);margin:2px 0 12px;}
+.chart-card svg{display:block;width:100%;height:auto;}
+.chart-card svg text{font-family:inherit;}
+.chart-foot{display:flex;justify-content:flex-end;margin-top:6px;}
+.data-toggle{background:none;border:none;color:var(--gl-blue);font-size:12px;padding:4px 2px;}
+.data-toggle:hover{text-decoration:underline;}
+.data-table{display:none;margin-top:8px;}
+.data-table.show{display:block;}
+.data-table table{width:100%;border-collapse:collapse;font-size:12px;}
+.data-table th,.data-table td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--gl-border-2);}
+.data-table th{color:var(--gl-text2);font-weight:600;}
+.data-table td.num,.data-table th.num{text-align:right;font-variant-numeric:tabular-nums;}
+#viz-tip{position:fixed;z-index:90;background:var(--demo-dark);color:#fff;font-size:12px;border-radius:6px;padding:6px 10px;pointer-events:none;display:none;box-shadow:0 4px 14px rgba(16,29,48,.3);white-space:nowrap;}
+#viz-tip .t-sub{color:#93a5c0;}
+
+/* automation view */
+.flow-wrap{display:flex;gap:8px;min-width:1050px;align-items:stretch;}
+.node{background:#fff;border:1px solid var(--gl-border);border-radius:9px;padding:12px 14px;box-shadow:var(--shadow);flex:1;}
+.node .n-ico{font-size:17px;}
+.node .n-title{font-weight:600;font-size:13px;margin-top:4px;line-height:1.3;}
+.node .n-sub{font-size:11.5px;color:var(--gl-text2);margin-top:3px;line-height:1.4;}
+.flow-arr{align-self:center;color:#a8b6cb;font-size:16px;flex:0 0 auto;}
+.guard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.guard{display:flex;gap:11px;background:#fff;border:1px solid var(--gl-border);border-radius:var(--radius);padding:13px 15px;font-size:13px;align-items:flex-start;box-shadow:var(--shadow);}
+.guard .g-ico{font-size:17px;flex:0 0 auto;}
+.guard b{display:block;margin-bottom:2px;}
+.guard .g-sub{color:var(--gl-text2);font-size:12.5px;line-height:1.45;}
+.cta-band{margin-top:20px;background:linear-gradient(100deg,var(--demo-dark),#1a3050);color:#fff;border-radius:12px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+.cta-band h3{color:#fff;font-size:17px;margin-bottom:4px;}
+.cta-band p{color:#aebfd6;font-size:13px;max-width:560px;}
+
+/* tour + toast */
+#tour-hl{position:absolute;z-index:100;border-radius:8px;box-shadow:0 0 0 4px rgba(24,115,243,.9),0 0 0 9999px rgba(16,29,48,.62);pointer-events:none;display:none;transition:all .35s ease;}
+#tour-tip{position:absolute;z-index:101;width:330px;max-width:calc(100vw - 32px);background:#fff;border-radius:10px;box-shadow:0 10px 40px rgba(16,29,48,.4);padding:18px 20px;display:none;}
+#tour-tip .t-step{font-size:11px;font-weight:700;color:var(--gl-blue);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+#tour-tip h4{font-size:15px;margin-bottom:7px;}
+#tour-tip p{font-size:13px;color:var(--gl-text2);line-height:1.55;}
+#tour-tip .t-btns{display:flex;align-items:center;gap:8px;margin-top:15px;}
+#tour-tip .t-skip{margin-right:auto;background:none;border:none;color:var(--gl-text3);font-size:12px;}
+#tour-tip.centered{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:400px;}
+#toast-wrap{position:fixed;left:18px;bottom:18px;z-index:120;display:flex;flex-direction:column;gap:8px;}
+.toast{background:var(--demo-dark);color:#fff;border-radius:8px;padding:11px 16px;font-size:13px;max-width:360px;box-shadow:0 6px 20px rgba(16,29,48,.35);display:flex;gap:9px;align-items:flex-start;animation:toastIn .3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);font-size:11.5px;text-align:center;}
+
+@media (max-width:1020px){
+  .app{flex-direction:column;}
+  .sidebar{width:100%;display:flex;overflow-x:auto;padding-bottom:0;}
+  .loc-block{border-bottom:none;flex:0 0 auto;}
+  .side-menu{flex-direction:row;padding:8px;}
+  .side-item{white-space:nowrap;}
+  .console-grid,.charts-grid,.guard-grid{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+}
+
+</style>
+</head>
+<body>
+
+<div id="demo-bar">
+  <div class="db-brand"><span class="db-dot"></span><span>AI Employee Demo — GoHighLevel</span>
+    <span class="db-sub" id="db-by"></span></div>
+  <div class="db-actions">
+    <a class="db-btn ghost" id="xlink" href="index.html" style="text-decoration:none;">← All demos</a>
+    <button class="db-btn" id="tour-start">▶ Start guided tour</button>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="loc-block">
+      <span class="loc-avatar">GA</span>
+      <div><b>Glow Aesthetics</b><span>Med Spa · Scottsdale, AZ</span></div>
+    </div>
+    <nav class="side-menu" id="side-menu">
+      <button class="side-item locked"><span class="si-ico">🚀</span>Launchpad</button>
+      <button class="side-item locked"><span class="si-ico">📊</span>Dashboard</button>
+      <button class="side-item active" data-view="console"><span class="si-ico">💬</span>Conversations <span class="flag">1</span></button>
+      <button class="side-item" data-view="queue"><span class="si-ico">👥</span>Today's Leads</button>
+      <button class="side-item locked"><span class="si-ico">📅</span>Calendars</button>
+      <button class="side-item locked"><span class="si-ico">🎯</span>Opportunities</button>
+      <button class="side-item locked"><span class="si-ico">💳</span>Payments</button>
+      <button class="side-item" data-view="automation"><span class="si-ico">⚙️</span>Automation</button>
+      <button class="side-item" data-view="reporting"><span class="si-ico">📈</span>Reporting</button>
+      <button class="side-item locked"><span class="si-ico">⭐</span>Reputation</button>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <div class="topbar">
+      <span class="tb-search">🔍 Search contacts, conversations…</span>
+      <div class="tb-right"><span>🔔</span><span>❓</span><span class="avatar">GS</span></div>
+    </div>
+    <main>
+
+      <!-- CONVERSATIONS / LIVE CONSOLE -->
+      <section class="view active" id="view-console">
+        <div class="view-head">
+          <div>
+            <h1>2:47 PM — you just missed a call</h1>
+            <div class="sub">Both front-desk staff were with clients. Most callers who hit voicemail hang up and dial the next med spa on Google. Watch what happens instead when an <b>AI Employee</b> is on the line.</div>
+          </div>
+          <button class="btn" id="sim-btn">▶ Replay the missed call</button>
+        </div>
+        <div class="console-controls">
+          <div class="mode-toggle" id="mode-toggle">
+            <button class="mode-btn active" data-mode="auto">⚡ Autopilot</button>
+            <button class="mode-btn" data-mode="copilot">🤝 Approval mode</button>
+          </div>
+          <div class="mode-note" id="mode-note"><b>Autopilot:</b> the AI texts back and books on its own — that's the point of speed. Approval mode makes price quotes wait for front-desk sign-off, useful in the first weeks.</div>
+        </div>
+        <div class="console-grid">
+          <div class="card card-pad">
+            <h3>What the AI Employee did</h3>
+            <div style="font-size:12px;color:var(--gl-text2);margin-bottom:14px;">Every step logged in GoHighLevel, with its reasoning.</div>
+            <div class="pipeline" id="pipeline"></div>
+          </div>
+          <div class="card card-pad" id="thread-card">
+            <h3>The text conversation</h3>
+            <div style="font-size:12px;color:var(--gl-text2);margin-bottom:14px;">What Jessica sees on her phone.</div>
+            <div class="thread" id="thread"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TODAY'S LEADS -->
+      <section class="view" id="view-queue">
+        <div class="view-head">
+          <div>
+            <h1>Today's conversations — every channel, one brain</h1>
+            <div class="sub">Missed calls, Instagram DMs, webchat, Google messages, SMS — the AI answers them all, books the good ones, and knows exactly when to hand off to a human. <b>Click a row</b> for its reasoning.</div>
+          </div>
+        </div>
+        <div class="card stack-wrap" id="verdict-stack">
+          <h3>This week: 78 conversations handled</h3>
+          <div class="stackbar" id="stackbar"></div>
+          <div class="stack-legend" id="stack-legend"></div>
+        </div>
+        <div class="card" style="overflow-x:auto;">
+          <table class="hs-table" id="queue-table"></table>
+        </div>
+      </section>
+
+      <!-- REPORTING -->
+      <section class="view" id="view-reporting">
+        <div class="view-head">
+          <div>
+            <h1>What the owner sees</h1>
+            <div class="sub">Glow Aesthetics' numbers, 90 days after the AI Employee went live (fictional data, realistic magnitudes). Missed calls stopped being lost revenue.</div>
+          </div>
+          <div style="font-size:12px;color:var(--gl-text2);">AI live since: <b>Apr 2, 2026</b></div>
+        </div>
+        <div class="kpi-row" id="kpi-row"></div>
+        <div class="charts-grid">
+          <div class="card chart-card" id="chart-bookings-card">
+            <h3>Bookings from missed calls, per month</h3>
+            <div class="c-sub">Appointments booked from calls nobody answered, Jan – Jun 2026</div>
+            <div id="chart-bookings"></div>
+            <div class="chart-foot"><button class="data-toggle" data-target="dt-bookings">view data</button></div>
+            <div class="data-table" id="dt-bookings"></div>
+          </div>
+          <div class="card chart-card">
+            <h3>Recovered revenue by channel — June</h3>
+            <div class="c-sub">Booked appointment value that used to slip away, by where it came from</div>
+            <div id="chart-revenue"></div>
+            <div class="chart-foot"><button class="data-toggle" data-target="dt-revenue">view data</button></div>
+            <div class="data-table" id="dt-revenue"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUTOMATION / HOW IT WORKS -->
+      <section class="view" id="view-automation">
+        <div class="view-head">
+          <div>
+            <h1>How it's built — and what it will never do</h1>
+            <div class="sub">All native GoHighLevel: a workflow trigger, Conversation AI trained on this business, real calendars, text-to-pay. The guardrails are configured in plain English and every message is logged.</div>
+          </div>
+        </div>
+        <div class="card card-pad" style="overflow-x:auto;">
+          <div class="flow-wrap" id="flow-row"></div>
+        </div>
+        <div class="guard-grid" id="guard-grid"></div>
+        <div class="cta-band">
+          <div><h3>Want this answering your missed calls?</h3><p id="cta-p"></p></div>
+          <button class="btn" id="cta-book">Book a walkthrough</button>
+        </div>
+      </section>
+
+    </main>
+    <footer>
+      Fictional business &amp; sample data for demonstration. Independent portfolio demo replicating the GoHighLevel user experience — not affiliated with or endorsed by HighLevel Inc.
+      <span id="foot-brand"></span>
+    </footer>
+  </div>
+</div>
+
+<div id="viz-tip"></div>
+<div id="tour-hl"></div>
+<div id="tour-tip"></div>
+<div id="toast-wrap"></div>
+
+<script>
+
+/* ============================================================
+   Branding — edit these lines to re-brand the whole demo
+   ============================================================ */
+const BRAND = {
+  consultant: "Gurmeet Singh",
+  title: "GoHighLevel Expert",
+  business: "Glow Aesthetics",
+  ctaLine: "I set this up inside real GoHighLevel accounts — your services, your prices, your calendars, your guardrails. Works for med spas, dental, salons, home services, real estate. Live in about a week."
+};
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const state = {view:"console", mode:"auto", gate:false};
+
+function toast(msg, ico="✅"){
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerHTML = `<span>${ico}</span><span>${msg}</span>`;
+  $("#toast-wrap").appendChild(t);
+  setTimeout(()=>{t.style.opacity="0"; t.style.transition="opacity .4s";}, 4200);
+  setTimeout(()=>t.remove(), 4700);
+}
+function switchView(name){
+  state.view = name;
+  $$(".view").forEach(v=>v.classList.remove("active"));
+  $("#view-"+name).classList.add("active");
+  $$(".side-item").forEach(b=>b.classList.toggle("active", b.dataset.view===name));
+  window.scrollTo({top:0});
+}
+
+/* ============================================================
+   The missed-call simulation
+   ============================================================ */
+let simTimers = [];
+function addStep({t, ico, title, sub, why, cls}){
+  const d = document.createElement("div");
+  d.className = "pl-step " + (cls||"done");
+  d.innerHTML = `<span class="pl-ico">${ico}</span><div class="pl-body">
+    <div class="pl-time">${t}</div><div class="pl-title">${title}</div>
+    ${sub?`<div class="pl-sub">${sub}</div>`:""}
+    ${why?`<button class="why-link">Why? ▾</button><div class="why-box">${why}</div>`:""}
+  </div>`;
+  $("#pipeline").appendChild(d);
+  const wl = d.querySelector(".why-link");
+  if(wl) wl.addEventListener("click", ()=>{
+    const box = d.querySelector(".why-box");
+    box.classList.toggle("show");
+    wl.textContent = box.classList.contains("show") ? "Why? ▴" : "Why? ▾";
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add("in")));
+  return d;
+}
+function addSms({cls, meta, body, foot, extra}){
+  const b = document.createElement("div");
+  b.className = "sms " + cls;
+  b.innerHTML = `${meta?`<div class="s-meta">${meta}</div>`:""}<div>${body}</div>${foot?`<div class="s-foot">${foot}</div>`:""}${extra||""}`;
+  $("#thread").appendChild(b);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add("in")));
+  b.scrollIntoView({block:"nearest", behavior:"smooth"});
+  return b;
+}
+function typing(ms){
+  const t = document.createElement("div");
+  t.className = "typing";
+  t.innerHTML = "<i></i><i></i><i></i>";
+  $("#thread").appendChild(t);
+  simTimers.push(setTimeout(()=>t.remove(), ms));
+}
+
+const QUOTE_SMS = `Great choice! Lip filler with our injector Maya is <b>$550</b>, and new guests get it for <b>$499</b> ✨ For this Saturday she has <b>10:15 AM</b> or <b>11:30 AM</b> open — want me to hold one for you?`;
+
+function runSim(){
+  simTimers.forEach(clearTimeout); simTimers = [];
+  $("#pipeline").innerHTML = ""; $("#thread").innerHTML = "";
+  const auto = state.mode === "auto";
+  let d = 300;
+  const at = (ms, fn) => simTimers.push(setTimeout(fn, ms));
+
+  at(d, ()=>{
+    addStep({t:"2:47:03 PM", ico:"📞", title:"Missed call — (480) 555-0147",
+      sub:"Rang 24 seconds, both front-desk lines busy. Caller skipped voicemail.",
+      why:"Industry surveys consistently find that the large majority of callers who reach voicemail at a local business simply hang up and call the next result on Google. A missed call is usually a lost customer — unless something answers fast."});
+    $("#thread").insertAdjacentHTML("beforeend", `<div class="chan-line">📞 Missed call · 2:47 PM · new number</div>`);
+  });
+  at(d+=1000, ()=>{
+    addStep({t:"+9 sec", ico:"💬", title:"Text-back sent automatically",
+      sub:"Workflow “Missed Call → AI Employee” fired. No human touched anything.",
+      why:"The trigger is a native GoHighLevel workflow on the business line. Nine seconds is fast enough that Jessica is still holding her phone."});
+    addSms({cls:"ai", meta:"Glow Aesthetics · 2:47 PM",
+      body:`Hi, it's Glow Aesthetics! 💕 So sorry we missed your call — we're with clients. How can we help you today?`,
+      foot:"⚡ Sent 9s after the missed call · via GHL workflow"});
+  });
+  at(d+=1600, ()=>{
+    addSms({cls:"lead", meta:"Jessica · 2:48 PM",
+      body:`hi! do you have anything this saturday for lip filler? and how much is it`});
+    addStep({t:"2:48 PM", ico:"🎯", title:`Reply received — intent detected: <span class="conf-pill">HIGH</span>`,
+      sub:"Service: lip filler · Timing: this Saturday · Price question",
+      why:"<b>Signals:</b> a named service + a specific day = ready to book, not browsing. New number → contact created in GHL, tagged <i>lip-filler</i> and <i>source: missed-call</i>."});
+  });
+  at(d+=1400, ()=>{
+    addStep({t:"+2 sec", ico:"💰", title:"Price pulled from the approved service menu",
+      sub:"Lip filler $550 · new-guest offer $499. The AI can only quote what's on the sheet.",
+      why:"<b>Guardrail:</b> prices come from the service menu the owner approved — the AI never invents numbers and never discounts beyond the listed offer. Menu changes once, everywhere."});
+    addStep({t:"+3 sec", ico:"📅", title:"Live calendar checked — Injector: Maya",
+      sub:"Two real Saturday openings found: 10:15 AM and 11:30 AM.",
+      why:"These are actual slots on Maya's GHL calendar, respecting her hours, buffers and the 45-minute service duration — not made-up times that front desk has to untangle later."});
+    if(auto){
+      typing(900);
+      at(950, ()=>{
+        addSms({cls:"ai", meta:"Glow Aesthetics · 2:48 PM", body:QUOTE_SMS,
+          foot:"⚡ Autopilot · price from approved menu · slots from Maya's live calendar"});
+      });
+    } else {
+      addStep({t:"—", ico:"⏸", title:"Approval mode: quote held for front desk", cls:"gated",
+        sub:"Price quotes wait for a human OK in your first weeks. Click <b>Approve &amp; send</b> in the conversation."});
+      const draft = addSms({cls:"draft", meta:"DRAFT — waiting for front-desk approval", body:QUOTE_SMS,
+        extra:`<div class="approve-row"><button class="btn sm" id="approve-btn">✓ Approve &amp; send</button><button class="btn secondary sm" id="edit-btn">Edit</button></div>`});
+      $("#approve-btn").addEventListener("click", ()=>{
+        draft.classList.remove("draft"); draft.classList.add("ai");
+        draft.querySelector(".s-meta").textContent = "Glow Aesthetics · 2:49 PM";
+        draft.querySelector(".approve-row").remove();
+        draft.insertAdjacentHTML("beforeend", `<div class="s-foot">🤝 Approved by front desk · price from approved menu</div>`);
+        const gate = $("#pipeline .pl-step.gated");
+        if(gate){ gate.classList.remove("gated"); gate.classList.add("done");
+          gate.querySelector(".pl-ico").textContent = "✅";
+          gate.querySelector(".pl-title").textContent = "Approved & sent";
+          gate.querySelector(".pl-sub").textContent = "Still under 2 minutes from the missed call."; }
+        afterQuote();
+      });
+      $("#edit-btn").addEventListener("click", ()=>toast("In the live build the draft opens for editing. For the demo, hit <b>Approve &amp; send</b>.", "✏️"));
+    }
+  });
+  if(auto) at(d+=1200, afterQuote);
+
+  function afterQuote(){
+    let e = 1400;
+    const at2 = (ms, fn) => simTimers.push(setTimeout(fn, ms));
+    at2(e, ()=>{
+      addSms({cls:"lead", meta:"Jessica · 2:51 PM", body:`11:30 works!! do i need to pay anything now?`});
+    });
+    at2(e+=1200, ()=>{
+      typing(800);
+      at2(850, ()=>{
+        addSms({cls:"ai", meta:"Glow Aesthetics · 2:51 PM",
+          body:`Perfect — you're booked for <b>Saturday, Jul 11 at 11:30 AM</b> with Maya! 🎉 We just ask for a $50 deposit to hold your spot (it comes off your total). You can pay right here:`,
+          foot:"Booked on Maya's real calendar · confirmation + reminders armed (48h · 24h · 2h)",
+          extra:`<div class="pay-chip">💳 glowaesthetics.pay/dep-50 → <b style="color:#1f7a52;">PAID ✓ 2:53 PM</b></div>
+            <div class="mini-card"><div class="bc-date"><span>Sat</span><b>11</b><span>Jul</span></div>
+            <div><b>Lip Filler — New Guest ($499)</b><div style="font-size:12px;color:var(--gl-text2);">11:30 AM · Maya R. · Glow Aesthetics</div></div></div>`});
+        addStep({t:"2:53 PM", ico:"💳", title:"Booked + $50 deposit paid (text-to-pay)",
+          sub:"Appointment on Maya's calendar · deposit collected via GHL Payments · reminder sequence armed.",
+          why:"Deposits collected at booking are what turn “booked” into “showed up”. The link is GHL's native text-to-pay — the money is real the moment she taps it."});
+      });
+    });
+    at2(e+=2600, ()=>{
+      addSms({cls:"lead", meta:"Jessica · 2:54 PM", body:`quick q — i'm 6 weeks pregnant, is filler ok?`});
+      addStep({t:"2:54 PM", ico:"🛑", title:"Medical question detected — AI steps aside",
+        sub:"No answer given. Routed to nurse injector Maya with the full thread; appointment flagged for clinical review.",
+        why:"<b>The most important guardrail:</b> anything medical — pregnancy, medications, reactions, contraindications — is never answered by AI. It acknowledges, hands off to licensed staff, and flags the booking. This is what makes owners comfortable turning it on."});
+      at2(900, ()=>{
+        addSms({cls:"ai", meta:"Glow Aesthetics · 2:54 PM",
+          body:`That's a really important question — I'll have Maya, our nurse injector, text you directly to talk it through before Saturday. She'll reach out within the hour. 💕`,
+          foot:"🛑 Medical topic → routed to licensed staff · no AI advice given"});
+      });
+    });
+    at2(e+=2400, ()=>{
+      addStep({t:"Total", ico:"🏁", title:"Missed call → paid booking: 6 minutes",
+        sub:"Contact created · opportunity “Jessica — Lip Filler ($499)” in the Bookings pipeline · tags set · full transcript in Conversations · front desk did nothing."});
+      toast("<b>Front desk</b> just got the notification: “New booking: Jessica — Lip Filler, Sat 11:30 AM, deposit paid. ⚠️ Clinical question flagged for Maya.”", "🔔");
+    });
+  }
+}
+
+/* ============================================================
+   Today's leads
+   ============================================================ */
+const QUEUE = [
+  {time:"7:02 AM", night:true, name:"Marisol V.", chan:"Google Business msg", msg:"“do you do brow lamination? prices?”",
+   verdict:["qual","✓ Replied + calendar link"], resp:"11s",
+   why:"Before opening hours. Quoted brow lamination from the menu ($95), sent the self-booking calendar link. She booked herself at 7:15 AM — an hour before staff arrived."},
+  {time:"9:14 AM", name:"Karen D.", chan:"Missed call", msg:"(existing client — recognized number)",
+   verdict:["booked","🔥 Booked — Botox touch-up"], resp:"8s",
+   why:"Number matched an existing contact, so the AI greeted her by name and offered her usual injector. Booked next-day 10:00 AM in two messages."},
+  {time:"10:31 AM", name:"@ninaglow_", chan:"Instagram DM", msg:"“how much for the microneedling package”",
+   verdict:["qual","✓ Replied + consult offered"], resp:"14s",
+   why:"Package pricing quoted from the menu; since microneedling results vary by skin goal, the playbook offers a free 15-min consult rather than hard-booking — she took Thursday 4 PM."},
+  {time:"11:05 AM", name:"Amber T.", chan:"Webchat", msg:"“I had some swelling after my appointment yesterday…”",
+   verdict:["staff","👤 Human — clinical, urgent"], resp:"6s",
+   why:"Post-treatment reaction = clinical and time-sensitive. The AI gave no advice, acknowledged warmly, and triggered an urgent notification — Maya called Amber within 4 minutes. The escalation is the feature."},
+  {time:"12:22 PM", name:"(unknown)", chan:"SMS", msg:"“STOP”",
+   verdict:["spam","⏹ DND set instantly"], resp:"1s",
+   why:"Opt-out honored immediately: DND flag set in GHL, no further messages possible from any campaign. Compliance is automatic, not a training issue."},
+  {time:"1:40 PM", name:"(555) 019-2834", chan:"Missed call", msg:"(known telemarketer pattern)",
+   verdict:["spam","🚫 No text-back sent"], resp:"—",
+   why:"Number matched spam patterns (sequential dialer, no prior contact, flagged prefix). No text-back — the AI doesn't waste your SMS budget chatting with robots."},
+  {time:"2:47 PM", name:"Jessica M.", chan:"Missed call", msg:"“anything saturday for lip filler? how much”",
+   verdict:["booked","🔥 Booked + $50 deposit"], resp:"9s", money:true,
+   why:"The conversation from the Conversations tab: quoted from the approved menu, booked Maya's real 11:30 slot, collected the deposit, and routed the pregnancy question to the nurse."},
+  {time:"4:15 PM", name:"Dana K.", chan:"Facebook lead form", msg:"“getting married in October — skincare plan?”",
+   verdict:["booked","🔥 Consult booked"], resp:"18s",
+   why:"Bridal = high lifetime value, flagged VIP. Booked a skin consult and tagged <i>bridal-oct</i> so she enters the 12-week bridal nurture sequence automatically."},
+  {time:"9:52 PM", night:true, name:"Tom W.", chan:"Webchat", msg:"“can I get a gift card for my wife's birthday?”",
+   verdict:["booked","💰 Gift card sold — $200"], resp:"7s", money:true,
+   why:"Two hours after close. Sent the gift-card payment link, he paid on the spot, and the e-card was emailed to him for printing. Revenue at 9:52 PM with the lights off."}
+];
+const VERDICT_MIX = [
+  {label:"Booked / sold", n:21, color:"#184f95", ink:"#fff"},
+  {label:"Replied & qualified", n:30, color:"#2a78d6", ink:"#fff"},
+  {label:"Routed to staff", n:5, color:"#5598e7", ink:"#0d2b52"},
+  {label:"Nurture", n:14, color:"#86b6ef", ink:"#0d2b52"},
+  {label:"Spam / opt-out", n:8, color:"#cbd6e2", ink:"#2a3342"}
+];
+function renderQueue(){
+  const total = VERDICT_MIX.reduce((a,v)=>a+v.n,0);
+  $("#stackbar").innerHTML = VERDICT_MIX.map(v=>
+    `<div style="width:${v.n/total*100}%;background:${v.color};color:${v.ink};">${v.n}</div>`).join("");
+  $("#stack-legend").innerHTML = VERDICT_MIX.map(v=>
+    `<span><span class="sw" style="background:${v.color};"></span>${v.label}</span>`).join("");
+  const tbl = $("#queue-table");
+  tbl.innerHTML = `<thead><tr><th>Time</th><th>Contact</th><th>Channel</th><th>Message</th><th>AI outcome</th><th>Response</th></tr></thead>
+    <tbody>${QUEUE.map((q,i)=>`
+      <tr data-q="${i}">
+        <td style="white-space:nowrap;">${q.time} ${q.night?'<span class="night-chip">🌙 closed</span>':""}</td>
+        <td><b>${q.name}</b></td>
+        <td style="white-space:nowrap;">${q.chan}</td>
+        <td style="max-width:300px;color:var(--gl-text2);">${q.msg}</td>
+        <td><span class="pill ${q.verdict[0]}">${q.verdict[1]}</span></td>
+        <td>${q.resp}</td>
+      </tr>
+      <tr class="q-details" style="display:none;" data-qd="${i}"><td colspan="6"><div class="qd-inner"><b>AI reasoning:</b> ${q.why}</div></td></tr>`).join("")}
+    </tbody>`;
+  tbl.querySelectorAll("tr[data-q]").forEach(tr=>{
+    tr.addEventListener("click", ()=>{
+      const det = tbl.querySelector(`tr[data-qd="${tr.dataset.q}"]`);
+      det.style.display = det.style.display==="none" ? "table-row" : "none";
+    });
+  });
+}
+
+/* ============================================================
+   Reporting
+   ============================================================ */
+const ACCENT = "#2a78d6";
+const KPIS = [
+  {label:"Median text-back time", value:"9 sec", delta:"was: never", vs:""},
+  {label:"Missed calls answered", value:"100%", delta:"was 0%", vs:"(all texted back)"},
+  {label:"Bookings from missed calls", value:"23", delta:"was ~4", vs:"per month"},
+  {label:"Revenue recovered", value:"$11,900", delta:"+$9.6K", vs:"June vs pre-AI"}
+];
+const BOOKINGS = [{m:"Jan",v:4},{m:"Feb",v:5},{m:"Mar",v:3},{m:"Apr",v:14},{m:"May",v:19},{m:"Jun",v:23}];
+const REVENUE = [
+  {name:"Missed calls", v:6300},
+  {name:"After-hours webchat", v:2450},
+  {name:"Instagram / FB DMs", v:1900},
+  {name:"Google Business msgs", v:1250}
+];
+function roundedRightBar(x,y,w,h,r){
+  w = Math.max(w, r+1);
+  return `M${x},${y} h${w-r} a${r},${r} 0 0 1 ${r},${r} v${h-2*r} a${r},${r} 0 0 1 -${r},${r} h${-(w-r)} z`;
+}
+const vizTip = {
+  el:null,
+  show(html,x,y){ this.el.innerHTML = html; this.el.style.display="block"; this.move(x,y); },
+  move(x,y){ this.el.style.left = Math.min(x+14, innerWidth-180)+"px"; this.el.style.top = (y-34)+"px"; },
+  hide(){ this.el.style.display="none"; }
+};
+function renderReporting(){
+  $("#kpi-row").innerHTML = KPIS.map(k=>`
+    <div class="card kpi"><div class="k-label">${k.label}</div><div class="k-value">${k.value}</div>
+    <div class="k-delta">${k.delta} <span class="vs">${k.vs}</span></div></div>`).join("");
+  const W=560,H=225,L=44,R=62,T=18,B=30,yMax=25;
+  const x = i => L + i*(W-L-R)/(BOOKINGS.length-1);
+  const y = v => T + (1 - v/yMax)*(H-T-B);
+  let g = "", hits = "";
+  [0,5,10,15,20,25].forEach(v=>{
+    g += `<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" stroke="#e7ebf2"/>`;
+    g += `<text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#5b6b83" font-variant-numeric="tabular-nums">${v}</text>`;
+  });
+  BOOKINGS.forEach((d,i)=>{
+    g += `<text x="${x(i)}" y="${H-9}" text-anchor="middle" font-size="11" fill="#5b6b83">${d.m}</text>`;
+    hits += `<rect x="${x(i)-24}" y="${T}" width="48" height="${H-T-B}" fill="transparent" class="hovpt" data-tip="<b>${d.m} 2026</b><br>${d.v} bookings from missed calls" data-cx="${x(i)}" data-cy="${y(d.v)}"/>`;
+  });
+  const line = BOOKINGS.map((d,i)=>`${i?"L":"M"}${x(i)},${y(d.v)}`).join(" ");
+  const gox = x(3);
+  $("#chart-bookings").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Bookings from missed calls per month">
+    ${g}
+    <line x1="${gox}" y1="${T-4}" x2="${gox}" y2="${H-B}" stroke="#8b97ab" stroke-dasharray="4 3"/>
+    <text x="${gox+6}" y="${T+6}" font-size="10.5" fill="#5b6b83">AI live · Apr 2</text>
+    <line id="trend-xhair" x1="0" y1="${T}" x2="0" y2="${H-B}" stroke="#a8b6cb" style="display:none;"/>
+    <path d="${line}" fill="none" stroke="${ACCENT}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle id="trend-dot" r="5" fill="${ACCENT}" stroke="#fff" stroke-width="2" style="display:none;"/>
+    <circle cx="${x(5)}" cy="${y(23)}" r="5" fill="${ACCENT}" stroke="#fff" stroke-width="2"/>
+    <text x="${x(5)+10}" y="${y(23)+4}" font-size="12" font-weight="700" fill="#2a3342">23</text>
+    ${hits}</svg>`;
+  $("#dt-bookings").innerHTML = `<table><tr><th>Month</th><th class="num">Bookings from missed calls</th></tr>
+    ${BOOKINGS.map(d=>`<tr><td>${d.m} 2026</td><td class="num">${d.v}</td></tr>`).join("")}</table>`;
+  const max = Math.max(...REVENUE.map(d=>d.v));
+  const labW=200, rowH=37, barH=18, plotW=560-labW-70;
+  let rows = "";
+  REVENUE.forEach((d,i)=>{
+    const yy = 8+i*rowH, w = Math.max(6, d.v/max*plotW);
+    rows += `<text x="${labW-8}" y="${yy+barH/2+4}" text-anchor="end" font-size="12" fill="#2a3342">${d.name}</text>`;
+    rows += `<path d="${roundedRightBar(labW,yy,w,barH,4)}" fill="${ACCENT}" class="hovmark" data-tip="<b>${d.name}</b><br>$${d.v.toLocaleString()} booked value in June"/>`;
+    rows += `<text x="${labW+w+8}" y="${yy+barH/2+4}" font-size="12" fill="#2a3342" font-weight="700">$${d.v.toLocaleString()}</text>`;
+  });
+  $("#chart-revenue").innerHTML = `<svg viewBox="0 0 560 ${12+REVENUE.length*rowH}" role="img" aria-label="Recovered revenue by channel">${rows}</svg>`;
+  $("#dt-revenue").innerHTML = `<table><tr><th>Channel</th><th class="num">Booked value (June)</th></tr>
+    ${REVENUE.map(d=>`<tr><td>${d.name}</td><td class="num">$${d.v.toLocaleString()}</td></tr>`).join("")}</table>
+    <div style="font-size:11px;color:#8b97ab;padding:6px 8px;">$11,900 of June bookings came through channels that used to go unanswered.</div>`;
+}
+function bindChartInteractions(){
+  vizTip.el = $("#viz-tip");
+  $$(".hovmark").forEach(m=>{
+    m.addEventListener("mousemove", e=>vizTip.show(m.dataset.tip, e.clientX, e.clientY));
+    m.addEventListener("mouseleave", ()=>vizTip.hide());
+  });
+  $$(".hovpt").forEach(m=>{
+    m.addEventListener("mousemove", e=>{
+      vizTip.show(m.dataset.tip, e.clientX, e.clientY);
+      const xh = $("#trend-xhair"), dot = $("#trend-dot");
+      xh.style.display="block"; xh.setAttribute("x1",m.dataset.cx); xh.setAttribute("x2",m.dataset.cx);
+      dot.style.display="block"; dot.setAttribute("cx",m.dataset.cx); dot.setAttribute("cy",m.dataset.cy);
+    });
+    m.addEventListener("mouseleave", ()=>{
+      vizTip.hide(); $("#trend-xhair").style.display="none"; $("#trend-dot").style.display="none";
+    });
+  });
+  $$(".data-toggle").forEach(b=>b.addEventListener("click", ()=>{
+    const t = $("#"+b.dataset.target);
+    t.classList.toggle("show");
+    b.textContent = t.classList.contains("show") ? "hide data" : "view data";
+  }));
+}
+
+/* ============================================================
+   Automation view
+   ============================================================ */
+const FLOW = [
+  {ico:"📞", t:"Missed call / DM / chat", s:"Any channel lands in one GHL inbox"},
+  {ico:"⚡", t:"Workflow trigger", s:"Native GHL automation fires in seconds"},
+  {ico:"🤖", t:"AI Employee", s:"Trained on this business: services, prices, FAQs, tone"},
+  {ico:"📅", t:"Books real calendars", s:"Staff hours, buffers and durations respected"},
+  {ico:"💳", t:"Text-to-pay deposit", s:"GHL Payments link — money at booking time"},
+  {ico:"📇", t:"CRM + notifications", s:"Contact, opportunity, tags, transcript, staff ping"}
+];
+const GUARDS = [
+  {ico:"🩺", t:"Medical topics = licensed staff only", s:"Pregnancy, medications, reactions, contraindications — the AI never advises. It hands off, flags the booking, and stays out."},
+  {ico:"💰", t:"Prices from the approved menu only", s:"No invented numbers, no rogue discounts. Change the menu once and every channel quotes correctly."},
+  {ico:"⏱️", t:"Replies instantly, never pesters", s:"It answers whenever a customer writes in — but never initiates outreach outside business hours, and honors STOP instantly."},
+  {ico:"📜", t:"Every message on the record", s:"Full transcripts live in GHL Conversations. The owner can audit any chat, any time."},
+  {ico:"🤝", t:"Approval mode for the first weeks", s:"Quotes and bookings can wait for front-desk sign-off until the AI has earned Autopilot."},
+  {ico:"📬", t:"Monday owner digest", s:"What it booked, what it earned, what it escalated — the AI reports to the owner like any employee."}
+];
+function renderAutomation(){
+  $("#flow-row").innerHTML = FLOW.map((n,i)=>
+    `<div class="node"><span class="n-ico">${n.ico}</span><div class="n-title">${n.t}</div><div class="n-sub">${n.s}</div></div>` +
+    (i<FLOW.length-1?`<div class="flow-arr">→</div>`:"")).join("");
+  $("#guard-grid").innerHTML = GUARDS.map(g=>
+    `<div class="guard"><span class="g-ico">${g.ico}</span><div><b>${g.t}</b><div class="g-sub">${g.s}</div></div></div>`).join("");
+  $("#cta-p").textContent = BRAND.ctaLine;
+  $("#cta-book").addEventListener("click", ()=>toast("In your live version this button links to your real booking calendar.", "📅"));
+}
+
+/* ============================================================
+   Guided tour
+   ============================================================ */
+const TOUR = [
+  {center:true, title:"Every missed call is a customer choosing your competitor 👋",
+   body:`A med spa's front desk can't answer the phone while their hands are on a client's face. Most callers who hit voicemail hang up and dial the next result on Google.<br><br>This demo shows a GoHighLevel <b>AI Employee</b> that texts back in seconds, quotes real prices, books real calendars, takes deposits — and knows exactly what it's <i>not</i> allowed to answer. Two minutes.`},
+  {view:"console", target:"#mode-toggle", title:"Autopilot — with an approval mode",
+   body:"Speed is the whole point, so Autopilot is the default: the AI texts back and books on its own. Nervous owners start in <b>Approval mode</b>, where price quotes wait for front-desk sign-off. Trust is earned, then you flip the switch."},
+  {view:"console", target:"#pipeline", title:"2:47 PM — the call nobody could take",
+   body:"I've started the replay. Jessica calls, both staff are busy, she skips voicemail — and <b>9 seconds later</b> she gets a text. Watch each step land; every one has a <b>Why?</b> you can expand. Click Next when she's booked.",
+   pre:()=>runSim()},
+  {view:"console", target:"#thread-card", title:"Reads like a great receptionist",
+   body:"Real price from the approved menu, real Saturday slots from Maya's actual calendar, a deposit link she pays by text — and when she asks a <b>pregnancy question</b>, the AI refuses to answer and hands her to the nurse. That refusal is what sells this to owners."},
+  {view:"queue", target:"#verdict-stack", title:"One brain across every channel",
+   body:"78 conversations this week — missed calls, Instagram DMs, webchat, Google messages, SMS. 21 booked or sold, 30 answered and qualified, 5 handed to staff, spam binned."},
+  {view:"queue", target:"#queue-table", title:"Judgment, row by row",
+   body:"Click the rows. <b>9:52 PM</b>: a $200 gift card sold two hours after close. <b>11:05 AM</b>: a post-treatment reaction the AI refused to touch — nurse called within 4 minutes. <b>12:22 PM</b>: a STOP honored in one second."},
+  {view:"reporting", target:"#kpi-row", title:"The owner's scoreboard",
+   body:"Missed-call bookings went from ~4 a month to 23, and June recovered <b>$11,900</b> in bookings that used to evaporate. The chart shows the break exactly at go-live."},
+  {view:"automation", target:"#flow-row", title:"All native GoHighLevel",
+   body:"No duct tape: a workflow trigger, Conversation AI trained on this business, real calendars, text-to-pay, pipeline writes. It lives inside the same GHL account the business already runs on — and it snapshots to any niche."},
+  {view:"automation", target:"#guard-grid", title:"The guardrails close the deal",
+   body:"Never gives medical advice. Never invents prices. Honors STOP instantly. Reports to the owner every Monday. This page turns “AI texting my clients? risky” into “when can we start?”"},
+  {center:true, title:"That's the AI Employee 🙌",
+   body:`Keep playing: replay the missed call, switch to Approval mode, click through the queue rows.<br><br>This installs into a real GoHighLevel account — your services, your calendars, your rules — and works for med spas, dental, salons, home services, real estate and more.`}
+];
+let tourIdx = -1;
+const hl = $("#tour-hl"), tip = $("#tour-tip");
+function tourShow(i){
+  if(i<0 || i>=TOUR.length) return tourEnd();
+  tourIdx = i;
+  const st = TOUR[i];
+  if(st.view && state.view!==st.view) switchView(st.view);
+  if(st.pre) st.pre();
+  setTimeout(()=>{
+    const btns = `<div class="t-btns">
+      <button class="t-skip" id="t-skip">End tour</button>
+      ${i>0?'<button class="btn secondary sm" id="t-back">Back</button>':""}
+      <button class="btn sm" id="t-next">${i===TOUR.length-1?"Finish ✓":"Next →"}</button></div>`;
+    tip.innerHTML = `<div class="t-step">Step ${i+1} of ${TOUR.length}</div><h4>${st.title}</h4><p>${st.body}</p>${btns}`;
+    if(st.center){
+      hl.style.display = "block";
+      hl.style.boxShadow = "0 0 0 9999px rgba(16,29,48,.62)";
+      hl.style.left = "50%"; hl.style.top = "40%"; hl.style.width = "0"; hl.style.height = "0";
+      tip.classList.add("centered");
+      tip.style.left = ""; tip.style.top = "";
+      tip.style.display = "block";
+    } else {
+      tip.classList.remove("centered");
+      const el = document.querySelector(st.target);
+      if(!el){ return tourShow(i+1); }
+      el.scrollIntoView({block:"center", behavior:"instant"});
+      const r = el.getBoundingClientRect();
+      hl.style.display = "block";
+      hl.style.boxShadow = "0 0 0 4px rgba(24,115,243,.9), 0 0 0 9999px rgba(16,29,48,.62)";
+      hl.style.left = (r.left+scrollX-6)+"px"; hl.style.top = (r.top+scrollY-6)+"px";
+      hl.style.width = (r.width+12)+"px"; hl.style.height = (r.height+12)+"px";
+      tip.style.display = "block";
+      const tw = 330, th = tip.offsetHeight || 200;
+      let tx = Math.min(Math.max(12, r.left+scrollX), scrollX+document.documentElement.clientWidth-tw-16);
+      let ty = r.bottom + scrollY + 16;
+      if(r.bottom + th + 30 > innerHeight){
+        ty = r.top + scrollY - th - 16;
+        if(ty < scrollY + 8) ty = r.bottom + scrollY + 16;
+      }
+      tip.style.left = tx+"px"; tip.style.top = ty+"px";
+    }
+    $("#t-next").onclick = ()=>tourShow(tourIdx+1===TOUR.length?-1:tourIdx+1);
+    const bb = $("#t-back"); if(bb) bb.onclick = ()=>tourShow(tourIdx-1);
+    $("#t-skip").onclick = tourEnd;
+  }, st.view ? 350 : 60);
+}
+function tourEnd(){ tourIdx = -1; hl.style.display="none"; tip.style.display="none"; }
+document.addEventListener("keydown", e=>{
+  if(tourIdx<0) return;
+  if(e.key==="Escape") tourEnd();
+  if(e.key==="ArrowRight") tourShow(Math.min(tourIdx+1, TOUR.length-1));
+  if(e.key==="ArrowLeft") tourShow(Math.max(tourIdx-1, 0));
+});
+window.addEventListener("resize", ()=>{ if(tourIdx>=0) tourShow(tourIdx); });
+
+/* ============================================================
+   Init
+   ============================================================ */
+function init(){
+  $("#db-by").textContent = `— prepared by ${BRAND.consultant} · ${BRAND.title}`;
+  $("#foot-brand").textContent = ` Demo prepared by ${BRAND.consultant}, ${BRAND.title}.`;
+  $("#cta-book").textContent = `Book a walkthrough with ${BRAND.consultant.split(" ")[0]}`;
+  $$(".side-item[data-view]").forEach(b=>b.addEventListener("click", ()=>switchView(b.dataset.view)));
+  $$(".side-item.locked").forEach(b=>b.addEventListener("click", ()=>
+    toast("This part of GoHighLevel isn't wired into the demo — the four highlighted sections are. In a real build, everything here is configured too.", "🔒")));
+  $("#tour-start").addEventListener("click", ()=>tourShow(0));
+  $("#sim-btn").addEventListener("click", runSim);
+  $$("#mode-toggle .mode-btn").forEach(b=>b.addEventListener("click", ()=>{
+    state.mode = b.dataset.mode;
+    $$("#mode-toggle .mode-btn").forEach(x=>x.classList.toggle("active", x===b));
+    $("#mode-note").innerHTML = state.mode==="auto"
+      ? "<b>Autopilot:</b> the AI texts back and books on its own — that's the point of speed. Approval mode makes price quotes wait for front-desk sign-off, useful in the first weeks."
+      : "<b>Approval mode:</b> the text-back still goes out instantly, but price quotes wait for a human OK. Press ▶ Replay to see the approval step.";
+    toast(`Mode set to <b>${state.mode==="auto"?"Autopilot":"Approval mode"}</b> — press ▶ Replay the missed call.`, "🎛️");
+  }));
+  renderQueue(); renderReporting(); renderAutomation(); bindChartInteractions();
+  setTimeout(runSim, 900);
+  setTimeout(()=>toast(`Live simulation — the phone just rang and nobody could answer. For the full story, hit <b>“▶ Start guided tour”</b>.`, "👋"), 1600);
+}
+init();
+
+</script>
+</body>
+</html>

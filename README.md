@@ -7,10 +7,14 @@ Attach them to a proposal and prospects can *see* the finished product before th
 Double-click it, email it, or host it anywhere. The two demos cross-link via the button
 in the top control bar.
 
-| File | Demo |
-|---|---|
-| `index.html` | **Full HubSpot portal build** — CRM, pipeline, automation map, lead scoring, reports, audit mode |
-| `ai-speed-to-lead.html` | **AI Speed-to-Lead / AI SDR** — watch an AI answer, qualify and book an inbound lead in seconds, with human-approval mode and guardrails |
+| File | Platform | Demo |
+|---|---|---|
+| `ghl/index.html` | **GoHighLevel** | **Demo hub** — Gurmeet's one-page portfolio site linking all GHL demos, services and booking CTA |
+| `ghl/ai-employee.html` | **GoHighLevel** | **AI Employee for local business** — missed-call text-back at a med spa: books a real calendar slot, takes a deposit by text-to-pay, routes medical questions to humans |
+| `index.html` | HubSpot | **Full portal build** — CRM, pipeline, automation map, lead scoring, reports, audit mode |
+| `ai-speed-to-lead.html` | HubSpot | **AI Speed-to-Lead / AI SDR** — an AI answers, qualifies and books an inbound lead in seconds, with human-approval mode and guardrails |
+
+**GoHighLevel is the primary focus** (that Upwork profile is the one being built up); the HubSpot demos serve the second profile. The GHL hub has a `CONFIG` object at the bottom of the file — paste your existing client-app demo URL and your real booking link there.
 
 ## What's inside
 

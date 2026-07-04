@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gurmeet Singh — GoHighLevel Expert · Live Demos</title>
+<style>
+:root{
+  --ink:#14213d; --ink-2:#4d5b74; --ink-3:#8391a8;
+  --ground:#f6f8fb; --card:#ffffff; --line:#dfe5ee;
+  --navy:#101d30; --navy-2:#1a3050;
+  --blue:#1873f3; --blue-dark:#0f5cc7; --blue-tint:#eef4ff;
+  --green:#2f9e6e;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;background:var(--ground);color:var(--ink);font-size:16px;line-height:1.55;}
+button{font-family:inherit;cursor:pointer;}
+a{color:var(--blue);text-decoration:none;}
+h1,h2,h3{text-wrap:balance;}
+
+/* hero */
+.hero{background:linear-gradient(115deg,var(--navy),var(--navy-2));color:#fff;padding:64px 24px 58px;}
+.hero-inner{max-width:960px;margin:0 auto;}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6da7ec;margin-bottom:16px;}
+.hero h1{font-size:clamp(28px,4.4vw,44px);font-weight:700;line-height:1.15;max-width:20ch;}
+.hero .lede{color:#b6c5da;font-size:17px;margin:18px 0 30px;max-width:56ch;}
+.hero .lede b{color:#fff;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:12px 24px;font-size:15px;font-weight:600;}
+.btn:hover{background:var(--blue-dark);}
+.btn.ghost{background:transparent;border:1px solid #3d5678;color:#d7e2f0;font-weight:500;}
+.btn.ghost:hover{border-color:#7f97b5;background:rgba(255,255,255,.06);}
+.hero-stats{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap;}
+.hstat b{display:block;font-size:22px;}
+.hstat span{font-size:12.5px;color:#8fa3bd;}
+
+/* layout */
+section{max-width:960px;margin:0 auto;padding:54px 24px 0;}
+.sec-head{margin-bottom:26px;}
+.sec-head h2{font-size:26px;}
+.sec-head p{color:var(--ink-2);margin-top:6px;max-width:60ch;}
+
+/* demo cards */
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.demo-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 26px 22px;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(20,33,61,.05);}
+.demo-card .chip{align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:5px;padding:3px 9px;margin-bottom:14px;}
+.chip.live{background:#e9f7f0;color:#1f7a52;}
+.chip.flag{background:var(--blue-tint);color:var(--blue-dark);}
+.demo-card h3{font-size:19px;margin-bottom:8px;}
+.demo-card p{font-size:14px;color:var(--ink-2);margin-bottom:14px;}
+.demo-card ul{list-style:none;margin:0 0 20px;flex:1;}
+.demo-card li{font-size:13.5px;color:var(--ink-2);padding:4px 0 4px 22px;position:relative;}
+.demo-card li::before{content:"→";position:absolute;left:0;color:var(--blue);font-weight:700;}
+.demo-card .btn{align-self:flex-start;padding:10px 20px;font-size:14px;}
+.hs-strip{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-2);}
+.hs-strip b{color:var(--ink);}
+.hs-strip a{margin-left:auto;font-weight:600;white-space:nowrap;}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;}
+.svc b{display:block;font-size:14.5px;margin-bottom:4px;}
+.svc span{font-size:13px;color:var(--ink-2);line-height:1.45;}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:step;}
+.step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;position:relative;}
+.step::before{counter-increment:step;content:counter(step,decimal-leading-zero);font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.08em;}
+.step b{display:block;font-size:15px;margin:8px 0 5px;}
+.step span{font-size:13.5px;color:var(--ink-2);line-height:1.5;}
+
+/* cta */
+.cta{max-width:960px;margin:56px auto 0;padding:0 24px 64px;}
+.cta-band{background:linear-gradient(115deg,var(--navy),var(--navy-2));color:#fff;border-radius:16px;padding:36px 34px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap;}
+.cta-band h2{font-size:23px;margin-bottom:6px;}
+.cta-band p{color:#b6c5da;font-size:14.5px;max-width:52ch;}
+footer{max-width:960px;margin:0 auto;padding:0 24px 34px;color:var(--ink-3);font-size:12px;text-align:center;}
+#toast-wrap{position:fixed;left:18px;bottom:18px;z-index:120;display:flex;flex-direction:column;gap:8px;}
+.toast{background:var(--navy);color:#fff;border-radius:8px;padding:11px 16px;font-size:13px;max-width:360px;box-shadow:0 6px 20px rgba(16,29,48,.35);display:flex;gap:9px;align-items:flex-start;animation:toastIn .3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+@media (max-width:820px){
+  .demo-grid,.svc-grid,.steps{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">GoHighLevel Specialist · Upwork</div>
+    <h1>See the GoHighLevel system before you pay for it.</h1>
+    <p class="lede">I'm <b>Gurmeet Singh</b>. Most freelancers describe what they'll build — I hand you a <b>working, clickable demo</b> with a guided tour, so you know exactly what you're buying before the contract starts. Below are live systems you can open right now.</p>
+    <div class="hero-btns">
+      <a class="btn" href="#demos">Open the live demos</a>
+      <button class="btn ghost" id="book-btn">Book a call</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><b>Live demos</b><span>click them, tour them, break them</span></div>
+      <div class="hstat"><b>All native GHL</b><span>snapshots, workflows, AI, payments</span></div>
+      <div class="hstat"><b>Guided handoff</b><span>tour + docs with every delivery</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="demos">
+  <div class="sec-head">
+    <h2>Live demos</h2>
+    <p>Fictional businesses, real functionality. Every demo has a "Start guided tour" button — that's the two-minute version of what I'd build for you.</p>
+  </div>
+  <div class="demo-grid">
+    <div class="demo-card">
+      <span class="chip flag">Flagship · Full build</span>
+      <h3>The complete client app</h3>
+      <p>A full-fledged GoHighLevel build, end to end — the demo I send with proposals so clients can explore everything before hiring.</p>
+      <ul>
+        <li>Complete sub-account experience with tour guide</li>
+        <li>Funnels, pipelines, calendars and automations</li>
+        <li>Everything a client sees, before they commit</li>
+      </ul>
+      <a class="btn" id="clientapp-btn" href="#">Open the demo</a>
+    </div>
+    <div class="demo-card">
+      <span class="chip live">Live · New</span>
+      <h3>AI Employee for local business</h3>
+      <p>A med spa misses a call at 2:47 PM. Nine seconds later the AI texts back — and six minutes later the caller is booked with a paid deposit.</p>
+      <ul>
+        <li>Missed-call text-back with visible AI reasoning</li>
+        <li>Real prices, real calendars, text-to-pay deposits</li>
+        <li>Guardrails: medical questions go to humans, always</li>
+      </ul>
+      <a class="btn" href="ai-employee.html">Open the demo</a>
+    </div>
+  </div>
+  <div class="hs-strip" id="hs-strip">
+    <span>🔁</span>
+    <span><b>Moving from HubSpot, or running both?</b> I work across platforms — HubSpot demos available on request.</span>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>What I build in GoHighLevel</h2>
+    <p>From single fixes to complete white-label systems for agencies.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="svc"><b>Industry snapshots</b><span>Complete niche setups — med spa, dental, real estate, home services — loaded into your sub-accounts.</span></div>
+    <div class="svc"><b>AI Employee & Conversation AI</b><span>Missed-call text-back, booking bots, review responses — with guardrails owners trust.</span></div>
+    <div class="svc"><b>Workflows & automation</b><span>Lead routing, nurture sequences, appointment reminders, pipeline automation that runs itself.</span></div>
+    <div class="svc"><b>Funnels & websites</b><span>Landing pages and funnels wired to calendars, forms and payments — not just pretty pages.</span></div>
+    <div class="svc"><b>Calendars & booking</b><span>Staff calendars, round-robin, service durations, buffers, deposits at booking time.</span></div>
+    <div class="svc"><b>A2P 10DLC & phone setup</b><span>Registration, numbers, call tracking and compliant SMS so your texts actually deliver.</span></div>
+    <div class="svc"><b>Payments & invoicing</b><span>Text-to-pay, deposits, subscriptions and invoices inside the same conversation.</span></div>
+    <div class="svc"><b>Migrations into GHL</b><span>Contacts, pipelines and automations moved in cleanly from HubSpot, Mailchimp, spreadsheets.</span></div>
+    <div class="svc"><b>White-label SaaS setup</b><span>Agency view: SaaS configurator, sub-account templates, rebilling and onboarding flows.</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>How working with me goes</h2>
+  </div>
+  <div class="steps">
+    <div class="step"><b>Show, then scope</b><span>We start from a demo like the ones above, mapped to your business — so the scope is something you've already seen working.</span></div>
+    <div class="step"><b>Build in a sandbox</b><span>Everything is built and tested in a sandbox sub-account first. You watch progress live; nothing touches your account until it's ready.</span></div>
+    <div class="step"><b>Guided handoff</b><span>Delivery includes a guided tour of your own system, plain-English docs, and support while your team settles in.</span></div>
+  </div>
+</section>
+
+<div class="cta">
+  <div class="cta-band">
+    <div>
+      <h2>Have a GoHighLevel project in mind?</h2>
+      <p>Send me the job on Upwork or book a call — and I'll usually answer with a working demo, not a wall of text.</p>
+    </div>
+    <button class="btn" id="book-btn2">Book a call with Gurmeet</button>
+  </div>
+</div>
+
+<footer>
+  Demo businesses are fictional. Demos replicate the GoHighLevel user experience for portfolio purposes — not affiliated with or endorsed by HighLevel Inc.
+</footer>
+<div id="toast-wrap"></div>
+
+<script>
+/* ============================================================
+   Edit these three lines, everything else updates itself
+   ============================================================ */
+const CONFIG = {
+  clientAppUrl: "",          // paste the URL of your existing full GHL client app demo
+  bookingUrl: "",            // paste your real booking / calendar link
+  upworkUrl: ""              // optional: your Upwork profile URL
+};
+
+function toast(msg, ico="👋"){
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.innerHTML = `<span>${ico}</span><span>${msg}</span>`;
+  document.querySelector("#toast-wrap").appendChild(t);
+  setTimeout(()=>{t.style.opacity="0"; t.style.transition="opacity .4s";}, 4500);
+  setTimeout(()=>t.remove(), 5000);
+}
+const ca = document.querySelector("#clientapp-btn");
+if(CONFIG.clientAppUrl){ ca.href = CONFIG.clientAppUrl; }
+else ca.addEventListener("click", e=>{ e.preventDefault();
+  toast("Paste your existing client-app demo URL into <b>CONFIG.clientAppUrl</b> at the bottom of this file and this button goes live.", "🔧"); });
+[["#book-btn"],["#book-btn2"]].forEach(([sel])=>{
+  const b = document.querySelector(sel);
+  b.addEventListener("click", ()=>{
+    if(CONFIG.bookingUrl) window.open(CONFIG.bookingUrl, "_blank");
+    else toast("Paste your real calendar link into <b>CONFIG.bookingUrl</b> and this button opens your live booking page.", "📅");
+  });
+});
+</script>
+</body>
+</html>
