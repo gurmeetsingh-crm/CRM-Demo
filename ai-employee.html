@@ -211,6 +211,65 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
   .kpi-row{grid-template-columns:repeat(2,1fr);}
 }
 
+/* ===== Contact record + AI Brain (depth views) ===== */
+.back-link{background:none;border:none;color:var(--gl-blue-dark);font-size:13px;font-weight:600;padding:4px 0;margin-bottom:12px;cursor:pointer;}
+.back-link:hover{text-decoration:underline;}
+.rec-grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:16px;align-items:start;}
+.rec-id{padding:20px 18px;text-align:center;}
+.rec-avatar{width:64px;height:64px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:24px;margin-bottom:10px;}
+.rec-id h2{font-size:19px;}
+.rec-id .rec-sub{font-size:12.5px;color:var(--gl-text2);margin-top:2px;}
+.rec-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px;}
+.tag-chip{font-size:11px;font-weight:650;border-radius:100px;padding:3px 10px;background:var(--gl-blue-tint);color:var(--gl-blue-dark);}
+.tag-chip.vip{background:#f4effb;color:#7a55b8;} .tag-chip.dnd{background:#fdeeef;color:#b0293a;}
+.rec-block{border-top:1px solid var(--gl-border-2);padding:14px 18px;}
+.rec-block h4{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--gl-text2);margin-bottom:10px;}
+.rec-field{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;margin-bottom:8px;}
+.rec-field .rf-k{color:var(--gl-text2);} .rec-field .rf-v{font-weight:600;text-align:right;}
+.insight{margin-bottom:11px;}
+.insight .ins-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;}
+.insight .ins-top b{font-weight:700;}
+.ins-bar{height:7px;border-radius:5px;background:#eef1f8;overflow:hidden;}
+.ins-bar>div{height:100%;border-radius:5px;}
+.rec-opp{border:1px solid var(--gl-border);border-radius:9px;padding:12px 14px;margin-bottom:10px;}
+.rec-opp .op-name{font-weight:650;font-size:13.5px;}
+.rec-opp .op-meta{font-size:12px;color:var(--gl-text2);margin-top:3px;}
+.rec-opp .op-val{font-size:16px;font-weight:750;color:#1f7a52;margin-top:6px;}
+.appt-card{display:flex;gap:11px;align-items:center;border:1px solid var(--gl-border);border-radius:9px;padding:11px 13px;}
+.appt-card .ac-date{background:var(--demo-dark);color:#fff;border-radius:7px;text-align:center;padding:5px 10px;line-height:1.15;}
+.appt-card .ac-date b{font-size:17px;display:block;} .appt-card .ac-date span{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;}
+.rec-right{display:flex;flex-direction:column;gap:16px;}
+.rec-tabs{display:flex;gap:2px;border-bottom:1px solid var(--gl-border);margin-bottom:4px;}
+.rec-tab{background:none;border:none;padding:9px 14px;font-size:13px;color:var(--gl-text2);border-bottom:2px solid transparent;cursor:pointer;}
+.rec-tab.active{color:var(--gl-blue-dark);font-weight:650;border-bottom-color:var(--gl-blue);}
+.rec-pane{display:none;} .rec-pane.active{display:block;}
+.transcript{display:flex;flex-direction:column;gap:9px;padding:4px 2px;}
+.chan-note{text-align:center;font-size:11px;color:var(--gl-text3);margin:4px 0;}
+.no-record{text-align:center;padding:40px 20px;color:var(--gl-text2);}
+.no-record .nr-ico{font-size:34px;margin-bottom:8px;}
+/* AI Brain */
+.brain-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start;}
+.brain-sec{margin-bottom:22px;} .brain-sec:last-child{margin-bottom:0;}
+.brain-sec-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.brain-sec-head h3{margin-bottom:0;}
+.brain-note{font-size:12px;color:var(--gl-text3);}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;}
+.profile-grid .pf{font-size:13px;} .profile-grid .pf .pf-k{font-size:11px;color:var(--gl-text2);text-transform:uppercase;letter-spacing:.4px;}
+.profile-grid .pf .pf-v{font-weight:600;margin-top:1px;}
+.kb-item{border:1px solid var(--gl-border);border-radius:9px;margin-bottom:8px;overflow:hidden;}
+.kb-q{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;font-size:13.5px;font-weight:600;}
+.kb-q .kb-chev{margin-left:auto;color:var(--gl-text3);transition:transform .2s;}
+.kb-item.open .kb-chev{transform:rotate(180deg);}
+.kb-a{display:none;padding:0 14px 13px 34px;font-size:13px;color:var(--gl-text2);line-height:1.55;}
+.kb-item.open .kb-a{display:block;}
+.brain-side{display:flex;flex-direction:column;gap:14px;}
+.rule-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.rule-list li{font-size:13px;color:var(--gl-text);padding-left:24px;position:relative;line-height:1.5;}
+.rule-list li::before{content:"🛑";position:absolute;left:0;font-size:12px;}
+.rule-list.esc li::before{content:"🚨";}
+.rule-list li b{color:var(--gl-text);}
+.brain-train p{font-size:13px;color:var(--gl-text2);line-height:1.6;}
+@media (max-width:1020px){ .rec-grid,.brain-grid{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
@@ -239,6 +298,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
       <button class="side-item locked"><span class="si-ico">🎯</span>Opportunities</button>
       <button class="side-item locked"><span class="si-ico">💳</span>Payments</button>
       <button class="side-item" data-view="automation"><span class="si-ico">⚙️</span>Automation</button>
+      <button class="side-item" data-view="brain"><span class="si-ico">🧠</span>AI Brain</button>
       <button class="side-item" data-view="reporting"><span class="si-ico">📈</span>Reporting</button>
       <button class="side-item locked"><span class="si-ico">⭐</span>Reputation</button>
     </nav>
@@ -286,7 +346,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
         <div class="view-head">
           <div>
             <h1>Today's conversations — every channel, one brain</h1>
-            <div class="sub">Missed calls, Instagram DMs, webchat, Google messages, SMS — the AI answers them all, books the good ones, and knows exactly when to hand off to a human. <b>Click a row</b> for its reasoning.</div>
+            <div class="sub">Missed calls, Instagram DMs, webchat, Google messages, SMS — the AI answers them all, books the good ones, and knows exactly when to hand off to a human. <b>Click any lead</b> to open their full contact record.</div>
           </div>
         </div>
         <div class="card stack-wrap" id="verdict-stack">
@@ -342,6 +402,52 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
         <div class="cta-band">
           <div><h3>Want this answering your missed calls?</h3><p id="cta-p"></p></div>
           <button class="btn" id="cta-book">Book a walkthrough</button>
+        </div>
+      </section>
+
+      <!-- CONTACT RECORD (opened from the queue) -->
+      <section class="view" id="view-record">
+        <button class="back-link" id="record-back">← Back to Today's Leads</button>
+        <div id="record-body"></div>
+      </section>
+
+      <!-- AI BRAIN / TRAINING -->
+      <section class="view" id="view-brain">
+        <div class="view-head">
+          <div>
+            <h1>The AI's brain — exactly what it knows</h1>
+            <div class="sub">No black box. Everything the AI says comes from what you load here: your services and prices, your answers to common questions, and your hard rules. Change it here, it changes everywhere.</div>
+          </div>
+        </div>
+        <div class="brain-grid">
+          <div class="card card-pad brain-main">
+            <div class="brain-sec">
+              <h3>💬 Business profile</h3>
+              <div class="profile-grid" id="brain-profile"></div>
+            </div>
+            <div class="brain-sec">
+              <div class="brain-sec-head"><h3>💵 Approved service menu</h3><span class="brain-note">The only prices the AI can quote — it never improvises a number.</span></div>
+              <table class="hs-table" id="brain-menu"></table>
+            </div>
+            <div class="brain-sec">
+              <div class="brain-sec-head"><h3>📚 Knowledge base</h3><span class="brain-note">Answers the AI gives verbatim. Click a question.</span></div>
+              <div id="brain-kb"></div>
+            </div>
+          </div>
+          <div class="brain-side">
+            <div class="card card-pad">
+              <h3>🛑 Hard rules (guardrails)</h3>
+              <ul class="rule-list" id="brain-rules"></ul>
+            </div>
+            <div class="card card-pad">
+              <h3>🚨 Escalate to a human when…</h3>
+              <ul class="rule-list esc" id="brain-esc"></ul>
+            </div>
+            <div class="card card-pad brain-train">
+              <h3>🎓 How it learns your voice</h3>
+              <p>Trained on your past conversations, your website and your intake forms, then tuned with you in the first week. Every reply is logged, so you can correct it once and it sticks.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -597,24 +703,160 @@ function renderQueue(){
   $("#stack-legend").innerHTML = VERDICT_MIX.map(v=>
     `<span><span class="sw" style="background:${v.color};"></span>${v.label}</span>`).join("");
   const tbl = $("#queue-table");
-  tbl.innerHTML = `<thead><tr><th>Time</th><th>Contact</th><th>Channel</th><th>Message</th><th>AI outcome</th><th>Response</th></tr></thead>
+  tbl.innerHTML = `<thead><tr><th>Time</th><th>Contact</th><th>Channel</th><th>Message</th><th>AI outcome</th><th>Response</th><th></th></tr></thead>
     <tbody>${QUEUE.map((q,i)=>`
       <tr data-q="${i}">
         <td style="white-space:nowrap;">${q.time} ${q.night?'<span class="night-chip">🌙 closed</span>':""}</td>
         <td><b>${q.name}</b></td>
         <td style="white-space:nowrap;">${q.chan}</td>
-        <td style="max-width:300px;color:var(--gl-text2);">${q.msg}</td>
+        <td style="max-width:280px;color:var(--gl-text2);">${q.msg}</td>
         <td><span class="pill ${q.verdict[0]}">${q.verdict[1]}</span></td>
         <td>${q.resp}</td>
-      </tr>
-      <tr class="q-details" style="display:none;" data-qd="${i}"><td colspan="6"><div class="qd-inner"><b>AI reasoning:</b> ${q.why}</div></td></tr>`).join("")}
+        <td style="color:var(--gl-blue-dark);font-weight:600;white-space:nowrap;">Open →</td>
+      </tr>`).join("")}
     </tbody>`;
   tbl.querySelectorAll("tr[data-q]").forEach(tr=>{
-    tr.addEventListener("click", ()=>{
-      const det = tbl.querySelector(`tr[data-qd="${tr.dataset.q}"]`);
-      det.style.display = det.style.display==="none" ? "table-row" : "none";
-    });
+    tr.addEventListener("click", ()=>openRecord(+tr.dataset.q));
   });
+}
+
+/* ============================================================
+   Contact record (opened from the queue) — the depth view
+   ============================================================ */
+const RECORD_EXTRA = {
+  0:{color:"#4a76a8",sub:"New lead · Brow lamination",phone:"(602) 555-0114",email:"marisol.v@gmail.com",source:"Google Business message · 7:02 AM",owner:"AI Employee",
+     tags:[["new-lead",""],["brows",""],["self-booked",""]],
+     insights:[["Buying intent","74 · High",74,"#2f9e6e"],["ICP fit","80",80,"#2f6bf6"],["Sentiment","Positive",100,"#6d5ae6"]],
+     opp:["Brow Lamination","Bookings · Appointment Scheduled","$95"],
+     appt:["Wed","09","Jul","Brow Lamination","9:30 AM · Tech: Priya"],
+     transcript:[["note","Google Business message · before opening hours"],["lead","do you do brow lamination? prices?","7:02 AM"],["ai","Morning! Yes — brow lamination is $95 and takes about 45 min. Here's our live calendar to grab a time 👉 glowaesthetics.link/book","7:02 AM"],["note","Marisol self-booked at 7:15 AM — an hour before staff arrived"]],
+     activity:[["📥","Contact created from Google Business message","7:02 AM"],["💵","Quoted brow lamination — $95 (from approved menu)","7:02 AM"],["📅","Sent self-booking calendar link","7:02 AM"],["✅","Self-booked Wed 9:30 AM","7:15 AM"]]},
+  1:{color:"#199e70",sub:"Returning client · Botox",phone:"(602) 555-0188",email:"karen.d@outlook.com",source:"Missed call · recognized number",owner:"Maya R. (injector)",
+     tags:[["returning","vip"],["botox",""],["regular",""]],
+     insights:[["Buying intent","85 · High",85,"#2f9e6e"],["ICP fit","95",95,"#2f6bf6"],["Lifetime value","$4,200",84,"#6d5ae6"]],
+     opp:["Botox touch-up","Bookings · Appointment Scheduled","$320"],
+     appt:["Fri","10","Jul","Botox touch-up","10:00 AM · Maya R."],
+     transcript:[["note","Missed call — number matched an existing contact"],["ai","Hi Karen! Sorry we missed you 💕 Is this about a Botox touch-up with Maya? I can get you in.","9:14 AM"],["lead","yes please! same as last time","9:15 AM"],["ai","Done — Maya has you Friday at 10:00 AM. Confirmation on its way 🎉","9:15 AM"]],
+     activity:[["🔎","Matched existing contact — greeted by name","9:14 AM"],["📅","Booked Botox touch-up · Maya · Fri 10:00 AM","9:15 AM"],["⏰","Reminder ladder armed (48h · 24h · 2h)","9:15 AM"]]},
+  2:{color:"#d55181",sub:"Instagram lead · Microneedling",handle:"@ninaglow_",phone:"—",email:"DM only",source:"Instagram DM · 10:31 AM",owner:"AI Employee",
+     tags:[["instagram",""],["microneedling",""],["consult",""]],
+     insights:[["Buying intent","70 · Medium",70,"#c98500"],["ICP fit","76",76,"#2f6bf6"],["Sentiment","Curious",70,"#6d5ae6"]],
+     opp:["Microneedling package (3)","Bookings · Consult Scheduled","$1,200 est."],
+     appt:["Thu","09","Jul","Free skin consult","4:00 PM · Maya R."],
+     transcript:[["note","Instagram DM"],["lead","how much for the microneedling package","10:31 AM"],["ai","Our 3-session microneedling package is $1,200 💫 Since the right plan depends on your skin goals, Maya offers a free 15-min consult first — want me to book one? We have Thursday 4 PM open.","10:31 AM"],["lead","thursday works!","10:34 AM"],["ai","Booked! Thursday 4 PM with Maya. See you then ✨","10:34 AM"]],
+     activity:[["📥","Contact created from Instagram DM","10:31 AM"],["💵","Quoted microneedling package — $1,200","10:31 AM"],["🧭","Playbook: results vary → offered consult, not hard-book","10:31 AM"],["📅","Booked free consult · Thu 4 PM","10:34 AM"]]},
+  3:{color:"#e2856e",sub:"Client · post-treatment concern",phone:"(602) 555-0173",email:"amber.t@gmail.com",source:"Webchat · 11:05 AM",owner:"Maya R. (nurse injector)",clinical:true,
+     tags:[["client","clinical"],["urgent","dnd"]],
+     insights:[["Urgency","High",100,"#d9414f"],["Sentiment","Concerned",40,"#c98500"],["AI action","Handed off",100,"#6d5ae6"]],
+     opp:null,
+     appt:["Fri","10","Jul","Follow-up check","2:00 PM · Maya R."],
+     transcript:[["note","Webchat"],["lead","I had some swelling after my appointment yesterday, is that normal?","11:05 AM"],["ai","Thank you for reaching out, Amber — I want to make sure you're taken care of properly. I'm not able to give medical advice, so I've flagged this for Maya, our nurse injector, and she'll call you within the hour. 💛","11:05 AM"],["note","🚨 Maya called Amber at 11:09 AM (4 minutes later) and booked a follow-up"]],
+     activity:[["🛑","Clinical keywords detected — AI gave NO medical advice","11:05 AM"],["🚨","Urgent alert sent to Maya with full context","11:05 AM"],["📞","Maya called the client","11:09 AM"],["📅","Follow-up check booked · Fri 2:00 PM","11:12 AM"]]},
+  6:{color:"#ff7a59",sub:"New lead · Lip filler",phone:"(480) 555-0147",email:"jessica.m@gmail.com",source:"Missed call → AI text-back · 2:47 PM",owner:"Maya R. (injector)",
+     tags:[["new-lead",""],["lip-filler",""],["deposit-paid","vip"],["clinical-flag","dnd"]],
+     insights:[["Buying intent","92 · Hot",92,"#2f9e6e"],["ICP fit","88",88,"#2f6bf6"],["Sentiment","Positive",100,"#6d5ae6"]],
+     opp:["Lip Filler — New Guest","Bookings · Appointment Scheduled","$499"],
+     appt:["Sat","11","Jul","Lip Filler — New Guest","11:30 AM · Maya R."],
+     transcript:[["note","Missed call · 2:47 PM — both front-desk lines busy"],["ai","Hi, it's Glow Aesthetics! 💕 So sorry we missed your call — we're with clients. How can we help you today?","2:47 PM"],["lead","hi! do you have anything this saturday for lip filler? and how much","2:48 PM"],["ai","Great choice! Lip filler with our injector Maya is $550, and new guests get it for $499 ✨ Saturday she has 10:15 AM or 11:30 AM — want me to hold one?","2:48 PM"],["lead","11:30 works!! do i need to pay anything now?","2:51 PM"],["ai","Perfect — booked for Sat 11:30 AM with Maya! 🎉 We ask a $50 deposit to hold your spot (comes off your total): glowaesthetics.pay/dep-50","2:51 PM"],["note","💳 Deposit paid at 2:53 PM"],["lead","quick q — i'm 6 weeks pregnant, is filler ok?","2:54 PM"],["ai","That's a really important question — I'll have Maya text you directly to talk it through before Saturday. She'll reach out within the hour. 💕","2:54 PM"],["note","🛑 Pregnancy question → routed to Maya, appointment flagged for clinical review"]],
+     activity:[["📥","Contact created from missed call","2:47 PM"],["🎯","Buying intent scored 0.92 (HIGH)","2:48 PM"],["💵","Quoted from approved menu — $499 new-guest","2:48 PM"],["📅","Booked Sat 11:30 AM · Maya","2:51 PM"],["💳","$50 deposit collected (text-to-pay)","2:53 PM"],["🛑","Pregnancy flagged → routed to Maya, appt marked for review","2:54 PM"]]},
+  7:{color:"#7a5fb5",sub:"Bridal lead · October wedding",phone:"(602) 555-0139",email:"dana.k@gmail.com",source:"Facebook lead form · 4:15 PM",owner:"AI Employee",
+     tags:[["bridal-oct","vip"],["high-ltv",""],["consult",""]],
+     insights:[["Buying intent","78 · High",78,"#2f9e6e"],["ICP fit","92 · high LTV",92,"#2f6bf6"],["Sentiment","Excited",100,"#6d5ae6"]],
+     opp:["Bridal skin plan","Bookings · Consult Scheduled","$1,800 est."],
+     appt:["Tue","14","Jul","Bridal skin consult","1:00 PM · Maya R."],
+     transcript:[["note","Facebook lead form"],["lead","getting married in October — want a skincare plan to look my best!","4:15 PM"],["ai","Congratulations, Dana!! 🥳 A October wedding gives us the perfect runway. Maya builds custom bridal skin plans — let's start with a consult. Tuesday 1 PM work?","4:16 PM"],["lead","yes!! so excited","4:17 PM"],["ai","Booked 💍 Tuesday 1 PM with Maya. I'll send a few prep tips before then!","4:17 PM"]],
+     activity:[["📥","Lead captured from Facebook form","4:15 PM"],["💎","Bridal + Oct wedding detected → tagged VIP, high-LTV","4:15 PM"],["📅","Booked bridal consult · Tue 1 PM","4:17 PM"],["🌱","Enrolled in 12-week bridal nurture sequence","4:17 PM"]]},
+  8:{color:"#199e70",sub:"Gift-card buyer",phone:"(602) 555-0155",email:"tom.w@gmail.com",source:"Webchat · 9:52 PM (after hours)",owner:"AI Employee",
+     tags:[["gift-card",""],["after-hours",""]],
+     insights:[["Buying intent","80 · High",80,"#2f9e6e"],["Sentiment","Positive",100,"#6d5ae6"]],
+     opp:["Gift card — $200","Payments · Won","$200"],
+     appt:null,
+     transcript:[["note","Webchat · 9:52 PM — two hours after close"],["lead","can I get a gift card for my wife's birthday?","9:52 PM"],["ai","What a lovely idea! 🎁 You can grab a gift card in any amount right here: glowaesthetics.pay/giftcard — I'll email you a printable card the moment it's done.","9:52 PM"],["note","💳 Tom paid $200 at 9:55 PM — e-card emailed instantly"]],
+     activity:[["📥","After-hours webchat started","9:52 PM"],["💳","Gift-card payment link sent","9:52 PM"],["✅","Paid $200 via text-to-pay","9:55 PM"],["📧","Printable e-card emailed","9:55 PM"]]}
+};
+function openRecord(i){
+  const q = QUEUE[i], x = RECORD_EXTRA[i];
+  const body = $("#record-body");
+  if(!x){
+    body.innerHTML = `<div class="card no-record"><div class="nr-ico">🚫</div>
+      <h2 style="font-size:18px;margin-bottom:6px;">No contact record created</h2>
+      <div style="max-width:440px;margin:0 auto;">${q.name} · ${q.chan} — <b>${q.verdict[1]}</b>.<br><br>${q.why}</div></div>`;
+    switchView("record"); return;
+  }
+  const initials = (x.handle || q.name).replace(/[^A-Za-z ]/g,"").trim().split(/\s+/).map(s=>s[0]).join("").slice(0,2).toUpperCase() || "GA";
+  const tags = x.tags.map(([t,cls])=>`<span class="tag-chip ${cls}">${t}</span>`).join("");
+  const insights = x.insights.map(([l,v,pct,c])=>`<div class="insight"><div class="ins-top"><span>${l}</span><b style="color:${c}">${v}</b></div><div class="ins-bar"><div style="width:${pct}%;background:${c}"></div></div></div>`).join("");
+  const opp = x.opp ? `<div class="rec-block"><h4>Opportunity</h4><div class="rec-opp"><div class="op-name">${x.opp[0]}</div><div class="op-meta">${x.opp[1]}</div><div class="op-val">${x.opp[2]}</div></div></div>` : "";
+  const appt = x.appt ? `<div class="rec-block"><h4>Appointment</h4><div class="appt-card"><div class="ac-date"><span>${x.appt[0]}</span><b>${x.appt[1]}</b><span>${x.appt[2]}</span></div><div><b style="font-size:13.5px;">${x.appt[3]}</b><div style="font-size:12px;color:var(--gl-text2);">${x.appt[4]}</div></div></div></div>` : "";
+  const transcript = x.transcript.map(m=> m[0]==="note" ? `<div class="chan-note">${m[1]}</div>`
+    : `<div class="sms ${m[0]} in" style="max-width:82%"><div class="s-meta">${m[0]==="ai"?"Glow Aesthetics (AI)":q.name} · ${m[2]||""}</div><div>${m[1]}</div></div>`).join("");
+  const activity = x.activity.map(a=>`<div class="pl-step done in"><span class="pl-ico">${a[0]}</span><div class="pl-body"><div class="pl-title">${a[1]}</div><div class="pl-time">${a[2]}</div></div></div>`).join("");
+  body.innerHTML = `<div class="rec-grid">
+    <div class="card">
+      <div class="rec-id"><span class="rec-avatar" style="background:${x.color}">${initials}</span>
+        <h2>${q.name}</h2><div class="rec-sub">${x.sub}</div>
+        <div class="rec-tags">${tags}</div></div>
+      <div class="rec-block"><h4>Contact</h4>
+        ${x.handle?`<div class="rec-field"><span class="rf-k">Instagram</span><span class="rf-v">${x.handle}</span></div>`:""}
+        <div class="rec-field"><span class="rf-k">Phone</span><span class="rf-v">${x.phone}</span></div>
+        <div class="rec-field"><span class="rf-k">Email</span><span class="rf-v">${x.email}</span></div>
+        <div class="rec-field"><span class="rf-k">Source</span><span class="rf-v">${x.source}</span></div>
+        <div class="rec-field"><span class="rf-k">Owner</span><span class="rf-v">${x.owner}</span></div></div>
+      <div class="rec-block"><h4>AI insights (custom fields)</h4>${insights}</div>
+      ${opp}${appt}</div>
+    <div class="rec-right">
+      <div class="card card-pad">
+        <div class="rec-tabs"><button class="rec-tab active" data-pane="conv">Conversation</button><button class="rec-tab" data-pane="act">Activity (${x.activity.length})</button></div>
+        <div class="rec-pane active" data-pane="conv"><div class="transcript">${transcript}</div></div>
+        <div class="rec-pane" data-pane="act"><div class="pipeline" style="padding-top:6px;">${activity}</div></div>
+      </div>
+      <div class="card card-pad" style="border-left:3px solid var(--gl-blue);"><b style="font-size:13px;">🧠 Why the AI did this:</b> <span style="font-size:13px;color:var(--gl-text2);">${q.why}</span></div>
+    </div></div>`;
+  body.querySelectorAll(".rec-tab").forEach(t=>t.addEventListener("click",()=>{
+    body.querySelectorAll(".rec-tab").forEach(x=>x.classList.toggle("active",x===t));
+    body.querySelectorAll(".rec-pane").forEach(p=>p.classList.toggle("active",p.dataset.pane===t.dataset.pane));
+  }));
+  switchView("record");
+}
+
+/* ============================================================
+   AI Brain / training view
+   ============================================================ */
+const BRAIN_PROFILE = [["Business","Glow Aesthetics"],["Type","Med spa · injectables & skin"],["Hours","Tue–Sat 9–6 (AI covers 24/7)"],["Timezone","Mountain (Phoenix)"],["Booking","Deposit required · $50 hold"],["Injector","Maya R., RN"]];
+const BRAIN_MENU = [
+  ["Lip filler","$550","$499 new-guest","45 min"],["Botox (per area)","$320","—","20 min"],
+  ["Microneedling (3-pack)","$1,200","—","consult first"],["Brow lamination","$95","—","45 min"],
+  ["Skin consult","Free","—","15 min"],["Gift card","Any amount","—","instant"]
+];
+const BRAIN_KB = [
+  ["Do you take insurance?","We're a cosmetic med spa, so treatments are self-pay. We accept all major cards, and offer Cherry financing on plans over $500."],
+  ["Where are you located?","We're at 44 Camelback Rd, Suite 200, Phoenix — free parking in the rear lot. I can text you a map pin!"],
+  ["Does it hurt / is there downtime?","Most guests describe filler as a light pinch; we use numbing cream. Expect mild swelling for 24–48h. Maya covers all aftercare at your visit."],
+  ["Can I reschedule?","Absolutely — just reply here or use the link in your confirmation. We ask for 24 hours' notice so we can offer the spot to someone else."],
+  ["Do you offer packages or memberships?","Yes! Our Glow Membership is $99/mo and includes a monthly treatment credit plus 15% off add-ons. Want the details?"]
+];
+const BRAIN_RULES = [
+  "<b>Never give medical advice.</b> Anything clinical → hand to Maya, flag the appointment.",
+  "<b>Only quote the approved menu.</b> No invented prices, no discounts beyond listed offers.",
+  "<b>Deposit before a booking is confirmed</b> for new guests.",
+  "<b>Honor STOP instantly</b> — set DND, never message again.",
+  "<b>Never promise medical outcomes</b> or diagnose."
+];
+const BRAIN_ESC = [
+  "Medical questions (pregnancy, meds, reactions, contraindications)",
+  "Complaints, refunds, or an upset customer",
+  "Anything the knowledge base can't answer confidently",
+  "Requests for a specific staff member by name",
+  "Legal, press, or partnership inquiries"
+];
+function renderBrain(){
+  $("#brain-profile").innerHTML = BRAIN_PROFILE.map(([k,v])=>`<div class="pf"><div class="pf-k">${k}</div><div class="pf-v">${v}</div></div>`).join("");
+  $("#brain-menu").innerHTML = `<thead><tr><th>Service</th><th>Price</th><th>Offer</th><th>Duration</th></tr></thead>
+    <tbody>${BRAIN_MENU.map(r=>`<tr style="cursor:default;"><td><b>${r[0]}</b></td><td>${r[1]}</td><td style="color:var(--gl-green)">${r[2]}</td><td style="color:var(--gl-text2)">${r[3]}</td></tr>`).join("")}</tbody>`;
+  $("#brain-kb").innerHTML = BRAIN_KB.map(([q,a])=>`<div class="kb-item"><div class="kb-q">❓ ${q}<span class="kb-chev">▾</span></div><div class="kb-a">${a}</div></div>`).join("");
+  $$("#brain-kb .kb-q").forEach(el=>el.addEventListener("click",()=>el.parentElement.classList.toggle("open")));
+  $("#brain-rules").innerHTML = BRAIN_RULES.map(r=>`<li>${r}</li>`).join("");
+  $("#brain-esc").innerHTML = BRAIN_ESC.map(r=>`<li>${r}</li>`).join("");
 }
 
 /* ============================================================
@@ -757,7 +999,14 @@ const TOUR = [
   {view:"queue", target:"#verdict-stack", title:"One brain across every channel",
    body:"78 conversations this week — missed calls, Instagram DMs, webchat, Google messages, SMS. 21 booked or sold, 30 answered and qualified, 5 handed to staff, spam binned."},
   {view:"queue", target:"#queue-table", title:"Judgment, row by row",
-   body:"Click the rows. <b>9:52 PM</b>: a $200 gift card sold two hours after close. <b>11:05 AM</b>: a post-treatment reaction the AI refused to touch — nurse called within 4 minutes. <b>12:22 PM</b>: a STOP honored in one second."},
+   body:"Every lead here is a full record — <b>click Jessica (2:47 PM)</b> and watch. <b>9:52 PM</b>: a $200 gift card sold after close. <b>11:05 AM</b>: a reaction the AI refused to touch — nurse called in 4 min.",
+   pre:()=>openRecord(6)},
+  {view:"record", target:"#record-body", title:"A real contact record — not a chat log",
+   body:"Everything the AI did, landed in the CRM: her details, tags, the <b>opportunity</b> and <b>booked appointment</b>, AI-scored custom fields (intent 92, ICP 88), the full <b>conversation</b>, and an <b>activity log</b> of every action. Toggle the Activity tab.",
+   pre:()=>openRecord(6)},
+  {view:"brain", target:"#brain-menu", title:"The AI's brain — no black box",
+   body:"This is <i>why</i> it never goes off-script. It can only quote the <b>approved menu</b>, answers from your <b>knowledge base</b>, and obeys the <b>hard rules</b> on the right — medical goes to a human, STOP is instant. Change it here, it changes everywhere.",
+   pre:()=>switchView("brain")},
   {view:"reporting", target:"#kpi-row", title:"The owner's scoreboard",
    body:"Missed-call bookings went from ~4 a month to 23, and June recovered <b>$11,900</b> in bookings that used to evaporate. The chart shows the break exactly at go-live."},
   {view:"automation", target:"#flow-row", title:"All native GoHighLevel",
@@ -843,7 +1092,8 @@ function init(){
       : "<b>Approval mode:</b> the text-back still goes out instantly, but price quotes wait for a human OK. Press ▶ Replay to see the approval step.";
     toast(`Mode set to <b>${state.mode==="auto"?"Autopilot":"Approval mode"}</b> — press ▶ Replay the missed call.`, "🎛️");
   }));
-  renderQueue(); renderReporting(); renderAutomation(); bindChartInteractions();
+  renderQueue(); renderReporting(); renderAutomation(); renderBrain(); bindChartInteractions();
+  $("#record-back").addEventListener("click", ()=>switchView("queue"));
   setTimeout(runSim, 900);
   setTimeout(()=>toast(`Live simulation — the phone just rang and nobody could answer. For the full story, hit <b>“▶ Start guided tour”</b>.`, "👋"), 1600);
 }
