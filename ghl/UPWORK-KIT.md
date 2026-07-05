@@ -21,6 +21,7 @@ hand over a working, clickable demo.** Every piece below leans on that.
 | `[HUB]` | Your demo hub link (host `ghl/index.html`, e.g. on GitHub Pages or Netlify) |
 | `[AI_DEMO]` | Link to the AI Employee demo |
 | `[SNAPSHOT_DEMO]` | Link to the dental snapshot demo |
+| `[REPUTATION_DEMO]` | Link to the reputation / review-engine demo |
 | `[CLIENT_APP]` | Link to your existing full GHL client-app demo |
 | `[CALENDAR]` | Your booking link |
 | `[RATE]` | Your hourly rate |
@@ -122,7 +123,16 @@ hero screen). Add one per demo. Put the demo link in the description **and** the
 > chiro, vets and home services.
 > ▶ Explore it: [SNAPSHOT_DEMO]
 
-### Portfolio item D — the hub itself
+### Portfolio item D — Reputation engine
+**Title:** `Reputation & Review Engine — More 5-Star Reviews on Autopilot (GHL)`
+**Description:**
+> A GoHighLevel review engine that asks every customer after a job, sends happy ones to Google
+> and catches unhappy ones privately — fast, and fully Google-compliant (no review gating). This
+> interactive demo has a live reputation dashboard, a happy-vs-unhappy routing you can run
+> yourself, and a before/after: 3.8★ → 4.8★ with a Google Map-Pack climb from #7 to #2.
+> ▶ Try it: [REPUTATION_DEMO]
+
+### Portfolio item E — the hub itself
 **Title:** `My GoHighLevel Demo Hub — See Everything I Build, Live`
 **Description:**
 > One page linking all my live GoHighLevel demos, each with a two-minute guided tour. This is
@@ -244,6 +254,8 @@ Spaces are fine to type; if a tool mangles them, replace each space with `%20`.
   `[AI_DEMO]?for=Radiance Med Spa`
 - Any local business, hub with the AI demo flagged:
   `[HUB]?for=Bright Smile Co&type=medspa`
+- Home-services / reviews prospect, hub with the reputation demo flagged:
+  `[HUB]?for=Apex Roofing&type=reviews`
 - White-label (reselling as your own agency):
   `[HUB]?for=Client Name&by=Your Agency`
 

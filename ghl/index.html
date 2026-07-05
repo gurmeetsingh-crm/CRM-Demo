@@ -161,7 +161,7 @@ section{padding:56px 0 8px;}
 .sec-head p{color:var(--ink-2);margin-top:9px;font-size:16px;}
 
 /* demo cards */
-.demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.demo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
 .demo-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 22px;
   display:flex;flex-direction:column;box-shadow:var(--shadow-sm);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;overflow:hidden;}
 .demo-card::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--azure));opacity:.9;}
@@ -182,13 +182,13 @@ section{padding:56px 0 8px;}
   background:color-mix(in srgb,var(--c,var(--azure)) 22%,transparent);
   box-shadow:inset 0 0 0 2px var(--c,var(--azure));}
 .demo-card .go{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:#fff;
-  background:var(--c,var(--azure));border-radius:10px;padding:10px 18px;transition:gap .16s ease,filter .16s;}
-.demo-card .go:hover{gap:12px;filter:brightness(1.06);text-decoration:none;}
+  background:color-mix(in srgb,var(--c,var(--azure)) 76%,#14213d);border-radius:10px;padding:10px 18px;transition:gap .16s ease,filter .16s;}
+.demo-card .go:hover{gap:12px;filter:brightness(1.08);text-decoration:none;}
 .demo-card.match{border-color:var(--c,var(--azure));box-shadow:0 0 0 2px color-mix(in srgb,var(--c,var(--azure)) 30%,transparent),var(--shadow);}
-.match-tag{display:none;position:absolute;top:14px;right:14px;background:var(--c,var(--azure));color:#fff;font-size:10px;font-weight:750;
+.match-tag{display:none;position:absolute;top:14px;right:14px;background:color-mix(in srgb,var(--c,var(--azure)) 76%,#14213d);color:#fff;font-size:10px;font-weight:750;
   letter-spacing:.04em;text-transform:uppercase;border-radius:100px;padding:4px 10px;z-index:2;}
 .demo-card.match .match-tag{display:inline-block;}
-.c-violet{--c:var(--violet);} .c-coral{--c:var(--coral);} .c-emerald{--c:var(--emerald);}
+.c-violet{--c:var(--violet);} .c-coral{--c:var(--coral);} .c-emerald{--c:var(--emerald);} .c-amber{--c:var(--amber);}
 
 /* hs strip */
 .hs-strip{margin-top:22px;background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:16px 22px;
@@ -375,6 +375,20 @@ footer{max-width:var(--maxw);margin:0 auto;padding:40px 24px 44px;color:var(--in
           <li>Clickable patient-journey map, ad to 6-month recall</li>
         </ul>
         <a class="go" href="dental-snapshot.html">Open the demo →</a>
+      </div>
+
+      <div class="demo-card c-amber reveal" data-niche="reputation reviews review rating google home services plumbing hvac roofing contractor auto restaurant salon dental medspa local">
+        <span class="match-tag">Closest to your business</span>
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></div>
+        <span class="chip">Live · New</span>
+        <h3>Reputation &amp; review engine</h3>
+        <p>Every finished job asks for a review, happy customers land on Google, and unhappy ones get caught privately — fast, and fully Google-compliant.</p>
+        <ul>
+          <li>Live reputation dashboard — collect a review, watch it land</li>
+          <li>Interactive happy vs. unhappy routing you can run</li>
+          <li>Before/after: 3.8★ → 4.8★ and a Map-Pack climb</li>
+        </ul>
+        <a class="go" href="reputation.html">Open the demo →</a>
       </div>
     </div>
 
