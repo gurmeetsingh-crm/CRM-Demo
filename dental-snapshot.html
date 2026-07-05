@@ -309,6 +309,37 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
   .counts-grid{grid-template-columns:repeat(2,1fr);}
   .funnel-grid,.wf-list,.tpl-grid{grid-template-columns:1fr;}
 }
+/* ===== Visual workflow builder (depth) ===== */
+.wf-open-btn{margin-top:12px;background:var(--gl-blue-tint);color:var(--gl-blue-dark);border:none;border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:650;cursor:pointer;}
+.wf-open-btn:hover{background:#dbe7ff;}
+.flow-overlay{position:fixed;inset:0;z-index:130;background:rgba(16,26,46,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;}
+.flow-overlay.show{display:flex;}
+.flow-modal{background:var(--gl-bg);border-radius:16px;box-shadow:0 30px 80px rgba(16,26,46,.5);width:100%;max-width:600px;overflow:hidden;animation:flowIn .25s ease;}
+@keyframes flowIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+.flow-modal-head{display:flex;align-items:center;gap:11px;padding:16px 20px;background:#fff;border-bottom:1px solid var(--gl-border);}
+.flow-modal-head .fm-ico{font-size:20px;}
+.flow-modal-head h3{font-size:16px;flex:1;}
+.flow-modal-head .fm-tag{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--gl-text3);}
+.fm-close{background:none;border:none;font-size:20px;color:var(--gl-text2);cursor:pointer;line-height:1;padding:2px 6px;}
+.fm-close:hover{color:var(--gl-text);}
+.flow-canvas{padding:22px 22px 26px;}
+.wf-track{display:flex;flex-direction:column;align-items:center;}
+.wf-node{width:100%;max-width:340px;background:#fff;border:1px solid var(--gl-border);border-radius:10px;padding:11px 14px;display:flex;gap:11px;align-items:flex-start;box-shadow:var(--shadow);}
+.wf-node .wn-ico{width:30px;height:30px;border-radius:8px;flex:0 0 auto;display:grid;place-items:center;color:#fff;font-size:14px;}
+.wf-node .wn-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--gl-text3);}
+.wf-node .wn-b{font-size:13px;color:var(--gl-text);margin-top:1px;line-height:1.4;}
+.wf-node.trigger{border-color:#f2c98a;background:#fff9ef;} .wf-node.trigger .wn-ico{background:#e0902a;}
+.wn-ico.sms,.wn-ico.email{background:var(--gl-blue);} .wn-ico.wait{background:#9aa7bd;} .wn-ico.action,.wn-ico.task{background:var(--gl-green);} .wn-ico.notify{background:var(--gl-red);} .wn-ico.branch{background:#6d5ae6;}
+.wf-conn{width:2px;height:18px;background:var(--gl-border);}
+.wf-branch{width:100%;max-width:460px;}
+.wf-branch-q{display:flex;justify-content:center;}
+.wf-branch-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
+.wf-branch-col{border:1px dashed var(--gl-border);border-radius:10px;padding:10px;}
+.wf-branch-col .bc-label{text-align:center;font-size:11px;font-weight:700;border-radius:100px;padding:2px 10px;margin-bottom:10px;display:inline-block;}
+.wf-branch-col.yes .bc-label{background:#e9f7f0;color:#1f7a52;} .wf-branch-col.no .bc-label{background:#fdf1e7;color:#b06a24;}
+.wf-branch-col .wf-node{max-width:100%;}
+.wf-branch-col .wf-track{gap:0;}
+@media (max-width:560px){ .wf-branch-cols{grid-template-columns:1fr;} }
 
 </style>
 </head>
@@ -456,6 +487,10 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
 <div id="tour-hl"></div>
 <div id="tour-tip"></div>
 <div id="toast-wrap"></div>
+<div class="flow-overlay" id="flow-overlay"><div class="flow-modal">
+  <div class="flow-modal-head"><span class="fm-ico" id="fm-ico">⚡</span><h3 id="fm-title">Workflow</h3><span class="fm-tag" id="fm-tag"></span><button class="fm-close" id="fm-close">✕</button></div>
+  <div class="flow-canvas" id="flow-canvas"></div>
+</div></div>
 
 <script>
 
@@ -743,10 +778,65 @@ function renderWorkflows(){
         <div class="wf-trigger">⚡ ${w.trig}</div>
         <ul class="wf-steps">${w.steps.map(s=>`<li>${s}</li>`).join("")}</ul>
         <div class="wf-why"><b>Why it's here:</b> ${w.why}</div>
+        <button class="wf-open-btn" data-flow="${i}">⚙️ Open visual workflow →</button>
       </div>
     </div>`).join("");
   $$(".wf-card .wf-head").forEach(h=>h.addEventListener("click", ()=>h.parentElement.classList.toggle("open")));
+  $$(".wf-open-btn").forEach(b=>b.addEventListener("click", e=>{ e.stopPropagation(); openFlow(+b.dataset.flow); }));
 }
+
+/* ================= Visual workflow builder (depth) ================= */
+/* node = [type, text] ; branch = ["branch", question, [yesNodes], [noNodes]] */
+const FLOWS = [
+  [ ["trigger","Incoming call not answered"],["wait","Wait 30 seconds"],["sms","“Sorry we missed you! How can we help? 🦷”"],
+    ["branch","Patient replies?",[["action","Continue in unified inbox → AI Employee books"]],[["wait","Wait 1 hour"],["task","Front-desk callback task"]]] ],
+  [ ["trigger","Appointment booked"],["email","48h before — details + what to bring"],["wait","Until 24h before"],["sms","24h — one-tap confirm link"],
+    ["branch","Confirmed?",[["action","Update calendar + pipeline → Confirmed"]],[["wait","Until 2h before"],["sms","2h — parking note + door code"]]] ],
+  [ ["trigger","Appointment marked no-show"],["wait","Wait 10 minutes"],["sms","“Life happens — want to rebook?” + self-book link"],
+    ["branch","Rebooked within a day?",[["action","Re-enter reminder ladder"]],[["task","Front-desk call task (next morning)"]]] ],
+  [ ["trigger","Visit completed"],["wait","Wait 3 hours"],["sms","“How was your visit?” — 1-tap rating"],
+    ["branch","Rating 4–5★?",[["email","Send Google review link"],["action","Tag “promoter” → feeds referral ask"]],[["action","Open private feedback form"],["notify","Alert office manager — same day"]]] ],
+  [ ["trigger","5½ months since last cleaning"],["email","“Time for your cleaning” + booking link"],["wait","Wait 1 week"],["sms","Nudge"],["wait","Wait 2 weeks"],["sms","Final — early/evening slots highlighted"],
+    ["branch","Booked?",[["action","Enter normal patient journey"]],[["task","Front-desk call task"]]] ],
+  [ ["trigger","No visit in 12 months"],["sms","Win-back #1 + comeback offer"],["wait","Wait 1 week"],["sms","Win-back #2"],["wait","Wait 2 weeks"],["sms","Win-back #3 (final)"],
+    ["branch","Responded?",[["action","Back into normal journey"]],[["action","Tag “cold”, stop — STOP honored instantly"]]] ],
+  [ ["trigger","Patient's birthday (7:00 AM)"],["sms","Happy birthday + whitening treat (valid 30 days)"],
+    ["branch","Redeemed within 30 days?",[["action","Tag redemption → ROI tracked"]],[["wait","Offer quietly expires"]]] ],
+  [ ["trigger","5★ review left + treatment completed"],["sms","“$50 credit for you + a friend” — personal link"],
+    ["branch","Friend books through the link?",[["action","Apply both credits, thank referrer"],["action","Tag referred patient to referrer"]],[["wait","No action — no pressure"]]] ]
+];
+const NODE_META = {
+  trigger:["⚡","trigger","Trigger"], sms:["💬","sms","Send SMS"], email:["✉️","email","Send email"],
+  wait:["⏳","wait","Delay"], action:["⚙️","action","Action"], task:["✅","task","Create task"], notify:["🔔","notify","Notify staff"],
+  branch:["◆","branch","Condition"]
+};
+function nodeHtml([type,text]){
+  const m = NODE_META[type] || ["•","action","Step"];
+  return `<div class="wf-node ${type==='trigger'?'trigger':''}"><span class="wn-ico ${m[1]}">${m[0]}</span><div><div class="wn-t">${m[2]}</div><div class="wn-b">${text}</div></div></div>`;
+}
+function trackHtml(nodes){
+  let out = "";
+  nodes.forEach((n,idx)=>{
+    if(idx>0) out += `<div class="wf-conn"></div>`;
+    if(n[0]==="branch"){
+      out += `<div class="wf-branch"><div class="wf-branch-q">${nodeHtml(["branch","<b>"+n[1]+"</b>"])}</div>
+        <div class="wf-branch-cols">
+          <div class="wf-branch-col yes"><span class="bc-label">✓ Yes</span><div class="wf-track">${trackHtml(n[2])}</div></div>
+          <div class="wf-branch-col no"><span class="bc-label">✕ No</span><div class="wf-track">${trackHtml(n[3])}</div></div>
+        </div></div>`;
+    } else {
+      out += nodeHtml(n);
+    }
+  });
+  return out;
+}
+function openFlow(i){
+  const w = WORKFLOWS[i];
+  $("#fm-ico").textContent = w.ico; $("#fm-title").textContent = w.t; $("#fm-tag").textContent = w.tag;
+  $("#flow-canvas").innerHTML = `<div class="wf-track">${trackHtml(FLOWS[i])}</div>`;
+  $("#flow-overlay").classList.add("show");
+}
+function closeFlow(){ $("#flow-overlay").classList.remove("show"); }
 
 /* ================= Pipeline & templates ================= */
 const STAGES = [
@@ -788,9 +878,9 @@ const TOUR = [
   {view:"funnel", target:"#lp", title:"Try the funnel yourself",
    body:"This is the snapshot's front door. Click <b>“Claim my $99 visit”</b>, pick a slot, and watch the right-hand log — contact created, reminders armed, pipeline updated, front desk notified. Nobody typed anything.",
    pre:()=>resetFunnel()},
-  {view:"automations", target:"#wf-list", title:"Eight automations, in plain English",
-   body:"Every workflow spelled out step by step — I've opened the <b>review engine</b>: happy patients go to Google, unhappy ones go to a private form and the manager's phone. The <b>6-month recall</b> below it is the quiet revenue engine of the whole snapshot.",
-   pre:()=>{ const c = $$(".wf-card")[3]; if(c && !c.classList.contains("open")) c.classList.add("open"); }},
+  {view:"automations", target:".wf-card[data-wf='3'] .wf-open-btn", title:"See the actual workflow — not just words",
+   body:"Every automation is a <b>real visual workflow</b>. Click <b>“Open visual workflow →”</b> and you'll see the review engine's triggers, delays and the if/else branch: happy patients routed to Google, unhappy ones to a private form + a same-day manager alert. Try it on any of the eight.",
+   pre:()=>{ closeFlow(); const c = $$(".wf-card")[3]; if(c && !c.classList.contains("open")) c.classList.add("open"); }},
   {view:"pipeline", target:"#board", title:"The board the front desk lives on",
    body:"Patients move across automatically as they book, show and accept treatment. Dana's $2,340 crown isn't a sticky note — it's a card that follows up on itself."},
   {view:"pipeline", target:"#tpl-grid", title:"Every message, pre-written",
@@ -864,6 +954,9 @@ function init(){
     toast("Not wired into this demo — in a real deployment this section is configured too (calendars, payments, reputation are all part of the snapshot).", "🔒")));
   $("#tour-start").addEventListener("click", ()=>tourShow(0));
   $("#funnel-reset").addEventListener("click", resetFunnel);
+  $("#fm-close").addEventListener("click", closeFlow);
+  $("#flow-overlay").addEventListener("click", e=>{ if(e.target.id==="flow-overlay") closeFlow(); });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeFlow(); });
   renderOverview(); renderMap(); renderWorkflows(); renderPipeline(); resetFunnel();
   setTimeout(()=>toast(`This is a live snapshot preview — everything is clickable. For the two-minute story, hit <b>“▶ Start guided tour”</b>.`, "👋"), 1200);
 }
