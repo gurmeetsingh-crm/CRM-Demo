@@ -277,6 +277,38 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
   .rep-tiles{grid-template-columns:repeat(2,1fr);}
 }
 
+/* ===== Request funnel + reply composer (depth) ===== */
+.req-funnel{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;}
+.req-step{flex:1;min-width:110px;background:var(--gl-bg);border:1px solid var(--gl-border-2);border-radius:10px;padding:12px 14px;position:relative;}
+.req-step b{font-size:22px;font-weight:750;display:block;letter-spacing:-.02em;}
+.req-step span{font-size:12px;color:var(--gl-text2);}
+.req-step .rq-pct{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;color:var(--gl-green);}
+.req-arrow{align-self:center;color:#a8b6cb;flex:0 0 auto;}
+.review{cursor:pointer;border-radius:8px;transition:background .12s;padding-left:6px;padding-right:6px;margin:0 -6px;}
+.review:hover{background:var(--gl-bg);}
+.rev-cta{font-size:11px;font-weight:700;color:var(--gl-blue-dark);opacity:0;transition:opacity .12s;}
+.review:hover .rev-cta{opacity:1;}
+.rp-overlay{position:fixed;inset:0;z-index:130;background:rgba(16,26,46,.55);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;}
+.rp-overlay.show{display:flex;}
+.rp-modal{background:#fff;border-radius:16px;box-shadow:0 30px 80px rgba(16,26,46,.5);width:100%;max-width:520px;overflow:hidden;animation:flowIn .25s ease;}
+@keyframes flowIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+.rp-head{display:flex;align-items:center;gap:11px;padding:15px 20px;border-bottom:1px solid var(--gl-border);}
+.rp-head h3{font-size:15px;flex:1;}
+.rp-close{background:none;border:none;font-size:20px;color:var(--gl-text2);cursor:pointer;line-height:1;padding:2px 6px;}
+.rp-close:hover{color:var(--gl-text);}
+.rp-body{padding:18px 20px 20px;}
+.rp-review{background:var(--gl-bg);border-radius:10px;padding:13px 15px;margin-bottom:16px;}
+.rp-review .rr-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.rp-review .rr-name{font-weight:650;font-size:13.5px;}
+.rp-draft-label{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--gl-blue-dark);margin-bottom:8px;}
+.rp-ai-badge{background:var(--gl-blue-tint);border-radius:100px;padding:2px 9px;font-size:10.5px;}
+.rp-textarea{width:100%;min-height:96px;border:1px solid var(--gl-border);border-radius:10px;padding:11px 13px;font-family:inherit;font-size:13.5px;line-height:1.5;color:var(--gl-text);resize:vertical;background:#fff;}
+.rp-textarea:focus{outline:none;border-color:var(--gl-blue);box-shadow:0 0 0 3px rgba(47,107,246,.12);}
+.rp-actions{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;align-items:center;}
+.rp-regen{background:#fff;border:1px solid var(--gl-border);border-radius:9px;padding:9px 14px;font-size:13px;font-weight:600;color:var(--gl-text);cursor:pointer;}
+.rp-regen:hover{background:var(--gl-bg);}
+.rp-note{font-size:11.5px;color:var(--gl-text3);margin-left:auto;}
+.rp-posted{background:var(--gl-green-bg);border-radius:10px;padding:13px 15px;font-size:13px;color:#1f7a52;}
 </style>
 </head>
 <body>
@@ -333,8 +365,12 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
           <div class="card dist-card" id="dist-card"></div>
         </div>
         <div class="rep-tiles" id="rep-tiles"></div>
+        <div class="card card-pad" style="margin-bottom:14px;">
+          <div class="rev-head"><h3>Review request funnel — this week</h3><span style="font-size:12px;color:var(--gl-text2);">every completed job is asked</span></div>
+          <div class="req-funnel" id="req-funnel"></div>
+        </div>
         <div class="card card-pad">
-          <div class="rev-head"><h3>Recent reviews</h3><span class="live-tag"><i></i> Live</span></div>
+          <div class="rev-head"><h3>Recent reviews <span style="font-weight:400;color:var(--gl-text3);font-size:12px;">· click one to reply</span></h3><span class="live-tag"><i></i> Live</span></div>
           <div id="review-stream"></div>
         </div>
       </section>
@@ -427,6 +463,10 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 30px;color:var(--gl-text3);
 <div id="viz-tip"></div>
 <div id="tour-hl"></div>
 <div id="tour-tip"></div>
+<div class="rp-overlay" id="rp-overlay"><div class="rp-modal">
+  <div class="rp-head"><span style="font-size:18px;">💬</span><h3>Reply to review</h3><button class="rp-close" id="rp-close">✕</button></div>
+  <div class="rp-body" id="rp-body"></div>
+</div></div>
 <div id="toast-wrap"></div>
 
 <script>
@@ -491,7 +531,7 @@ const TILES = [
 const REVIEWS = [
   ["DM","#2f8f6e","Diane M.","google",5,"Luis showed up on time, found the leak fast and the price was exactly the quote. Booked our AC tune-up too!","Thanks so much, Diane! Luis will be glad to hear it — see you for the tune-up. 🙌","2h ago"],
   ["RT","#6d5ae6","Robert T.","google",5,"Called at 7am with no AC, they had someone out by 10. Lifesavers in this heat.","Beating the Phoenix heat is what we do, Robert — thanks for the kind words!","5h ago"],
-  ["SK","#e0873f","Sara K.","fb",4,"Good work overall, tech was friendly. Took a little longer than expected but they kept me posted.","Appreciate the honest feedback, Sara — we're working on tighter time windows!","1d ago"],
+  ["SK","#e0873f","Sara K.","fb",4,"Good work overall, tech was friendly. Took a little longer than expected but they kept me posted.",null,"1d ago"],
   ["JP","#3b7bb5","James P.","google",5,"Second time using Rivera. Honest, no upsell, fixed the actual problem. Rare these days.","That trust means everything, James. Thank you!","2d ago"]
 ];
 const NEW_REVIEWS = [
@@ -522,18 +562,83 @@ function renderDash(){
       <b>${val}</b><span>${lab}${sub?" · "+sub:""}</span></div>`;
   }).join("");
   // reviews
+  REVIEW_REG.length = 0;
   const stream = $("#review-stream");
   stream.innerHTML = REVIEWS.map(r=>reviewHtml(r)).join("");
 }
+let REVIEW_REG = [];
 function reviewHtml([init,color,name,plat,stars,txt,reply,time]){
-  return `<div class="review"><div class="rev-av" style="background:${color}">${init.trim().slice(0,2)}</div>
+  const rid = REVIEW_REG.push({name,plat,stars,txt,reply}) - 1;
+  return `<div class="review" data-rid="${rid}"><div class="rev-av" style="background:${color}">${init.trim().slice(0,2)}</div>
     <div class="rev-body">
       <div class="rev-top"><span class="rev-name">${name}</span>
         <span class="rev-plat ${plat==='google'?'plat-google':'plat-fb'}">${plat==='google'?'Google':'Facebook'}</span>
-        <span class="rev-stars">${starRow(stars)}</span></div>
+        <span class="rev-stars">${starRow(stars)}</span>
+        <span class="rev-cta">Reply →</span></div>
       <div class="rev-txt">${txt}</div>
-      ${reply?`<div class="rev-reply"><b>Rivera replied:</b> ${reply}</div>`:`<div class="rev-reply"><span class="reply-badge">✎ AI reply drafted — awaiting approval</span></div>`}
+      <div class="rev-reply">${reply?`<b>Rivera replied:</b> ${reply}`:`<span class="reply-badge">✎ AI reply drafted — click to review &amp; approve</span>`}</div>
     </div><div class="rev-time">${time}</div></div>`;
+}
+/* ---------- reply composer ---------- */
+const REPLY_DRAFTS = {
+  5:["Thank you so much, {{name}}! 🙌 Reviews like this make our whole team's day — we're grateful you took the time. See you next visit!",
+     "{{name}}, you're the best! 💙 So glad we hit the mark. Thank you for trusting Rivera — call us anytime.",
+     "This means the world, {{name}}! 🌟 Thank you for the kind words and for being part of the Rivera family."],
+  4:["Thanks for the honest feedback, {{name}}! 🙏 We're glad you had a good experience, and we're always working to make the next one even smoother.",
+     "Appreciate you, {{name}}! Happy you were taken care of — we've noted your feedback to keep getting better. See you next time!",
+     "Thank you, {{name}}! 😊 Glad we could help — your notes help us sharpen things up."],
+  low:["{{name}}, thank you for the honest feedback and I'm sorry we fell short. This isn't the experience we want — our owner will reach out personally today to make it right.",
+     "We hear you, {{name}}, and we're sorry. That's not our standard. Please expect a call from our team today so we can fix this for you."]
+};
+let rpState = {rid:null, di:0, bucket:5};
+function openReply(rid){
+  const rv = REVIEW_REG[rid]; if(!rv) return;
+  rpState = {rid, di:0, bucket: rv.stars>=5?5:(rv.stars>=4?4:"low")};
+  renderReplyModal();
+  $("#rp-overlay").classList.add("show");
+}
+function renderReplyModal(){
+  const rv = REVIEW_REG[rpState.rid];
+  const quote = `<div class="rp-review"><div class="rr-top"><span class="rr-name">${rv.name}</span>
+    <span class="rev-plat ${rv.plat==='google'?'plat-google':'plat-fb'}">${rv.plat==='google'?'Google':'Facebook'}</span>
+    <span class="rev-stars">${starRow(rv.stars)}</span></div><div class="rev-txt">${rv.txt}</div></div>`;
+  if(rv.reply){
+    $("#rp-body").innerHTML = quote + `<div class="rp-posted"><b>✓ Posted reply:</b> ${rv.reply}</div>
+      <div class="rp-actions"><span class="rp-note">Already approved &amp; posted — every review gets a reply.</span></div>`;
+    return;
+  }
+  const draft = REPLY_DRAFTS[rpState.bucket][rpState.di].replace(/{{name}}/g, rv.name.split(" ")[0]);
+  $("#rp-body").innerHTML = quote +
+    `<div class="rp-draft-label">🧠 AI-drafted reply <span class="rp-ai-badge">in your brand voice</span></div>
+     <textarea class="rp-textarea" id="rp-text">${draft}</textarea>
+     <div class="rp-actions">
+       <button class="btn" id="rp-approve">✓ Approve &amp; post</button>
+       <button class="rp-regen" id="rp-regen">↻ Regenerate</button>
+       <span class="rp-note">You approve every reply — the AI never posts on its own.</span>
+     </div>`;
+  $("#rp-approve").addEventListener("click", approveReply);
+  $("#rp-regen").addEventListener("click", ()=>{
+    rpState.di = (rpState.di+1) % REPLY_DRAFTS[rpState.bucket].length;
+    const d = REPLY_DRAFTS[rpState.bucket][rpState.di].replace(/{{name}}/g, rv.name.split(" ")[0]);
+    $("#rp-text").value = d;
+  });
+}
+function approveReply(){
+  const rv = REVIEW_REG[rpState.rid];
+  const text = $("#rp-text").value.trim() || REPLY_DRAFTS[rpState.bucket][rpState.di];
+  rv.reply = text;
+  const card = document.querySelector(`.review[data-rid="${rpState.rid}"] .rev-reply`);
+  if(card) card.innerHTML = `<b>Rivera replied:</b> ${text}`;
+  closeReply();
+  toast(`Reply posted to ${rv.name}'s ${rv.plat==='google'?'Google':'Facebook'} review. 💬`, "✅");
+}
+function closeReply(){ $("#rp-overlay").classList.remove("show"); }
+/* ---------- request funnel ---------- */
+const REQ_FUNNEL = [["Requests sent","84","100%"],["Opened","61","73%"],["Clicked the link","38","45%"],["Left a review","23","27%"]];
+function renderReqFunnel(){
+  $("#req-funnel").innerHTML = REQ_FUNNEL.map((s,i)=>
+    `<div class="req-step"><span class="rq-pct">${s[2]}</span><b>${s[1]}</b><span>${s[0]}</span></div>`+
+    (i<REQ_FUNNEL.length-1?`<div class="req-arrow">→</div>`:"")).join("");
 }
 function collectReview(){
   const r = NEW_REVIEWS[newRevIdx % NEW_REVIEWS.length]; newRevIdx++;
@@ -693,7 +798,7 @@ function renderHow(){
 const TOUR=[
   {center:true,title:"The reviews game, won on autopilot ⭐",body:`For a local business, the Google Map Pack is the whole ballgame — and it's won on review <b>count</b>, <b>rating</b> and <b>responses</b>. This GoHighLevel engine handles all three after every job, and it does it the honest, Google-safe way. Two minutes.`},
   {view:"dash",target:"#gauge-num",title:"A live reputation dashboard",body:"4.8★ from 312 reviews — up 266 in six months. Every finished job feeds this. Hit <b>“Collect a review”</b> anytime to watch a new one land."},
-  {view:"dash",target:"#review-stream",title:"Reviews stream in — with replies drafted",body:"Each review arrives tagged, and the AI drafts an on-brand reply for you to approve. Responding to reviews is a real ranking factor most businesses ignore."},
+  {view:"dash",target:"#review-stream",title:"Reviews stream in — reply in one click",body:"<b>Click any review</b> and the AI hands you a drafted, on-brand reply — approve it, tweak it, or hit regenerate. You approve every one; it never posts on its own. Responding to reviews is a real ranking factor most businesses ignore."},
   {view:"flow",target:".flow-choice",title:"Happy vs. unhappy — you decide",body:"Here's the honest part. The <b>same</b> request goes to everyone. Click <b>Simulate a happy customer</b>, then try the unhappy one — watch how differently the system handles each.",pre:()=>runFlow("happy")},
   {view:"flow",target:"#flow-log",title:"The unhappy save is the magic",body:"A low rating routes to a private message and pings the owner in <b>seconds</b> — a real save before it becomes a public 1-star. Nothing is suppressed; the customer can still post. That's the compliant way to protect a rating.",pre:()=>runFlow("unhappy")},
   {view:"results",target:"#kpi-row",title:"Why it matters: the Map Pack",body:"Rating 3.8→4.8, reviews 46→312, and a jump from #7 to #2 on “plumber near me.” The top three listings get most of the clicks — this is how you get there."},
@@ -743,7 +848,11 @@ function init(){
   $("#tour-start").addEventListener("click",()=>tourShow(0));
   $("#collect-btn").addEventListener("click",collectReview);
   $$(".choice-btn").forEach(b=>b.addEventListener("click",()=>runFlow(b.dataset.path)));
-  renderDash(); renderResults(); renderHow(); bindCharts();
+  $("#review-stream").addEventListener("click", e=>{ const r=e.target.closest(".review"); if(r) openReply(+r.dataset.rid); });
+  $("#rp-close").addEventListener("click", closeReply);
+  $("#rp-overlay").addEventListener("click", e=>{ if(e.target.id==="rp-overlay") closeReply(); });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeReply(); });
+  renderDash(); renderReqFunnel(); renderResults(); renderHow(); bindCharts();
   setTimeout(()=>toast(`Live reputation demo — click <b>“Collect a review”</b> or take the <b>guided tour</b>.`,"⭐"),1100);
 }
 init();
