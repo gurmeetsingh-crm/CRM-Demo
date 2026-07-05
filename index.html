@@ -3,1506 +3,689 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BrightDesk — Interactive HubSpot Portal Demo</title>
+<title>Gurmeet Singh — GoHighLevel Expert · Live Demos</title>
 <style>
 /* ============================================================
-   HubSpot-flavored design tokens
+   Tokens — a bright, colorful, premium light theme
    ============================================================ */
 :root{
-  --hs-nav:#33475b;
-  --hs-nav-hover:#2d3e50;
-  --hs-bg:#f5f8fa;
-  --hs-card:#ffffff;
-  --hs-border:#cbd6e2;
-  --hs-border-light:#dfe3eb;
-  --hs-text:#33475b;
-  --hs-text-2:#516f90;
-  --hs-text-3:#7c98b6;
-  --hs-link:#0091ae;
-  --hs-orange:#ff7a59;
-  --hs-orange-dark:#e66e50;
-  --hs-teal:#00a4bd;
-  --hs-green:#00bda5;
-  --hs-green-dark:#007a63;
-  --hs-red:#f2545b;
-  --hs-red-bg:#fdedee;
-  --hs-yellow:#f5c26b;
-  --hs-yellow-bg:#fef8f0;
-  /* chart tokens (validated ordinal ramp + accent) */
-  --viz-1:#59bccd; --viz-2:#33a9bd; --viz-3:#0091ae; --viz-4:#00758c; --viz-5:#005a6b;
-  --viz-accent:#0091ae;
-  --viz-grid:#e5ebf1;
-  --viz-axis:#516f90;
-  --demo-dark:#182a3a;
-  --radius:3px;
-  --shadow:0 1px 5px rgba(51,71,91,.08);
+  --page:#eef2fb;
+  --page-2:#e6ebf7;
+  --surface:#ffffff;
+  --surface-2:#f7f9ff;
+  --ink:#14213d;
+  --ink-2:#48566f;
+  --ink-3:#8592ab;
+  --line:#e5eaf4;
+  --line-2:#eef1f8;
+
+  --azure:#2f6bf6;
+  --azure-ink:#1b52d8;
+  --cyan:#16b6e4;
+  --violet:#6d5ae6;
+  --coral:#ff6a5a;
+  --emerald:#10b5a0;
+  --amber:#f7a63b;
+  --pink:#ec5fb0;
+
+  --shadow-sm:0 1px 3px rgba(20,33,61,.06);
+  --shadow:0 8px 30px rgba(20,33,61,.09);
+  --shadow-lg:0 24px 60px rgba(20,33,61,.14);
+  --radius:16px;
+  --maxw:1120px;
 }
+@media (prefers-color-scheme: dark){
+  :root{
+    --page:#0a0f1c; --page-2:#0d1424; --surface:#121a2c; --surface-2:#0f1626;
+    --ink:#f2f5fc; --ink-2:#aab6cd; --ink-3:#7382a0; --line:#22304a; --line-2:#1a2740;
+    --azure:#5b8cff; --azure-ink:#87abff; --cyan:#3fc9f2;
+    --violet:#9b8cf5; --coral:#ff8577; --emerald:#2fd0ba; --amber:#ffbd5c; --pink:#f57ec4;
+    --shadow-sm:0 1px 3px rgba(0,0,0,.4); --shadow:0 8px 30px rgba(0,0,0,.45); --shadow-lg:0 24px 60px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="light"]{
+  --page:#eef2fb; --page-2:#e6ebf7; --surface:#ffffff; --surface-2:#f7f9ff;
+  --ink:#14213d; --ink-2:#48566f; --ink-3:#8592ab; --line:#e5eaf4; --line-2:#eef1f8;
+  --azure:#2f6bf6; --azure-ink:#1b52d8; --cyan:#16b6e4;
+  --violet:#6d5ae6; --coral:#ff6a5a; --emerald:#10b5a0; --amber:#f7a63b; --pink:#ec5fb0;
+}
+:root[data-theme="dark"]{
+  --page:#0a0f1c; --page-2:#0d1424; --surface:#121a2c; --surface-2:#0f1626;
+  --ink:#f2f5fc; --ink-2:#aab6cd; --ink-3:#7382a0; --line:#22304a; --line-2:#1a2740;
+  --azure:#5b8cff; --azure-ink:#87abff; --cyan:#3fc9f2;
+  --violet:#9b8cf5; --coral:#ff8577; --emerald:#2fd0ba; --amber:#ffbd5c; --pink:#f57ec4;
+}
+
 *{margin:0;padding:0;box-sizing:border-box;}
-html{-webkit-text-size-adjust:100%;}
+html{scroll-behavior:smooth;}
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
-  background:var(--hs-bg); color:var(--hs-text);
-  font-size:14px; line-height:1.45;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  color:var(--ink); font-size:16px; line-height:1.55;
+  background:
+    radial-gradient(1100px 620px at 88% -8%, rgba(47,107,246,.14), transparent 60%),
+    radial-gradient(880px 520px at -6% 8%, rgba(109,90,230,.12), transparent 55%),
+    radial-gradient(760px 620px at 60% 108%, rgba(16,181,160,.10), transparent 55%),
+    var(--page);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
 }
+a{color:var(--azure-ink);text-decoration:none;}
+h1,h2,h3{text-wrap:balance;letter-spacing:-.02em;line-height:1.1;}
 button{font-family:inherit;cursor:pointer;}
-a{color:var(--hs-link);text-decoration:none;}
-a:hover{text-decoration:underline;}
-h1,h2,h3,h4{font-weight:600;color:var(--hs-text);}
+::selection{background:rgba(47,107,246,.2);}
 
-/* ============================================================
-   Demo control bar (the consultant's chrome, above HubSpot's)
-   ============================================================ */
-#demo-bar{
-  background:var(--demo-dark); color:#fff;
-  display:flex; align-items:center; gap:14px;
-  padding:8px 18px; font-size:13px; position:relative; z-index:60;
-  flex-wrap:wrap;
-}
-#demo-bar .db-brand{display:flex;align-items:center;gap:9px;font-weight:600;}
-#demo-bar .db-brand .db-dot{width:8px;height:8px;border-radius:50%;background:var(--hs-orange);box-shadow:0 0 8px var(--hs-orange);}
-#demo-bar .db-sub{color:#9fb3c8;font-weight:400;}
-#demo-bar .db-actions{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.db-btn{
-  background:var(--hs-orange); color:#fff; border:none; border-radius:var(--radius);
-  padding:7px 16px; font-size:13px; font-weight:600;
-}
-.db-btn:hover{background:var(--hs-orange-dark);}
-.db-btn.ghost{background:transparent;border:1px solid #4a617a;color:#dbe5ee;font-weight:400;}
-.db-btn.ghost:hover{border-color:#9fb3c8;background:rgba(255,255,255,.06);}
-/* audit switch */
-.switch-wrap{display:flex;align-items:center;gap:8px;color:#dbe5ee;}
-.switch{position:relative;width:38px;height:20px;background:#4a617a;border-radius:20px;border:none;transition:background .2s;flex:0 0 auto;}
-.switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s;}
-.switch.on{background:var(--hs-red);}
-.switch.on::after{left:20px;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
 
-/* ============================================================
-   HubSpot top navigation
-   ============================================================ */
-#hs-nav{
-  background:var(--hs-nav); color:#fff; display:flex; align-items:center;
-  padding:0 14px; height:52px; gap:4px; position:relative; z-index:50;
-}
-#hs-nav .logo{display:flex;align-items:center;gap:8px;margin-right:14px;font-weight:700;font-size:15px;color:#fff;letter-spacing:.2px;}
-#hs-nav .logo svg{display:block;}
-#hs-nav .nav-items{display:flex;height:100%;}
-.nav-item{
-  background:none;border:none;color:#cbd6e2;font-size:14px;padding:0 14px;height:100%;
-  display:flex;align-items:center;gap:6px;border-bottom:3px solid transparent;border-top:3px solid transparent;
-}
-.nav-item:hover{background:var(--hs-nav-hover);color:#fff;}
-.nav-item.active{color:#fff;border-bottom-color:var(--hs-orange);background:var(--hs-nav-hover);}
-.nav-item .flag{background:var(--hs-red);color:#fff;font-size:10px;font-weight:700;border-radius:8px;padding:1px 6px;}
-#hs-nav .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
-.nav-search{
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius);
-  color:#cbd6e2;font-size:13px;padding:6px 12px;min-width:170px;display:flex;align-items:center;gap:8px;
-}
-.nav-ico{color:#cbd6e2;font-size:16px;background:none;border:none;padding:4px;}
-.avatar{
-  width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;color:#fff;flex:0 0 auto;
-}
-.av-a{background:#7a5fb5;} .av-b{background:#00a4bd;} .av-c{background:#e2856e;} .av-d{background:#5b9e63;} .av-e{background:#4a76a8;}
-
-/* ============================================================
-   Layout & generic components
-   ============================================================ */
-main{max-width:1280px;margin:0 auto;padding:22px 22px 60px;}
-.view{display:none;}
-.view.active{display:block;animation:fadeIn .25s ease;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
-.view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
-.view-head h1{font-size:22px;}
-.view-head .sub{color:var(--hs-text-2);font-size:13px;margin-top:3px;max-width:640px;}
-.card{background:var(--hs-card);border:1px solid var(--hs-border);border-radius:var(--radius);box-shadow:var(--shadow);}
-.card-pad{padding:16px 18px;}
-.card h3{font-size:14px;margin-bottom:10px;}
+/* buttons */
 .btn{
-  background:var(--hs-orange);color:#fff;border:none;border-radius:var(--radius);
-  padding:9px 20px;font-size:14px;font-weight:600;
+  display:inline-flex;align-items:center;gap:9px;border:none;border-radius:11px;
+  padding:13px 24px;font-size:15px;font-weight:650;letter-spacing:-.01em;
+  background:linear-gradient(135deg,var(--azure),#3f79ff);
+  color:#fff;box-shadow:0 8px 22px rgba(47,107,246,.34);transition:transform .16s ease,box-shadow .16s ease;
 }
-.btn:hover{background:var(--hs-orange-dark);}
-.btn.secondary{background:#fff;color:var(--hs-text);border:1px solid var(--hs-border);font-weight:400;}
-.btn.secondary:hover{background:var(--hs-bg);}
-.btn.sm{padding:5px 12px;font-size:12px;}
-.pill{display:inline-flex;align-items:center;gap:5px;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:600;white-space:nowrap;}
-.pill.lead{background:#e5f5f8;color:#00758c;}
-.pill.mql{background:#e5f8f6;color:var(--hs-green-dark);}
-.pill.sql{background:#fef8f0;color:#b88217;}
-.pill.customer{background:#eaf0f6;color:var(--hs-text-2);}
-.pill.opp{background:#f2ebfa;color:#7a5fb5;}
-.pill.missing{background:var(--hs-red-bg);color:#c02b33;}
-.pill.warn{background:var(--hs-yellow-bg);color:#b88217;}
-.pill.ok{background:#e5f8f6;color:var(--hs-green-dark);}
-.flag-chip{display:inline-flex;align-items:center;gap:5px;background:var(--hs-red-bg);color:#c02b33;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;}
-.warn-chip{display:inline-flex;align-items:center;gap:5px;background:var(--hs-yellow-bg);color:#b88217;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;}
-.audit-only{display:none !important;}
-body.audit .audit-only{display:revert !important;}
-body.audit .audit-only.flex{display:inline-flex !important;}
-body.audit .clean-only{display:none !important;}
-.audit-banner{
-  background:var(--hs-red-bg);border:1px solid #f5b5b8;border-radius:var(--radius);
-  color:#8f2027;padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start;
-}
-.audit-banner b{color:#8f2027;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(47,107,246,.42);}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-sm);}
+.btn.ghost:hover{border-color:var(--azure);color:var(--azure-ink);box-shadow:var(--shadow);}
+.btn.lg{padding:15px 30px;font-size:16px;}
+.btn svg{width:17px;height:17px;}
 
-/* tables */
-.hs-table{width:100%;border-collapse:collapse;font-size:13px;}
-.hs-table th{
-  text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--hs-text-2);
-  background:var(--hs-bg);padding:9px 14px;border-bottom:1px solid var(--hs-border);font-weight:600;white-space:nowrap;
-}
-.hs-table td{padding:11px 14px;border-bottom:1px solid var(--hs-border-light);vertical-align:middle;}
-.hs-table tr:last-child td{border-bottom:none;}
-.hs-table tbody tr{cursor:pointer;}
-.hs-table tbody tr:hover{background:#f0f6fa;}
-.hs-table .cname{color:var(--hs-link);font-weight:600;}
-.hs-table tr.dup-row{background:var(--hs-red-bg);}
-.hs-table tr.dup-row:hover{background:#fbdfe1;}
-.cell-missing{color:#c02b33;font-weight:600;}
+/* nav */
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(1.4) blur(12px);
+  background:color-mix(in srgb, var(--page) 72%, transparent);border-bottom:1px solid var(--line-2);}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:14px;}
+.brand{display:flex;align-items:center;gap:11px;font-weight:750;font-size:16px;letter-spacing:-.02em;}
+.brand .mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:0 0 auto;
+  background:conic-gradient(from 210deg,var(--azure),var(--violet),var(--emerald),var(--azure));
+  box-shadow:0 6px 16px rgba(47,107,246,.35);}
+.brand .mark span{width:13px;height:13px;border-radius:4px;background:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.35) inset;}
+.brand small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);letter-spacing:0;margin-top:-2px;}
+.nav .spacer{flex:1;}
+.nav .nav-link{color:var(--ink-2);font-weight:550;font-size:14px;padding:8px 6px;}
+.nav .nav-link:hover{color:var(--ink);}
+@media (max-width:720px){ .nav .nav-link{display:none;} }
 
-/* ============================================================
-   Contact record (3 columns)
-   ============================================================ */
-.record-grid{display:grid;grid-template-columns:300px minmax(0,1fr) 330px;gap:16px;align-items:start;}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;margin-bottom:12px;background:none;border:none;color:var(--hs-link);}
-.back-link:hover{text-decoration:underline;}
-.rec-left .id-block{text-align:center;padding:22px 18px 16px;}
-.big-avatar{width:72px;height:72px;border-radius:50%;background:#7a5fb5;color:#fff;font-size:26px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;}
-.rec-left h2{font-size:18px;}
-.rec-left .jobline{color:var(--hs-text-2);font-size:13px;margin-top:2px;}
-.action-row{display:flex;justify-content:center;gap:14px;padding:14px 8px 18px;border-bottom:1px solid var(--hs-border-light);}
-.action-btn{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:none;color:var(--hs-text-2);font-size:11px;}
-.action-btn .circ{width:34px;height:34px;border-radius:50%;border:1px solid var(--hs-border);display:flex;align-items:center;justify-content:center;font-size:14px;background:#fff;color:var(--hs-text-2);transition:all .15s;}
-.action-btn:hover .circ{border-color:var(--hs-link);color:var(--hs-link);}
-.about-sec{padding:14px 18px 18px;}
-.about-sec h4{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--hs-text-2);margin-bottom:10px;}
-.prop{margin-bottom:11px;}
-.prop .plabel{font-size:11px;color:var(--hs-text-2);margin-bottom:1px;}
-.prop .pvalue{font-size:13px;}
-.prop .pvalue a{font-weight:600;}
-/* timeline */
-.rec-tabs{display:flex;gap:2px;border-bottom:1px solid var(--hs-border);padding:0 6px;background:#fff;border-radius:var(--radius) var(--radius) 0 0;}
-.rec-tab{background:none;border:none;padding:12px 13px;font-size:13px;color:var(--hs-text-2);border-bottom:3px solid transparent;}
-.rec-tab.active{color:var(--hs-text);font-weight:600;border-bottom-color:var(--hs-teal);}
-.tl-filter{padding:10px 16px;color:var(--hs-text-2);font-size:12px;border-bottom:1px solid var(--hs-border-light);background:#fff;}
-.tl-body{padding:14px 16px;background:var(--hs-bg);border-radius:0 0 var(--radius) var(--radius);}
-.tl-month{font-size:12px;font-weight:700;color:var(--hs-text-2);text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px;}
-.tl-month:first-child{margin-top:0;}
-.tl-item{background:#fff;border:1px solid var(--hs-border-light);border-radius:var(--radius);padding:11px 14px;margin-bottom:8px;display:flex;gap:11px;box-shadow:0 1px 2px rgba(51,71,91,.05);}
-.tl-ico{width:30px;height:30px;border-radius:50%;background:#eaf0f6;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto;}
-.tl-item .tl-title{font-size:13px;font-weight:600;}
-.tl-item .tl-title .who{color:var(--hs-link);}
-.tl-item .tl-meta{font-size:11px;color:var(--hs-text-3);margin-top:1px;}
-.tl-item .tl-snip{font-size:12px;color:var(--hs-text-2);margin-top:5px;background:var(--hs-bg);border-left:2px solid var(--hs-border);padding:6px 9px;border-radius:2px;}
-.tl-gap{border:1px dashed #e9a2a6;background:var(--hs-red-bg);color:#8f2027;font-size:12px;font-weight:600;text-align:center;padding:9px;border-radius:var(--radius);margin-bottom:8px;}
-/* right column cards */
-.rc-card{margin-bottom:14px;}
-.rc-head{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--hs-border-light);}
-.rc-head h4{font-size:13px;}
-.rc-head .count{color:var(--hs-text-2);font-weight:400;}
-.rc-body{padding:13px 15px;}
-.rc-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;gap:10px;}
-.rc-row .k{color:var(--hs-text-2);}
-.rc-row .v{font-weight:600;text-align:right;}
-.custom-tag{display:inline-flex;align-items:center;gap:4px;background:#e5f5f8;color:#00758c;font-size:10px;font-weight:700;border-radius:3px;padding:2px 7px;text-transform:uppercase;letter-spacing:.3px;}
-.rc-deal{border:1px solid var(--hs-border-light);border-radius:var(--radius);padding:10px 12px;}
-.rc-deal .dname{color:var(--hs-link);font-weight:600;font-size:13px;}
-.rc-deal .dmeta{font-size:12px;color:var(--hs-text-2);margin-top:3px;}
-.health-bar{height:6px;background:#eaf0f6;border-radius:3px;overflow:hidden;margin-top:4px;}
-.health-bar>div{height:100%;background:var(--hs-green);border-radius:3px;}
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px;align-items:center;padding:66px 0 40px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:750;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--azure-ink);background:rgba(47,107,246,.1);border:1px solid rgba(47,107,246,.2);border-radius:100px;padding:6px 14px;margin-bottom:20px;}
+.eyebrow .live-dot{width:8px;height:8px;border-radius:50%;background:var(--emerald);box-shadow:0 0 0 0 rgba(16,181,160,.6);animation:pulse 2s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,181,160,.5);}70%{box-shadow:0 0 0 9px rgba(16,181,160,0);}100%{box-shadow:0 0 0 0 rgba(16,181,160,0);}}
+.hero h1{font-size:clamp(34px,5.2vw,56px);font-weight:800;letter-spacing:-.03em;}
+.hero h1 .grad{background:linear-gradient(115deg,var(--azure),var(--violet) 55%,var(--emerald));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero .lede{color:var(--ink-2);font-size:18px;margin:20px 0 28px;max-width:54ch;}
+.hero .lede b{color:var(--ink);font-weight:650;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.trust-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px;}
+.trust{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--line);border-radius:100px;padding:6px 13px;box-shadow:var(--shadow-sm);}
+.trust .tdot{width:7px;height:7px;border-radius:50%;}
 
-/* ============================================================
-   Deal pipeline board
-   ============================================================ */
-.board-wrap{overflow-x:auto;padding-bottom:10px;}
-.board{display:flex;gap:12px;min-width:1080px;}
-.stage-col{flex:1 1 0;min-width:200px;}
-.stage-head{background:#fff;border:1px solid var(--hs-border);border-radius:var(--radius);padding:10px 12px;margin-bottom:10px;}
-.stage-head .st-top{display:flex;align-items:center;gap:6px;}
-.stage-head h4{font-size:13px;flex:1;}
-.zap-btn{background:#fff7f0;border:1px solid #ffd6c2;color:#d35730;border-radius:50%;width:24px;height:24px;font-size:12px;display:flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto;}
-.zap-btn:hover{background:#ffe9dd;}
-.stage-head .st-sub{font-size:11px;color:var(--hs-text-2);margin-top:3px;}
-.deal-card{background:#fff;border:1px solid var(--hs-border);border-radius:var(--radius);padding:11px 12px;margin-bottom:9px;box-shadow:0 1px 2px rgba(51,71,91,.06);cursor:pointer;position:relative;}
-.deal-card:hover{box-shadow:0 2px 8px rgba(51,71,91,.14);}
-.deal-card.stalled{border-left:3px solid var(--hs-red);}
-.deal-card .dl-name{color:var(--hs-link);font-weight:600;font-size:13px;line-height:1.3;}
-.deal-card .dl-co{font-size:11px;color:var(--hs-text-3);margin-top:2px;}
-.deal-card .dl-amt{font-size:13px;font-weight:700;margin-top:6px;}
-.deal-card .dl-foot{display:flex;align-items:center;justify-content:space-between;margin-top:7px;font-size:11px;color:var(--hs-text-2);}
-.deal-card .avatar{width:22px;height:22px;font-size:9px;}
-.date-bad{color:#c02b33;font-weight:700;}
-.deal-chips{margin-top:7px;display:flex;gap:5px;flex-wrap:wrap;}
-/* popover */
-#popover{
-  position:absolute;z-index:80;max-width:320px;background:var(--hs-nav);color:#fff;border-radius:6px;
-  padding:13px 15px;font-size:13px;line-height:1.5;box-shadow:0 6px 24px rgba(23,38,52,.35);display:none;
-}
-#popover.show{display:block;animation:fadeIn .18s ease;}
-#popover h5{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#ffb59e;margin-bottom:6px;display:flex;gap:6px;align-items:center;}
-#popover .pop-arrow{position:absolute;top:-6px;left:24px;width:12px;height:12px;background:var(--hs-nav);transform:rotate(45deg);}
+/* hero console panel */
+.panel{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-lg);overflow:hidden;}
+.panel-top{display:flex;align-items:center;gap:9px;padding:13px 16px;border-bottom:1px solid var(--line-2);background:var(--surface-2);}
+.panel-top .dots{display:flex;gap:6px;}
+.panel-top .dots i{width:10px;height:10px;border-radius:50%;display:inline-block;}
+.panel-top .title{font-size:12.5px;font-weight:650;color:var(--ink-2);margin-left:4px;}
+.panel-top .badge{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--emerald);
+  background:color-mix(in srgb,var(--emerald) 14%,transparent);border-radius:100px;padding:3px 10px;}
+.panel-net{position:relative;height:150px;background:
+  radial-gradient(420px 160px at 50% 0%, color-mix(in srgb,var(--azure) 9%,transparent), transparent 70%);}
+#net{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.feed{padding:12px 14px 6px;display:flex;flex-direction:column;gap:8px;min-height:190px;}
+.feed-item{display:flex;align-items:center;gap:11px;padding:9px 11px;border:1px solid var(--line-2);border-radius:12px;
+  background:var(--surface-2);opacity:0;transform:translateY(8px);animation:feedIn .5s ease forwards;}
+@keyframes feedIn{to{opacity:1;transform:none;}}
+.feed-item .fi-ico{width:30px;height:30px;border-radius:9px;flex:0 0 auto;display:grid;place-items:center;color:#fff;font-size:14px;}
+.feed-item .fi-txt{flex:1;min-width:0;}
+.feed-item .fi-tag{font-size:11px;font-weight:750;letter-spacing:.02em;}
+.feed-item .fi-sub{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.feed-item .fi-time{font-size:11px;font-weight:650;color:var(--ink-3);font-variant-numeric:tabular-nums;flex:0 0 auto;}
+.panel-stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line-2);}
+.panel-stats div{padding:12px 14px;text-align:center;border-right:1px solid var(--line-2);}
+.panel-stats div:last-child{border-right:none;}
+.panel-stats b{display:block;font-size:18px;font-weight:750;letter-spacing:-.02em;}
+.panel-stats span{font-size:11px;color:var(--ink-3);}
 
-/* ============================================================
-   Automation map
-   ============================================================ */
-.map-outer{position:relative;}
-.map-scroll{overflow-x:auto;}
-.map-canvas{position:relative;min-width:1150px;padding:10px 6px 18px;}
-#edge-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
-.map-lanes{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:26px;z-index:1;}
-.lane-title{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--hs-text-3);text-align:center;margin-bottom:14px;}
-.lane{display:flex;flex-direction:column;gap:22px;align-items:stretch;}
-.node{
-  background:#fff;border:1px solid var(--hs-border);border-radius:6px;padding:11px 13px;position:relative;
-  box-shadow:0 1px 3px rgba(51,71,91,.08);cursor:pointer;transition:box-shadow .15s,border-color .15s;
-}
-.node:hover{box-shadow:0 3px 12px rgba(51,71,91,.16);border-color:#9fb3c8;}
-.node.sel{border-color:var(--hs-teal);box-shadow:0 0 0 2px rgba(0,164,189,.25);}
-.node .n-ico{font-size:16px;}
-.node .n-title{font-weight:600;font-size:13px;margin-top:3px;line-height:1.3;}
-.node .n-sub{font-size:11px;color:var(--hs-text-2);margin-top:2px;}
-.node.diamond{border-color:#b7a4dd;background:#faf7ff;}
-.node .n-badge{position:absolute;top:-9px;right:-7px;}
-.map-explain{margin-top:16px;}
-.map-explain .ex-empty{color:var(--hs-text-2);font-size:13px;}
-.map-explain h4{font-size:14px;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
-.map-explain .ex-what{font-size:13px;margin-bottom:8px;}
-.map-explain .ex-why{font-size:13px;color:var(--hs-text-2);background:var(--hs-bg);border-left:3px solid var(--hs-teal);padding:9px 12px;border-radius:2px;}
+/* marquee strip */
+.strip{margin:14px 0 4px;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
+.strip-track{display:flex;gap:12px;width:max-content;animation:slide 34s linear infinite;}
+.strip-chip{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-size:13px;font-weight:600;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--line);border-radius:100px;padding:8px 15px;box-shadow:var(--shadow-sm);}
+@keyframes slide{to{transform:translateX(-50%);}}
 
-/* ============================================================
-   Lead scoring view
-   ============================================================ */
-.score-grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;align-items:start;}
-.score-hero{text-align:center;padding:24px 18px 20px;}
-.score-num{font-size:52px;font-weight:700;line-height:1;transition:color .3s;}
-.score-num.hot{color:var(--hs-green-dark);}
-.score-cap{font-size:12px;color:var(--hs-text-2);margin-top:4px;}
-.stage-flip{margin-top:12px;}
-.thresh-wrap{margin:18px 4px 6px;}
-.thresh-track{height:10px;background:#eaf0f6;border-radius:6px;position:relative;overflow:visible;}
-.thresh-fill{height:100%;border-radius:6px;background:var(--viz-accent);width:0%;transition:width .5s ease;}
-.thresh-mark{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--hs-text-2);left:50%;}
-.thresh-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--hs-text-2);margin-top:6px;}
-.rules-list{list-style:none;}
-.rules-list li{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:7px 0;border-bottom:1px solid var(--hs-border-light);}
-.rules-list li:last-child{border-bottom:none;}
-.rules-list .pts{font-weight:700;color:var(--hs-green-dark);}
-.rules-list .pts.neg{color:#c02b33;}
-.feed{min-height:280px;}
-.feed-item{
-  display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--hs-border-light);
-  border-radius:var(--radius);padding:11px 14px;margin-bottom:8px;opacity:0;transform:translateY(8px);
-  transition:opacity .35s ease,transform .35s ease;
-}
-.feed-item.in{opacity:1;transform:none;}
-.feed-item .f-ico{width:30px;height:30px;border-radius:50%;background:#eaf0f6;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto;}
-.feed-item .f-txt{flex:1;}
-.feed-item .f-title{font-size:13px;font-weight:600;}
-.feed-item .f-meta{font-size:11px;color:var(--hs-text-3);}
-.pts-chip{font-size:13px;font-weight:700;color:var(--hs-green-dark);background:#e5f8f6;border-radius:12px;padding:3px 11px;flex:0 0 auto;}
-.pts-chip.neg{color:#c02b33;background:var(--hs-red-bg);}
-.feed-item.milestone{border-color:var(--hs-green);background:#f2fbfa;}
+/* sections */
+section{padding:56px 0 8px;}
+.sec-head{margin-bottom:28px;max-width:62ch;}
+.sec-head .kicker{font-size:12.5px;font-weight:750;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);margin-bottom:9px;}
+.sec-head h2{font-size:clamp(24px,3.4vw,34px);font-weight:800;}
+.sec-head p{color:var(--ink-2);margin-top:9px;font-size:16px;}
 
-/* ============================================================
-   Reports dashboard
-   ============================================================ */
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
-.kpi{padding:14px 16px;}
-.kpi .k-label{font-size:12px;color:var(--hs-text-2);}
-.kpi .k-value{font-size:28px;font-weight:600;margin-top:4px;}
-.kpi .k-delta{font-size:12px;font-weight:600;margin-top:3px;}
-.kpi .k-delta.up{color:var(--hs-green-dark);}
-.kpi .k-delta.down{color:#c02b33;}
-.kpi .k-delta .vs{color:var(--hs-text-3);font-weight:400;}
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.chart-card{padding:16px 18px 12px;}
-.chart-card h3{font-size:14px;}
-.chart-card .c-sub{font-size:12px;color:var(--hs-text-2);margin:2px 0 12px;}
-.chart-card svg{display:block;width:100%;height:auto;}
-.chart-card svg text{font-family:inherit;}
-.chart-foot{display:flex;justify-content:flex-end;margin-top:6px;}
-.data-toggle{background:none;border:none;color:var(--hs-link);font-size:12px;padding:4px 2px;}
-.data-toggle:hover{text-decoration:underline;}
-.data-table{display:none;margin-top:8px;}
-.data-table.show{display:block;}
-.data-table table{width:100%;border-collapse:collapse;font-size:12px;}
-.data-table th,.data-table td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--hs-border-light);}
-.data-table th{color:var(--hs-text-2);font-weight:600;}
-.data-table td.num,.data-table th.num{text-align:right;font-variant-numeric:tabular-nums;}
-.lb-bar{height:8px;border-radius:4px;background:#eaf0f6;overflow:hidden;min-width:90px;}
-.lb-bar>div{height:100%;background:var(--viz-accent);border-radius:4px;}
-#viz-tip{
-  position:fixed;z-index:90;background:var(--hs-nav);color:#fff;font-size:12px;border-radius:4px;
-  padding:6px 10px;pointer-events:none;display:none;box-shadow:0 4px 14px rgba(23,38,52,.3);white-space:nowrap;
-}
-#viz-tip b{color:#fff;}
-#viz-tip .t-sub{color:#9fb3c8;}
+/* demo cards */
+.demo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+.demo-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 22px;
+  display:flex;flex-direction:column;box-shadow:var(--shadow-sm);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;overflow:hidden;}
+.demo-card::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--azure));opacity:.9;}
+.demo-card::after{content:"";position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;
+  background:radial-gradient(circle, color-mix(in srgb,var(--c,var(--azure)) 22%,transparent), transparent 70%);opacity:.5;transition:opacity .2s;}
+.demo-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:color-mix(in srgb,var(--c,var(--azure)) 40%,var(--line));}
+.demo-card:hover::after{opacity:.9;}
+.card-ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;color:#fff;margin-bottom:15px;
+  background:linear-gradient(135deg,var(--c,var(--azure)),color-mix(in srgb,var(--c,var(--azure)) 60%, #ffffff));box-shadow:0 8px 20px color-mix(in srgb,var(--c,var(--azure)) 40%,transparent);}
+.card-ico svg{width:24px;height:24px;}
+.demo-card .chip{align-self:flex-start;font-size:11px;font-weight:750;letter-spacing:.05em;text-transform:uppercase;border-radius:6px;padding:3px 9px;margin-bottom:12px;
+  color:var(--c,var(--azure));background:color-mix(in srgb,var(--c,var(--azure)) 12%,transparent);}
+.demo-card h3{font-size:20px;margin-bottom:9px;letter-spacing:-.02em;}
+.demo-card p{font-size:14px;color:var(--ink-2);margin-bottom:15px;}
+.demo-card ul{list-style:none;margin:0 0 22px;flex:1;display:flex;flex-direction:column;gap:8px;}
+.demo-card li{font-size:13.5px;color:var(--ink-2);padding-left:24px;position:relative;}
+.demo-card li::before{content:"";position:absolute;left:2px;top:7px;width:12px;height:12px;border-radius:4px;
+  background:color-mix(in srgb,var(--c,var(--azure)) 22%,transparent);
+  box-shadow:inset 0 0 0 2px var(--c,var(--azure));}
+.demo-card .go{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:#fff;
+  background:color-mix(in srgb,var(--c,var(--azure)) 76%,#14213d);border-radius:10px;padding:10px 18px;transition:gap .16s ease,filter .16s;}
+.demo-card .go:hover{gap:12px;filter:brightness(1.08);text-decoration:none;}
+.demo-card.match{border-color:var(--c,var(--azure));box-shadow:0 0 0 2px color-mix(in srgb,var(--c,var(--azure)) 30%,transparent),var(--shadow);}
+.match-tag{display:none;position:absolute;top:14px;right:14px;background:color-mix(in srgb,var(--c,var(--azure)) 76%,#14213d);color:#fff;font-size:10px;font-weight:750;
+  letter-spacing:.04em;text-transform:uppercase;border-radius:100px;padding:4px 10px;z-index:2;}
+.demo-card.match .match-tag{display:inline-block;}
+.c-violet{--c:var(--violet);} .c-coral{--c:var(--coral);} .c-emerald{--c:var(--emerald);} .c-amber{--c:var(--amber);}
 
-/* ============================================================
-   Audit report view
-   ============================================================ */
-.audit-intro{max-width:560px;margin:40px auto;text-align:center;padding:36px 30px;}
-.audit-intro .big-ico{font-size:40px;margin-bottom:10px;}
-.audit-intro p{color:var(--hs-text-2);margin:10px 0 20px;}
-.audit-head{display:grid;grid-template-columns:170px minmax(0,1fr);gap:22px;align-items:center;padding:20px 22px;margin-bottom:16px;}
-.grade-ring{position:relative;width:140px;height:140px;margin:0 auto;}
-.grade-ring svg{transform:rotate(-90deg);}
-.grade-ring .g-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.grade-ring .g-num{font-size:32px;font-weight:700;line-height:1;}
-.grade-ring .g-of{font-size:11px;color:var(--hs-text-2);}
-.audit-head h2{font-size:19px;margin-bottom:5px;}
-.audit-head .a-sub{color:var(--hs-text-2);font-size:13px;max-width:620px;}
-.grade-letter{display:inline-flex;background:var(--hs-red-bg);color:#c02b33;font-weight:700;border-radius:3px;padding:2px 10px;margin-left:8px;font-size:14px;}
-.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:18px;}
-.cat-card{padding:15px 17px;}
-.cat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.cat-top h4{font-size:13px;}
-.cat-score{font-weight:700;font-size:15px;}
-.cat-bar{height:7px;background:#eaf0f6;border-radius:4px;overflow:hidden;margin-bottom:10px;}
-.cat-bar>div{height:100%;border-radius:4px;}
-.cat-find{font-size:12.5px;color:var(--hs-text-2);padding:5px 0 5px 2px;display:flex;gap:8px;align-items:flex-start;line-height:1.4;}
-.cat-find .sev{flex:0 0 auto;margin-top:1px;}
-.sev{width:8px;height:8px;border-radius:50%;display:inline-block;}
-.sev.hi{background:var(--hs-red);} .sev.med{background:var(--hs-yellow);} .sev.lo{background:#9fb3c8;}
-.fix-table th:first-child{width:46%;}
-.impact-hi{color:#c02b33;font-weight:700;} .impact-med{color:#b88217;font-weight:700;}
-.effort{color:var(--hs-text-2);}
-.cta-band{
-  margin-top:20px;background:linear-gradient(100deg,var(--hs-nav),#1f3448);color:#fff;border-radius:6px;
-  padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
-}
-.cta-band h3{color:#fff;font-size:17px;margin-bottom:4px;}
-.cta-band p{color:#b7c8d8;font-size:13px;max-width:560px;}
+/* hs strip */
+.hs-strip{margin-top:22px;background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:16px 22px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-2);box-shadow:var(--shadow-sm);}
+.hs-strip .hs-ico{width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--amber) 16%,transparent);
+  display:grid;place-items:center;flex:0 0 auto;}
+.hs-strip b{color:var(--ink);}
 
-/* ============================================================
-   Tour, toast, footer
-   ============================================================ */
-#tour-hl{position:absolute;z-index:100;border-radius:6px;box-shadow:0 0 0 4px rgba(255,122,89,.9),0 0 0 9999px rgba(24,42,58,.62);pointer-events:none;display:none;transition:all .35s ease;}
-#tour-tip{
-  position:absolute;z-index:101;width:330px;max-width:calc(100vw - 32px);background:#fff;border-radius:8px;
-  box-shadow:0 10px 40px rgba(23,38,52,.4);padding:18px 20px;display:none;
-}
-#tour-tip .t-step{font-size:11px;font-weight:700;color:var(--hs-orange);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
-#tour-tip h4{font-size:15px;margin-bottom:7px;}
-#tour-tip p{font-size:13px;color:var(--hs-text-2);line-height:1.55;}
-#tour-tip .t-btns{display:flex;align-items:center;gap:8px;margin-top:15px;}
-#tour-tip .t-skip{margin-right:auto;background:none;border:none;color:var(--hs-text-3);font-size:12px;}
-#tour-tip .t-skip:hover{color:var(--hs-text);}
-#tour-tip.centered{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:400px;}
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.svc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow-sm);
+  transition:transform .16s ease,box-shadow .16s ease;}
+.svc:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+.svc .svc-ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;margin-bottom:13px;color:#fff;}
+.svc .svc-ico svg{width:21px;height:21px;}
+.svc b{display:block;font-size:15px;margin-bottom:5px;letter-spacing:-.01em;}
+.svc span{font-size:13.5px;color:var(--ink-2);line-height:1.5;}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:step;}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 22px;position:relative;box-shadow:var(--shadow-sm);}
+.step .step-n{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;margin-bottom:14px;
+  background:linear-gradient(135deg,var(--azure),var(--violet));}
+.step b{display:block;font-size:16px;margin-bottom:6px;letter-spacing:-.01em;}
+.step span{font-size:14px;color:var(--ink-2);line-height:1.55;}
+.step .conn{position:absolute;top:42px;right:-13px;color:var(--ink-3);font-size:18px;z-index:2;}
+@media (max-width:820px){ .step .conn{display:none;} }
+
+/* metrics band */
+.metrics{margin-top:14px;background:linear-gradient(120deg,#0f1830,#141f3d 55%,#122a3f);border-radius:22px;padding:34px 26px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;}
+.metrics::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(420px 200px at 12% 0%, rgba(47,107,246,.4), transparent 60%),
+  radial-gradient(420px 220px at 90% 110%, rgba(16,181,160,.34), transparent 60%);opacity:.9;}
+.metric{position:relative;text-align:center;color:#fff;}
+.metric b{display:block;font-size:34px;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(120deg,#fff,#bcd3ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.metric span{font-size:13px;color:#aec0e0;}
+
+/* cta band */
+.cta-band{margin:56px 0 0;background:
+   radial-gradient(600px 300px at 100% 0%, rgba(109,90,230,.5), transparent 60%),
+   linear-gradient(120deg,var(--azure),#3f79ff);
+  border-radius:22px;padding:40px 34px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  box-shadow:var(--shadow-lg);color:#fff;}
+.cta-band h2{color:#fff;font-size:26px;margin-bottom:7px;}
+.cta-band p{color:rgba(255,255,255,.9);font-size:15px;max-width:52ch;}
+.cta-band .btn{background:#fff;color:var(--azure-ink);box-shadow:0 10px 30px rgba(0,0,0,.2);}
+.cta-band .btn:hover{box-shadow:0 16px 40px rgba(0,0,0,.28);}
+
+footer{max-width:var(--maxw);margin:0 auto;padding:40px 24px 44px;color:var(--ink-3);font-size:12.5px;text-align:center;}
+
+/* personalization ribbon */
+.for-ribbon{position:relative;z-index:60;text-align:center;font-size:13px;padding:9px 20px;color:#fff;
+  background:linear-gradient(120deg,var(--azure),var(--violet));box-shadow:var(--shadow-sm);}
+.for-ribbon b{color:#fff;font-weight:750;}
+.for-ribbon .c-name{color:rgba(255,255,255,.92);}
+
+/* toast */
 #toast-wrap{position:fixed;left:18px;bottom:18px;z-index:120;display:flex;flex-direction:column;gap:8px;}
-.toast{
-  background:var(--hs-nav);color:#fff;border-radius:6px;padding:11px 16px;font-size:13px;max-width:360px;
-  box-shadow:0 6px 20px rgba(23,38,52,.35);display:flex;gap:9px;align-items:flex-start;
-  animation:toastIn .3s ease;
-}
+.toast{background:#131d33;color:#fff;border-radius:12px;padding:12px 16px;font-size:13px;max-width:370px;
+  box-shadow:var(--shadow-lg);display:flex;gap:9px;align-items:flex-start;animation:toastIn .3s ease;}
 @keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-footer{max-width:1280px;margin:0 auto;padding:0 22px 30px;color:var(--hs-text-3);font-size:11.5px;text-align:center;}
 
-/* responsive */
-@media (max-width:1020px){
-  .record-grid{grid-template-columns:1fr;}
-  .score-grid{grid-template-columns:1fr;}
-  .charts-grid{grid-template-columns:1fr;}
-  .kpi-row{grid-template-columns:repeat(2,1fr);}
-  .audit-head{grid-template-columns:1fr;text-align:center;}
-  #hs-nav{overflow-x:auto;}
-  .nav-search{display:none;}
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1);}
+.reveal.in{opacity:1;transform:none;}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:30px;padding:40px 0 20px;}
+  .demo-grid,.svc-grid,.steps{grid-template-columns:1fr;}
+  .metrics{grid-template-columns:repeat(2,1fr);row-gap:26px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;scroll-behavior:auto;}
+  .reveal{opacity:1;transform:none;transition:none;}
+  .strip-track{animation:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- ================= Demo control bar ================= -->
-<div id="demo-bar">
-  <div class="db-brand"><span class="db-dot"></span><span id="db-name">Interactive HubSpot Portal Demo</span>
-    <span class="db-sub" id="db-by"></span></div>
-  <div class="db-actions">
-    <a class="db-btn ghost" id="xlink" href="ai-speed-to-lead.html" style="text-decoration:none;">AI Speed-to-Lead demo →</a>
-    <span class="switch-wrap">Audit mode
-      <button class="switch" id="audit-switch" aria-label="Toggle audit mode"></button>
-    </span>
-    <button class="db-btn" id="tour-start">▶ Start guided tour</button>
-  </div>
-</div>
-
-<!-- ================= HubSpot chrome ================= -->
-<header id="hs-nav">
-  <span class="logo">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="3.4" fill="#ff7a59"/>
-      <g stroke="#ff7a59" stroke-width="2.4" stroke-linecap="round">
-        <line x1="12" y1="1.5" x2="12" y2="5.5"/><line x1="12" y1="18.5" x2="12" y2="22.5"/>
-        <line x1="1.5" y1="12" x2="5.5" y2="12"/><line x1="18.5" y1="12" x2="22.5" y2="12"/>
-        <line x1="4.6" y1="4.6" x2="7.4" y2="7.4"/><line x1="16.6" y1="16.6" x2="19.4" y2="19.4"/>
-        <line x1="4.6" y1="19.4" x2="7.4" y2="16.6"/><line x1="16.6" y1="7.4" x2="19.4" y2="4.6"/>
-      </g>
-    </svg>
-    BrightDesk CRM
-  </span>
-  <nav class="nav-items" id="nav-items">
-    <button class="nav-item active" data-view="contacts">Contacts</button>
-    <button class="nav-item" data-view="deals">Deals</button>
-    <button class="nav-item" data-view="automation">Automation</button>
-    <button class="nav-item" data-view="scoring">Lead Scoring</button>
-    <button class="nav-item" data-view="reports">Reports</button>
-    <button class="nav-item" data-view="audit">Audit <span class="flag audit-only">6</span></button>
-  </nav>
-  <div class="nav-right">
-    <span class="nav-search">🔍 Search BrightDesk CRM</span>
-    <button class="nav-ico" title="Settings">⚙️</button>
-    <button class="nav-ico" title="Notifications">🔔</button>
-    <span class="avatar av-a">SC</span>
+<header class="nav">
+  <div class="nav-in">
+    <div class="brand">
+      <span class="mark"><span></span></span>
+      <div>Gurmeet Singh<small class="swap-consultant-sub">GoHighLevel Systems</small></div>
+    </div>
+    <div class="spacer"></div>
+    <a class="nav-link" href="#demos">Demos</a>
+    <a class="nav-link" href="#services">What I build</a>
+    <a class="nav-link" href="#process">Process</a>
+    <button class="btn" id="book-btn">Book a call</button>
   </div>
 </header>
 
-<main>
-  <!-- ================= CONTACTS LIST ================= -->
-  <section class="view active" id="view-contacts">
-    <div class="view-head">
-      <div>
-        <h1>Contacts <span style="color:var(--hs-text-3);font-weight:400;font-size:15px;" id="contact-count"></span></h1>
-        <div class="sub">Every lead and customer in one place — with owner, lifecycle stage and score kept up to date automatically. Click <b>Sarah Chen</b> to open a record.</div>
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow" id="hero-eyebrow"><span class="live-dot"></span> GoHighLevel Specialist · Upwork</div>
+      <h1 id="hero-h1">See the system <span class="grad">before you pay</span> for it.</h1>
+      <p class="lede" id="hero-lede">I'm <b>Gurmeet Singh</b>. Most freelancers describe what they'll build — I hand you a <b>working, clickable demo</b> with a guided tour, so you know exactly what you're buying before the contract starts. Everything below is live. Open any of it.</p>
+      <div class="hero-btns">
+        <a class="btn lg" href="#demos">Open the live demos
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <button class="btn ghost lg" id="book-btn-hero">Book a call</button>
       </div>
-      <div><button class="btn secondary sm">Import</button> <button class="btn sm" style="margin-left:6px;">Create contact</button></div>
+      <div class="trust-row">
+        <span class="trust"><span class="tdot" style="background:var(--emerald)"></span> 100% native GoHighLevel</span>
+        <span class="trust"><span class="tdot" style="background:var(--azure)"></span> Guided tour with every demo</span>
+        <span class="trust"><span class="tdot" style="background:var(--violet)"></span> Sandbox-built, then handed off</span>
+      </div>
     </div>
-    <div class="audit-banner audit-only">⚠️ <span><b>Audit mode:</b> this is the same portal, but the way most portals actually look before cleanup — duplicates, missing owners and blank lifecycle stages are highlighted in red. Flip the switch in the top bar to go back to the clean build.</span></div>
-    <div class="card" style="overflow-x:auto;">
-      <table class="hs-table" id="contacts-table"></table>
-    </div>
-  </section>
 
-  <!-- ================= CONTACT RECORD ================= -->
-  <section class="view" id="view-record">
-    <button class="back-link" data-goto="contacts">← Back to Contacts</button>
-    <div class="record-grid">
-      <!-- LEFT: identity + properties -->
-      <div class="card rec-left" id="rec-left">
-        <div class="id-block">
-          <span class="big-avatar">SC</span>
-          <h2>Sarah Chen</h2>
-          <div class="jobline">VP of Operations at Meridian Logistics</div>
-        </div>
-        <div class="action-row">
-          <button class="action-btn"><span class="circ">📝</span>Note</button>
-          <button class="action-btn"><span class="circ">✉️</span>Email</button>
-          <button class="action-btn"><span class="circ">📞</span>Call</button>
-          <button class="action-btn"><span class="circ">✅</span>Task</button>
-          <button class="action-btn"><span class="circ">📅</span>Meeting</button>
-        </div>
-        <div class="about-sec" id="about-props">
-          <h4>About this contact</h4>
-          <div class="prop"><div class="plabel">Email</div><div class="pvalue"><a href="#" onclick="return false">sarah.chen@meridianlog.com</a></div></div>
-          <div class="prop"><div class="plabel">Phone number</div><div class="pvalue">+1 (312) 555-0184</div></div>
-          <div class="prop"><div class="plabel">Contact owner</div><div class="pvalue clean-only">Marcus Webb</div><div class="pvalue audit-only"><span class="pill missing">— No owner assigned</span></div></div>
-          <div class="prop"><div class="plabel">Lifecycle stage</div><div class="pvalue clean-only"><span class="pill mql">Marketing Qualified Lead</span></div><div class="pvalue audit-only"><span class="pill missing">— Blank</span></div></div>
-          <div class="prop"><div class="plabel">Lead status</div><div class="pvalue clean-only">Open — attempting contact</div><div class="pvalue audit-only"><span class="pill missing">— Blank</span></div></div>
-          <div class="prop"><div class="plabel">HubSpot score</div><div class="pvalue clean-only"><b>75</b></div><div class="pvalue audit-only"><span class="pill missing">Scoring not set up</span></div></div>
-          <div class="prop"><div class="plabel">Original source</div><div class="pvalue">Organic search → Pricing page</div></div>
-          <div class="prop"><div class="plabel">Last activity date</div><div class="pvalue clean-only">Today, 9:41 AM</div><div class="pvalue audit-only"><span class="cell-missing">47 days ago</span></div></div>
-        </div>
+    <!-- live systems console -->
+    <div class="panel reveal">
+      <div class="panel-top">
+        <div class="dots"><i style="background:#ff6a5a"></i><i style="background:#f7a63b"></i><i style="background:#10b5a0"></i></div>
+        <span class="title">Live systems — sample activity</span>
+        <span class="badge"><span style="width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block"></span> running</span>
       </div>
-
-      <!-- MIDDLE: activity timeline -->
-      <div>
-        <div class="audit-banner audit-only" style="margin-bottom:12px;">⚠️ <span><b>2 possible duplicates</b> of this contact exist (sarah.chen@meridianlog.com / s.chen@meridianlog.com / schen84@gmail.com). Activity is split across three records, so nobody sees the full story.</span></div>
-        <div class="card" style="border-radius:var(--radius);overflow:hidden;">
-          <div class="rec-tabs">
-            <button class="rec-tab active">Activity</button><button class="rec-tab">Notes</button><button class="rec-tab">Emails</button><button class="rec-tab">Calls</button><button class="rec-tab">Tasks</button><button class="rec-tab">Meetings</button>
-          </div>
-          <div class="tl-filter">Filter activity (28/28) ▾ &nbsp;·&nbsp; All users ▾ &nbsp;·&nbsp; All teams ▾</div>
-          <div class="tl-body" id="timeline"></div>
-        </div>
-      </div>
-
-      <!-- RIGHT: associations + CUSTOM CARDS -->
-      <div id="rec-right">
-        <div class="card rc-card">
-          <div class="rc-head"><h4>Company <span class="count">(1)</span></h4><a href="#" onclick="return false">+ Add</a></div>
-          <div class="rc-body">
-            <div class="rc-deal"><div class="dname">Meridian Logistics</div><div class="dmeta">meridianlog.com · 240 employees · Chicago, IL</div></div>
-          </div>
-        </div>
-        <div class="card rc-card">
-          <div class="rc-head"><h4>Deals <span class="count">(1)</span></h4><a href="#" onclick="return false">+ Add</a></div>
-          <div class="rc-body">
-            <div class="rc-deal">
-              <div class="dname">Meridian — Annual plan (86 seats)</div>
-              <div class="dmeta"><b>$24,000</b> · Contract Sent · Closes Jul 18, 2026</div>
-            </div>
-          </div>
-        </div>
-        <div class="card rc-card" id="stripe-card">
-          <div class="rc-head"><h4>💳 Subscription &amp; Billing</h4><span class="custom-tag">⚡ Custom card</span></div>
-          <div class="rc-body">
-            <div class="rc-row"><span class="k">Plan</span><span class="v">Team — 86 seats</span></div>
-            <div class="rc-row"><span class="k">Status</span><span class="v"><span class="pill ok">● Trialing → day 9 of 14</span></span></div>
-            <div class="rc-row"><span class="k">MRR at conversion</span><span class="v">$2,000</span></div>
-            <div class="rc-row"><span class="k">Payment method</span><span class="v">Visa ····4242</span></div>
-            <div class="rc-row" style="margin-bottom:4px;"><span class="k">Last event</span><span class="v">trial_will_end (Stripe)</span></div>
-            <div style="font-size:11px;color:var(--hs-text-3);border-top:1px solid var(--hs-border-light);padding-top:8px;">Live data from Stripe, shown right on the contact — no tab-switching for reps. Built as a HubSpot UI extension.</div>
-          </div>
-        </div>
-        <div class="card rc-card" id="usage-card">
-          <div class="rc-head"><h4>📈 Product Usage</h4><span class="custom-tag">⚡ Custom card</span></div>
-          <div class="rc-body">
-            <div class="rc-row"><span class="k">Seats activated</span><span class="v">61 / 86</span></div>
-            <div class="rc-row"><span class="k">Weekly active users</span><span class="v">54</span></div>
-            <div class="rc-row"><span class="k">Health score</span><span class="v" style="color:var(--hs-green-dark);">82 — Healthy</span></div>
-            <div class="health-bar"><div style="width:82%;"></div></div>
-            <div style="font-size:11px;color:var(--hs-text-3);margin-top:9px;">Synced nightly from the product database so sales &amp; CS see adoption before every call.</div>
-          </div>
-        </div>
+      <div class="panel-net"><canvas id="net"></canvas></div>
+      <div class="feed" id="live-feed"></div>
+      <div class="panel-stats">
+        <div><b style="color:var(--coral)">9<span style="font-size:13px">s</span></b><span>median text-back</span></div>
+        <div><b style="color:var(--azure)">24/7</b><span>coverage</span></div>
+        <div><b style="color:var(--emerald)">0</b><span>leads missed</span></div>
       </div>
     </div>
   </section>
 
-  <!-- ================= DEALS BOARD ================= -->
-  <section class="view" id="view-deals">
-    <div class="view-head">
-      <div>
-        <h1>Deals <span style="color:var(--hs-text-3);font-weight:400;font-size:15px;" id="deal-total"></span></h1>
-        <div class="sub">Sales pipeline — click the <b style="color:#d35730;">⚡</b> on any stage to see, in plain English, what happens automatically when a deal lands there.</div>
-      </div>
-      <div><button class="btn secondary sm">Board actions</button> <button class="btn sm" style="margin-left:6px;">Create deal</button></div>
-    </div>
-    <div class="audit-banner audit-only">⚠️ <span><b>Audit mode:</b> stalled deals, missing amounts and past-due close dates are now flagged — this is what an unmaintained pipeline looks like, and why forecasts stop being trusted.</span></div>
-    <div class="board-wrap"><div class="board" id="board"></div></div>
-  </section>
+  <!-- marquee -->
+  <div class="strip">
+    <div class="strip-track" id="strip-track"></div>
+  </div>
 
-  <!-- ================= AUTOMATION MAP ================= -->
-  <section class="view" id="view-automation">
-    <div class="view-head">
-      <div>
-        <h1>Automation map</h1>
-        <div class="sub">Every workflow in the portal on one page — from first touch to invoice. HubSpot can't show you this view; I draw it for every client so you always know what your system does. <b>Click any step</b> for a plain-English explanation.</div>
+  <!-- DEMOS -->
+  <section id="demos">
+    <div class="sec-head reveal">
+      <div class="kicker">Live demos</div>
+      <h2>Real, clickable systems — not screenshots.</h2>
+      <p>Fictional businesses, real functionality. Every demo has a "Start guided tour" button — the two-minute version of what I'd build for you.</p>
+    </div>
+    <div class="demo-grid">
+      <div class="demo-card c-violet reveal" data-niche="full clientapp complete">
+        <span class="match-tag">Closest to your business</span>
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></div>
+        <span class="chip">Flagship · Full build</span>
+        <h3>The complete client app</h3>
+        <p>A full-fledged GoHighLevel build, end to end — the demo I send with proposals so clients explore everything before hiring.</p>
+        <ul>
+          <li>Complete sub-account experience with tour guide</li>
+          <li>Funnels, pipelines, calendars and automations</li>
+          <li>Everything a client sees, before they commit</li>
+        </ul>
+        <a class="go" id="clientapp-btn" href="#">Open the demo →</a>
       </div>
-    </div>
-    <div class="audit-banner audit-only">⚠️ <span><b>Audit mode:</b> red badges mark automations that are silently broken — dead workflows, a disconnected sync, and two workflows fighting over the same field.</span></div>
-    <div class="card card-pad map-outer">
-      <div class="map-scroll"><div class="map-canvas" id="map-canvas">
-        <svg id="edge-svg"></svg>
-        <div class="map-lanes" id="map-lanes"></div>
-      </div></div>
-    </div>
-    <div class="card card-pad map-explain" id="map-explain">
-      <div class="ex-empty">👆 Click any step above to see what it does and why it matters.</div>
-    </div>
-  </section>
 
-  <!-- ================= LEAD SCORING ================= -->
-  <section class="view" id="view-scoring">
-    <div class="view-head">
-      <div>
-        <h1>Lead scoring — watch it happen</h1>
-        <div class="sub">Sales shouldn't chase every lead. Points accumulate from real behavior, and at <b>50 points</b> the contact automatically becomes an MQL and sales is notified — while the lead is still on your site.</div>
+      <div class="demo-card c-coral reveal" data-niche="medspa spa salon aesthetics local ai missedcall call phone chiro vet fitness gym">
+        <span class="match-tag">Closest to your business</span>
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="8.5" cy="10" r="1"/><circle cx="12" cy="10" r="1"/><circle cx="15.5" cy="10" r="1"/></svg></div>
+        <span class="chip">Live · New</span>
+        <h3>AI Employee for local business</h3>
+        <p>A med spa misses a call at 2:47 PM. Nine seconds later the AI texts back — six minutes later the caller is booked with a paid deposit.</p>
+        <ul>
+          <li>Missed-call text-back with visible AI reasoning</li>
+          <li>Real prices, real calendars, text-to-pay deposits</li>
+          <li>Guardrails: medical questions go to humans, always</li>
+        </ul>
+        <a class="go" href="ai-employee.html">Open the demo →</a>
       </div>
-      <button class="btn" id="replay-btn">▶ Replay Sarah's journey</button>
+
+      <div class="demo-card c-emerald reveal" data-niche="dental dentist orthodontist snapshot practice medical clinic health">
+        <span class="match-tag">Closest to your business</span>
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5C9 2.5 4 4 4 8.5c0 3 1.5 5 2.5 8.5.6 2 .8 3 1.8 3s1-2 1.7-2 1.7 2 1.7 2c1 0 1.2-1 1.8-3 1-3.5 2.5-5.5 2.5-8.5C16 4 12 5.5 12 5.5z"/></svg></div>
+        <span class="chip">Live · New</span>
+        <h3>Dental practice snapshot</h3>
+        <p>A complete, pre-built system that loads into any account in minutes — the whole patient engine, ready to deploy and re-skin.</p>
+        <ul>
+          <li>Interactive $99 new-patient funnel you can try</li>
+          <li>8 automations: reminders, recall, reviews, rescue</li>
+          <li>Clickable patient-journey map, ad to 6-month recall</li>
+        </ul>
+        <a class="go" href="dental-snapshot.html">Open the demo →</a>
+      </div>
+
+      <div class="demo-card c-amber reveal" data-niche="reputation reviews review rating google home services plumbing hvac roofing contractor auto restaurant salon dental medspa local">
+        <span class="match-tag">Closest to your business</span>
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></div>
+        <span class="chip">Live · New</span>
+        <h3>Reputation &amp; review engine</h3>
+        <p>Every finished job asks for a review, happy customers land on Google, and unhappy ones get caught privately — fast, and fully Google-compliant.</p>
+        <ul>
+          <li>Live reputation dashboard — collect a review, watch it land</li>
+          <li>Interactive happy vs. unhappy routing you can run</li>
+          <li>Before/after: 3.8★ → 4.8★ and a Map-Pack climb</li>
+        </ul>
+        <a class="go" href="reputation.html">Open the demo →</a>
+      </div>
     </div>
-    <div class="score-grid">
-      <div>
-        <div class="card score-hero">
-          <span class="avatar av-a" style="width:46px;height:46px;font-size:16px;">SC</span>
-          <div style="font-weight:600;margin-top:8px;">Sarah Chen</div>
-          <div style="font-size:12px;color:var(--hs-text-2);">Meridian Logistics</div>
-          <div class="score-num" id="score-num">0</div>
-          <div class="score-cap">HubSpot score</div>
-          <div class="stage-flip" id="stage-flip"><span class="pill lead">Lead</span></div>
-          <div class="thresh-wrap">
-            <div class="thresh-track"><div class="thresh-fill" id="thresh-fill"></div><div class="thresh-mark" title="MQL threshold"></div></div>
-            <div class="thresh-labels"><span>0</span><span>MQL at 50</span><span>100</span></div>
-          </div>
-        </div>
-        <div class="card card-pad" style="margin-top:14px;" id="rules-card">
-          <h3>How the score is configured</h3>
-          <ul class="rules-list">
-            <li><span>Visited the pricing page</span><span class="pts">+10</span></li>
-            <li><span>Submitted “Request a demo” form</span><span class="pts">+15</span></li>
-            <li><span>Opened a marketing email</span><span class="pts">+5</span></li>
-            <li><span>Clicked a link in an email</span><span class="pts">+7</span></li>
-            <li><span>Booked a meeting</span><span class="pts">+20</span></li>
-            <li><span>Company size 100+ (firmographic)</span><span class="pts">+10</span></li>
-            <li><span>Visited the careers page</span><span class="pts neg">−5</span></li>
-            <li><span>Email bounced / unsubscribed</span><span class="pts neg">−15</span></li>
-          </ul>
-        </div>
-      </div>
-      <div class="card card-pad">
-        <h3>Sarah's journey, replayed</h3>
-        <div style="font-size:12px;color:var(--hs-text-2);margin-bottom:12px;">This is the exact sequence HubSpot recorded over 11 days — compressed to a few seconds.</div>
-        <div class="feed" id="feed"></div>
-      </div>
+
+    <div class="hs-strip reveal">
+      <div class="hs-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#f7a63b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+      <span><b>Moving from HubSpot, or running both?</b> I work across platforms — HubSpot demos available on request.</span>
     </div>
   </section>
 
-  <!-- ================= REPORTS ================= -->
-  <section class="view" id="view-reports">
-    <div class="view-head">
-      <div>
-        <h1>Reporting dashboard</h1>
-        <div class="sub">The numbers a founder or sales leader actually opens on Monday morning — funnel, revenue, sources and rep performance. Hover any chart for exact values; every chart also has a “view data” table.</div>
-      </div>
-      <div style="font-size:12px;color:var(--hs-text-2);">Date range: <b>This quarter (Q2 2026)</b> ▾</div>
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="sec-head reveal">
+      <div class="kicker">Capabilities</div>
+      <h2>What I build in GoHighLevel</h2>
+      <p>From a single fix to complete white-label systems for agencies.</p>
     </div>
-    <div class="kpi-row" id="kpi-row"></div>
-    <div class="charts-grid">
-      <div class="card chart-card" id="chart-funnel-card">
-        <h3>Lifecycle funnel — Q2</h3>
-        <div class="c-sub">Where visitors become customers, and the conversion between each stage</div>
-        <div id="chart-funnel"></div>
-        <div class="chart-foot"><button class="data-toggle" data-target="dt-funnel">view data</button></div>
-        <div class="data-table" id="dt-funnel"></div>
-      </div>
-      <div class="card chart-card">
-        <h3>Revenue closed by source — Q2</h3>
-        <div class="c-sub">Closed-won revenue attributed to original source</div>
-        <div id="chart-source"></div>
-        <div class="chart-foot"><button class="data-toggle" data-target="dt-source">view data</button></div>
-        <div class="data-table" id="dt-source"></div>
-      </div>
-      <div class="card chart-card">
-        <h3>Revenue closed by month</h3>
-        <div class="c-sub">Closed-won revenue, Jan – Jun 2026</div>
-        <div id="chart-trend"></div>
-        <div class="chart-foot"><button class="data-toggle" data-target="dt-trend">view data</button></div>
-        <div class="data-table" id="dt-trend"></div>
-      </div>
-      <div class="card chart-card">
-        <h3>Rep leaderboard — Q2</h3>
-        <div class="c-sub">Closed-won revenue vs. individual quota</div>
-        <div id="leaderboard"></div>
-      </div>
+    <div class="svc-grid" id="svc-grid"></div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="sec-head reveal">
+      <div class="kicker">How it works</div>
+      <h2>Working with me, in three steps</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="step-n">1</div><b>Show, then scope</b><span>We start from a demo mapped to your business — so the scope is something you've already seen working, not a guess.</span><span class="conn">→</span></div>
+      <div class="step reveal"><div class="step-n">2</div><b>Build in a sandbox</b><span>Everything is built and tested in a sandbox sub-account first. You watch progress live; nothing touches your account until it's ready.</span><span class="conn">→</span></div>
+      <div class="step reveal"><div class="step-n">3</div><b>Guided handoff</b><span>Delivery includes a guided tour of your own system, plain-English docs, and support while your team settles in.</span></div>
+    </div>
+
+    <div class="metrics reveal">
+      <div class="metric"><b data-count="3">3</b><span>live demos to explore</span></div>
+      <div class="metric"><b data-count="8">8</b><span>automations shown</span></div>
+      <div class="metric"><b data-count="14">14</b><span>message templates</span></div>
+      <div class="metric"><b data-suffix=" wk" data-count="1">1</b><span>from load to go-live</span></div>
     </div>
   </section>
 
-  <!-- ================= AUDIT REPORT ================= -->
-  <section class="view" id="view-audit">
-    <div class="clean-only">
-      <div class="card audit-intro">
-        <div class="big-ico">🔍</div>
-        <h2>Portal Audit</h2>
-        <p>Right now you're looking at the <b>clean build</b> — the portal as I deliver it. Flip on <b>Audit mode</b> to see the same portal the way most companies' portals actually look, with every problem found, graded and given a fix plan.<br><br>This is the exact audit I run in week&nbsp;1 for every client.</p>
-        <button class="btn" id="audit-cta">Turn on Audit mode</button>
-      </div>
+  <!-- CTA -->
+  <div class="cta-band reveal">
+    <div>
+      <h2>Have a GoHighLevel project in mind?</h2>
+      <p>Send me the job on Upwork or book a call — and I'll usually answer with a working demo, not a wall of text.</p>
     </div>
-    <div class="audit-only" id="audit-report"></div>
-  </section>
+    <button class="btn lg" id="book-btn2">Book a call with <span class="swap-consultant">Gurmeet</span></button>
+  </div>
+
 </main>
 
 <footer>
-  Fictional company &amp; sample data for demonstration. This is an independent portfolio demo replicating the HubSpot user experience — not affiliated with or endorsed by HubSpot, Inc.
-  <span id="foot-brand"></span>
+  Demo businesses are fictional. Demos replicate the GoHighLevel user experience for portfolio purposes — not affiliated with or endorsed by HighLevel Inc.
 </footer>
-
-<div id="popover"><div class="pop-arrow"></div><div id="popover-content"></div></div>
-<div id="viz-tip"></div>
-<div id="tour-hl"></div>
-<div id="tour-tip"></div>
 <div id="toast-wrap"></div>
 
 <script>
 /* ============================================================
-   Branding — edit these four lines to re-brand the whole demo
+   Edit these three lines, everything else updates itself
    ============================================================ */
-const BRAND = {
-  consultant: "Gurmeet Singh",
-  title: "HubSpot Expert",
-  clientName: "BrightDesk",
-  ctaLine: "I run this exact audit on real portals in week 1 — then fix the list in priority order."
+const CONFIG = {
+  clientAppUrl: "",          // paste the URL of your existing full GHL client app demo
+  bookingUrl: "",            // paste your real booking / calendar link
+  upworkUrl: ""              // optional: your Upwork profile URL
 };
 
-/* ============================================================
-   Data
-   ============================================================ */
-const CONTACTS = [
-  {init:"SC", av:"av-a", name:"Sarah Chen",        title:"VP of Operations",  co:"Meridian Logistics",  email:"sarah.chen@meridianlog.com",  owner:"Marcus Webb",  stage:"mql",      stageLabel:"MQL",        score:75, last:"Today, 9:41 AM", record:true},
-  {init:"JR", av:"av-b", name:"James Rivera",      title:"Head of Support",   co:"Cloudloom",           email:"j.rivera@cloudloom.io",       owner:"Dana Okafor",  stage:"sql",      stageLabel:"SQL",        score:81, last:"Today, 8:15 AM"},
-  {init:"PM", av:"av-c", name:"Priya Mehta",       title:"COO",               co:"Atlas Freight Co.",   email:"priya@atlasfreight.com",      owner:"Marcus Webb",  stage:"customer", stageLabel:"Customer",   score:64, last:"Yesterday"},
-  {init:"TN", av:"av-d", name:"Tom Nakamura",      title:"IT Director",       co:"Halewood Group",      email:"t.nakamura@halewood.co.uk",   owner:"Alex Torres",  stage:"lead",     stageLabel:"Lead",       score:23, last:"Yesterday"},
-  {init:"LB", av:"av-e", name:"Lena Bauer",        title:"Customer Success Lead", co:"Nordwind SaaS",   email:"lena.bauer@nordwind.de",      owner:"Dana Okafor",  stage:"opp",      stageLabel:"Opportunity",score:58, last:"2 days ago"},
-  {init:"OA", av:"av-b", name:"Omar Abdi",         title:"Founder",           co:"Finlink",             email:"omar@finlink.app",            owner:"Alex Torres",  stage:"mql",      stageLabel:"MQL",        score:55, last:"2 days ago"},
-  {init:"EW", av:"av-c", name:"Emily Watts",       title:"Ops Manager",       co:"Brightline Health",   email:"e.watts@brightlinehealth.com",owner:"Marcus Webb",  stage:"lead",     stageLabel:"Lead",       score:31, last:"3 days ago"},
-  {init:"DK", av:"av-d", name:"Daniel Kim",        title:"VP Sales",          co:"Parcelio",            email:"dkim@parcelio.com",           owner:"Dana Okafor",  stage:"sql",      stageLabel:"SQL",        score:76, last:"4 days ago"},
-  {init:"AF", av:"av-a", name:"Alicia Fuentes",    title:"Support Director",  co:"Vantage Retail",      email:"afuentes@vantageretail.com",  owner:"Alex Torres",  stage:"customer", stageLabel:"Customer",   score:49, last:"5 days ago"},
-  {init:"RS", av:"av-e", name:"Rob Sinclair",      title:"CTO",               co:"Juniper Analytics",   email:"rob@juniperanalytics.io",     owner:"Marcus Webb",  stage:"lead",     stageLabel:"Lead",       score:18, last:"1 week ago"}
-];
-/* extra rows only shown in audit mode */
-const AUDIT_CONTACT_ROWS = [
-  {idx:1, dup:true,  init:"SC", av:"av-a", name:"Sarah Chen",  title:"—", co:"Meridian",           email:"s.chen@meridianlog.com",  owner:null, stage:null, score:null, last:"47 days ago"},
-  {idx:2, dup:true,  init:"S",  av:"av-a", name:"sarah chen",  title:"—", co:"—",                  email:"schen84@gmail.com",       owner:null, stage:null, score:null, last:"Feb 2026"},
-  {idx:6, dup:true,  init:"OA", av:"av-b", name:"Omar Abdi",   title:"—", co:"Finlink Technologies", email:"omar.abdi@finlink.app", owner:null, stage:null, score:null, last:"Mar 2026"}
-];
-const AUDIT_BLANK_OWNERS = new Set(["Tom Nakamura","Emily Watts","Rob Sinclair"]);
-const AUDIT_BLANK_STAGES = new Set(["Tom Nakamura","Lena Bauer","Emily Watts","Rob Sinclair","Alicia Fuentes"]);
-
-const STAGES = [
-  {name:"Appointment Scheduled", zap:"Rep automatically gets a prep task with the contact's full history attached. The prospect gets a meeting confirmation instantly, plus reminder emails 24 hours and 1 hour before — no-show rate drops without anyone lifting a finger.",
-   deals:[
-     {name:"Halewood — Support suite", co:"Halewood Group", amt:9600,  date:"Jul 24", ownerI:"AT", av:"av-d", stall:false},
-     {name:"Finlink — Starter plan",   co:"Finlink",        amt:4800,  date:"Jul 29", ownerI:"AT", av:"av-d", stall:false},
-     {name:"Brightline — 40 seats",    co:"Brightline Health", amt:11500, date:"Aug 4", ownerI:"MW", av:"av-b", stall:true, days:96}
-   ]},
-  {name:"Qualified to Buy", zap:"Deal amount and close date become required — nothing enters the forecast half-filled. The prospect joins the evaluation nurture track, and the owner's manager is added as a deal follower automatically.",
-   deals:[
-     {name:"Parcelio — Team plan",     co:"Parcelio",       amt:18200, date:"Jul 21", ownerI:"DO", av:"av-c", stall:false},
-     {name:"Vantage — Renewal + upsell", co:"Vantage Retail", amt:15800, date:"Jul 31", ownerI:"AT", av:"av-d", stall:false, noamt:true}
-   ]},
-  {name:"Presentation Scheduled", zap:"After the demo ends, the recap deck and recording are emailed automatically within the hour, and a follow-up task lands on the rep's desk for 8 AM the next morning — the follow-up never slips.",
-   deals:[
-     {name:"Nordwind — 120 seats",     co:"Nordwind SaaS",  amt:31000, date:"Jul 17", ownerI:"DO", av:"av-c", stall:false},
-     {name:"Juniper — Analytics add-on", co:"Juniper Analytics", amt:7400, date:"Jul 25", ownerI:"MW", av:"av-b", stall:true, days:112}
-   ]},
-  {name:"Contract Sent", zap:"The e-sign envelope goes out the moment the deal enters this stage. Unsigned after 3 days? The owner gets a nudge task and the prospect a polite reminder. Unsigned after 7? The deal is flagged to the manager.",
-   deals:[
-     {name:"Meridian — Annual plan (86 seats)", co:"Meridian Logistics", amt:24000, date:"Jul 18", ownerI:"MW", av:"av-b", stall:false},
-     {name:"Cloudloom — Expansion",    co:"Cloudloom",      amt:12600, date:"Jul 15", ownerI:"DO", av:"av-c", stall:false, pastdue:true}
-   ]},
-  {name:"Closed Won", zap:"Winning a deal kicks off everything at once: the client enters the onboarding pipeline, the invoice is created in QuickBooks, and the whole team gets the Slack win notification 🎉 — zero manual handoff.",
-   deals:[
-     {name:"Atlas Freight — Multi-year", co:"Atlas Freight Co.", amt:42000, date:"Won Jun 26", ownerI:"MW", av:"av-b", stall:false, won:true},
-     {name:"Vantage — Initial rollout",  co:"Vantage Retail",    amt:19500, date:"Won Jun 12", ownerI:"AT", av:"av-d", stall:false, won:true}
-   ]}
-];
-
-const MAP_LANES = [
-  {title:"1 · Capture", nodes:[
-    {id:"forms", ico:"📋", t:"Website forms", s:"Demo request, pricing, ebook",
-     what:"Every form on the site feeds straight into HubSpot — no spreadsheets, no copy-paste. Hidden fields capture which page and campaign the lead came from.",
-     why:"If capture isn't automatic, leads leak. This guarantees every hand raised on the website becomes a record with its source attached."},
-    {id:"chat", ico:"💬", t:"Live chat bot", s:"Qualifies before it books",
-     what:"The chat bot answers instantly, asks two qualifying questions (team size, use case) and creates or updates the contact with the answers.",
-     why:"Speed matters most in the first 5 minutes. The bot engages while the visitor is still on the page — even at 2 AM."},
-    {id:"ads", ico:"📣", t:"LinkedIn Lead Ads sync", s:"Native ads integration",
-     what:"Leads from LinkedIn ad forms sync into HubSpot within minutes, tagged with the exact campaign and ad that produced them.",
-     why:"Ad spend finally becomes accountable — you can trace every closed deal back to the campaign that started it.",
-     auditFlag:"Disconnected since May 12 — 6 weeks of ad leads never reached the CRM"}
-  ]},
-  {title:"2 · Qualify", nodes:[
-    {id:"scoring", ico:"🎯", t:"Lead scoring workflow", s:"Behavior + firmographics",
-     what:"Every action adds or subtracts points — pricing page +10, demo form +15, careers page −5. Company size adds firmographic points on top.",
-     why:"Sales time is the most expensive resource in the company. Scoring makes sure it's spent on the leads showing real buying intent."},
-    {id:"gate", ico:"◆", t:"Score ≥ 50?", s:"The MQL gate", diamond:true,
-     what:"A simple, transparent threshold. At 50 points the contact's lifecycle stage flips to Marketing Qualified Lead automatically.",
-     why:"Marketing and sales stop arguing about lead quality when the definition of 'qualified' is a number both teams agreed on."},
-    {id:"nurture", ico:"🌱", t:"Nurture track", s:"5 emails over 3 weeks · below 50",
-     what:"Leads that aren't ready get a helpful email series — case studies, ROI calculator, comparison guide — and are re-scored on every open and click.",
-     why:"Around 80% of leads aren't ready to buy today. Nurture keeps them warm so they come back to YOU when they are.",
-     auditFlag:"0 enrollments in the last 90 days — the enrollment trigger was broken by a form rename"}
-  ]},
-  {title:"3 · Route", nodes:[
-    {id:"mql", ico:"⭐", t:"Mark as MQL", s:"Lifecycle stage updated",
-     what:"The lifecycle stage flips to MQL, timestamped. This single property drives the funnel report you saw in Reports.",
-     why:"Clean lifecycle data is what makes every funnel and attribution report trustworthy. One workflow owns this field — nothing else touches it.",
-     auditFlag:"Conflict: two workflows update Lifecycle stage and overwrite each other"},
-    {id:"rr", ico:"🔀", t:"Round-robin assignment", s:"By territory, instantly",
-     what:"New MQLs are distributed across the sales team evenly, respecting territories and working hours. Out-of-office reps are skipped automatically.",
-     why:"Leads answered in under 5 minutes convert dramatically better than leads answered in an hour. Instant routing is the cheapest revenue lift there is."},
-    {id:"alert", ico:"🔔", t:"Owner task + Slack alert", s:"'You have a hot lead'",
-     what:"The assigned rep gets a task with the lead's score breakdown and page history, plus a Slack ping with a one-click link to the record.",
-     why:"An assignment nobody notices is no assignment at all. The alert closes the loop between 'routed' and 'contacted'."}
-  ]},
-  {title:"4 · Sell", nodes:[
-    {id:"seq", ico:"📨", t:"Sales sequence", s:"5-touch, auto-pauses on reply",
-     what:"A personalized email + call cadence over 10 business days. The moment the prospect replies or books, the sequence stops itself.",
-     why:"Reps follow up 2–3 times and give up; sequences don't. And auto-pause means no embarrassing 'just bumping this' after they already answered."},
-    {id:"pipe", ico:"📊", t:"Pipeline automations", s:"Per-stage — see Deals ⚡",
-     what:"Each deal stage carries its own automation: prep tasks, required fields, demo follow-ups, contract nudges. Click the ⚡ icons on the Deals board to read each one.",
-     why:"The pipeline stops depending on individual discipline. Every deal gets the same best-practice treatment, every time."}
-  ]},
-  {title:"5 · Post-sale", nodes:[
-    {id:"onb", ico:"🚀", t:"Closed-won → Onboarding", s:"Second pipeline kicks off",
-     what:"Winning a deal automatically creates the onboarding project: kickoff task, welcome email with scheduling link, and a 30-60-90 day check-in cadence.",
-     why:"The most dangerous moment for churn is right after the sale. Automated onboarding means no client ever sits in silence wondering what happens next."},
-    {id:"qb", ico:"🧾", t:"QuickBooks invoice", s:"Created from deal amount",
-     what:"The invoice is generated in QuickBooks from the deal's amount and terms — finance never re-types what sales already entered.",
-     why:"Re-keying data between sales and finance is where errors and delays live. This removes the re-keying entirely."},
-    {id:"nps", ico:"💚", t:"NPS survey · day 30", s:"Detractors alert the CSM",
-     what:"Thirty days in, the client gets a one-question NPS survey. A low score instantly opens a ticket and alerts the customer success manager.",
-     why:"You hear about problems while they're still fixable — instead of in a cancellation email six months later."}
-  ]}
-];
-const MAP_EDGES = [
-  ["forms","scoring"],["chat","scoring"],["ads","scoring"],
-  ["scoring","gate"],["gate","mql"],["gate","nurture"],["nurture","scoring"],
-  ["mql","rr"],["rr","alert"],["alert","seq"],["seq","pipe"],
-  ["pipe","onb"],["onb","qb"],["onb","nps"]
-];
-
-const JOURNEY = [
-  {ico:"🔎", t:"Found BrightDesk via Google — landed on the pricing page", m:"Day 1 · Organic search", pts:10},
-  {ico:"📄", t:"Downloaded “The Support Ops Playbook” ebook", m:"Day 1 · Form submission", pts:8},
-  {ico:"✉️", t:"Opened welcome email", m:"Day 3 · Marketing email", pts:5},
-  {ico:"🖱️", t:"Clicked “Compare plans” link in email", m:"Day 3 · Email click", pts:7},
-  {ico:"🏢", t:"Firmographic match: Meridian Logistics has 240 employees", m:"Day 3 · Enrichment", pts:10},
-  {ico:"📋", t:"Submitted “Request a demo” form", m:"Day 8 · Form submission", pts:15},
-  {ico:"📅", t:"Booked a meeting with Marcus for Thursday", m:"Day 11 · Meetings tool", pts:20}
-];
-
-const TIMELINE = [
-  {mo:"June 2026", items:[
-    {ico:"📅", title:'<span class="who">Sarah Chen</span> booked a meeting: <b>BrightDesk demo — 86 seat rollout</b>', meta:"Today at 9:41 AM · Meetings tool · with Marcus Webb", snip:null},
-    {ico:"⚡", title:'Workflow <b>“MQL routing”</b> assigned this contact to <span class="who">Marcus Webb</span>', meta:"Today at 9:40 AM · Automation", snip:null},
-    {ico:"🎯", title:"HubSpot score crossed <b>50 → lifecycle stage set to MQL</b>", meta:"Today at 9:40 AM · Lead scoring", snip:null},
-    {ico:"📋", title:'<span class="who">Sarah Chen</span> submitted the form <b>“Request a demo”</b>', meta:"Jun 28 at 2:12 PM · Pricing page", snip:"“We're evaluating support platforms for an 86-person ops team. Timeline: this quarter.”"},
-    {ico:"🖱️", title:'Email click: <b>“Compare plans”</b> in <i>Welcome to BrightDesk</i>', meta:"Jun 23 at 8:05 AM · Marketing email", snip:null}
-  ]},
-  {mo:"May 2026", items:[
-    {ico:"✉️", title:'Email tracked: <span class="who">Sarah Chen</span> opened <b>“Welcome to BrightDesk”</b>', meta:"May 31 at 7:48 AM", snip:null},
-    {ico:"📄", title:'Downloaded ebook: <b>The Support Ops Playbook</b>', meta:"May 29 at 4:30 PM · Content offer", snip:null},
-    {ico:"🔎", title:"First visit — <b>Organic search → /pricing</b> (4 pages, 6 min)", meta:"May 29 at 4:22 PM · Website", snip:null}
-  ]}
-];
-
-const REPORTS = {
-  kpis:[
-    {label:"Revenue closed", value:"$486K", delta:"+18%", dir:"up", vs:"vs Q1"},
-    {label:"New MQLs", value:"640", delta:"+12%", dir:"up", vs:"vs Q1"},
-    {label:"Win rate", value:"24%", delta:"+3 pts", dir:"up", vs:"vs Q1"},
-    {label:"Avg. sales cycle", value:"32 days", delta:"−6 days", dir:"up", vs:"vs Q1"}
-  ],
-  funnel:[
-    {stage:"Sessions", v:48200},
-    {stage:"Leads", v:2140},
-    {stage:"MQLs", v:640},
-    {stage:"SQLs", v:210},
-    {stage:"Customers", v:51}
-  ],
-  sources:[
-    {name:"Organic search", v:148},
-    {name:"Paid ads", v:112},
-    {name:"Email marketing", v:86},
-    {name:"Referrals", v:74},
-    {name:"Outbound", v:66}
-  ],
-  trend:[
-    {m:"Jan", v:118},{m:"Feb", v:96},{m:"Mar", v:132},{m:"Apr", v:141},{m:"May", v:158},{m:"Jun", v:173}
-  ],
-  reps:[
-    {init:"MW", av:"av-b", name:"Marcus Webb", won:11, rev:"$168K", quota:112},
-    {init:"DO", av:"av-c", name:"Dana Okafor", won:9,  rev:"$142K", quota:95},
-    {init:"AT", av:"av-d", name:"Alex Torres", won:8,  rev:"$118K", quota:79},
-    {init:"KP", av:"av-e", name:"Kira Patel",  won:4,  rev:"$58K",  quota:39}
-  ]
-};
-
-const AUDIT = {
-  score:54, letter:"C−",
-  summary:"Based on 6 problem areas found across contacts, deals, automation and reporting. Every finding below is visible in the portal right now — flip through the tabs and look for the red flags.",
-  cats:[
-    {name:"Data hygiene", score:41, finds:[
-      [ "hi","312 duplicate contacts (like the 3 Sarah Chens) splitting activity across records"],
-      ["hi","23% of contacts have no owner — nobody is responsible for following up"],
-      ["med","47% missing lifecycle stage, so funnel reports undercount every stage"]
-    ]},
-    {name:"Automation health", score:48, finds:[
-      ["hi","6 of 14 workflows had zero enrollments in 90 days — silently dead"],
-      ["hi","Two workflows overwrite each other's lifecycle stage updates"],
-      ["med","LinkedIn Lead Ads sync disconnected since May 12 (6 weeks of lost leads)"]
-    ]},
-    {name:"Pipeline hygiene", score:58, finds:[
-      ["hi","$412K sitting in deals untouched for 90+ days"],
-      ["med","34% of open deals have a close date in the past"],
-      ["med","No required fields at stage entry — forecast built on half-filled deals"]
-    ]},
-    {name:"Reporting readiness", score:62, finds:[
-      ["med","No source attribution — nobody can say which channel pays for itself"],
-      ["lo","Dashboards exist but haven't been opened by leadership in 60 days"]
-    ]},
-    {name:"Team adoption", score:66, finds:[
-      ["med","Only 3 of 7 reps consistently log calls and meetings"],
-      ["lo","Sequences unused by half the team — follow-up depends on memory"]
-    ]}
-  ],
-  fixes:[
-    {fix:"Merge 312 duplicates, then turn on dedupe rules so they never come back", impact:"hi", effort:"Medium", when:"Week 1"},
-    {fix:"Fix or archive the 6 dead workflows; repair the LinkedIn ads sync", impact:"hi", effort:"Low", when:"Week 1"},
-    {fix:"Make one workflow the single owner of Lifecycle stage (kill the conflict)", impact:"hi", effort:"Low", when:"Week 2"},
-    {fix:"Required fields + stalled-deal alerts on every pipeline stage", impact:"hi", effort:"Low", when:"Week 2"},
-    {fix:"Assign owners to the 23% orphaned contacts via round-robin backfill", impact:"med", effort:"Low", when:"Week 3"},
-    {fix:"Source attribution reporting + a Monday-morning exec dashboard", impact:"med", effort:"Medium", when:"Week 4"}
-  ]
-};
-
-/* ============================================================
-   Helpers, state, router
-   ============================================================ */
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const state = {audit:false, view:"contacts", playedScoring:false, edgesDrawn:false};
-const money = n => "$" + n.toLocaleString();
-
-function toast(msg, ico="✅"){
+function toast(msg, ico="👋"){
   const t = document.createElement("div");
   t.className = "toast";
   t.innerHTML = `<span>${ico}</span><span>${msg}</span>`;
-  $("#toast-wrap").appendChild(t);
-  setTimeout(()=>{t.style.opacity="0"; t.style.transition="opacity .4s";}, 4200);
-  setTimeout(()=>t.remove(), 4700);
+  document.querySelector("#toast-wrap").appendChild(t);
+  setTimeout(()=>{t.style.opacity="0"; t.style.transition="opacity .4s";}, 4500);
+  setTimeout(()=>t.remove(), 5000);
 }
 
-function switchView(name){
-  state.view = name;
-  $$(".view").forEach(v=>v.classList.remove("active"));
-  $("#view-"+name).classList.add("active");
-  $$(".nav-item").forEach(b=>b.classList.toggle("active",
-    b.dataset.view===name || (name==="record" && b.dataset.view==="contacts")));
-  hidePopover();
-  if(name==="automation") requestAnimationFrame(drawEdges);
-  if(name==="scoring" && !state.playedScoring){ state.playedScoring = true; setTimeout(playJourney, 400); }
-  window.scrollTo({top:0});
-}
-
-/* ============================================================
-   Contacts list
-   ============================================================ */
-function renderContacts(){
-  let rows = CONTACTS.map(c=>({...c}));
-  if(state.audit){
-    // splice duplicate rows in after their sibling, blank out owners/stages
-    const out = [];
-    rows.forEach((c,i)=>{
-      if(AUDIT_BLANK_OWNERS.has(c.name)) c.owner = null;
-      if(AUDIT_BLANK_STAGES.has(c.name)){ c.stage = null; c.stageLabel = null; }
-      out.push(c);
-      AUDIT_CONTACT_ROWS.filter(d=>d.idx===i).forEach(d=>out.push(d));
-    });
-    rows = out;
-  }
-  const tbl = $("#contacts-table");
-  tbl.innerHTML = `<thead><tr>
-      <th>Name</th><th>Company</th><th>Email</th><th>Contact owner</th>
-      <th>Lifecycle stage</th><th>Score</th><th>Last activity</th></tr></thead>
-    <tbody>${rows.map(c=>`
-      <tr class="${c.dup?"dup-row":""}" data-name="${c.name}" data-rec="${c.record?1:0}">
-        <td><span style="display:flex;align-items:center;gap:9px;">
-          <span class="avatar ${c.av}" style="width:26px;height:26px;font-size:10px;">${c.init}</span>
-          <span class="cname">${c.name}</span>
-          ${c.dup?'<span class="flag-chip">DUPLICATE</span>':""}
-        </span></td>
-        <td>${c.co}</td>
-        <td>${c.email}</td>
-        <td>${c.owner ? c.owner : '<span class="cell-missing">— Unassigned</span>'}</td>
-        <td>${c.stage ? `<span class="pill ${c.stage}">${c.stageLabel}</span>` : '<span class="cell-missing">— Blank</span>'}</td>
-        <td>${c.score ?? '<span class="cell-missing">—</span>'}</td>
-        <td>${c.last}</td>
-      </tr>`).join("")}</tbody>`;
-  $("#contact-count").textContent = state.audit ? "· 4,318 records" : "· 4,006 records";
-  tbl.querySelectorAll("tbody tr").forEach(tr=>{
-    tr.addEventListener("click", ()=>{
-      if(tr.dataset.rec==="1") switchView("record");
-      else toast("In the full build every contact opens a complete record — this demo wires up <b>Sarah Chen</b>. Click her row!", "👆");
-    });
-  });
-}
-
-/* ============================================================
-   Contact record timeline
-   ============================================================ */
-function renderTimeline(){
-  const el = $("#timeline");
-  let html = "";
-  if(state.audit){
-    html += `<div class="tl-gap">⚠️ No activity logged for the last 47 days — while this deal was supposedly “in negotiation”</div>`;
-  }
-  TIMELINE.forEach(group=>{
-    html += `<div class="tl-month">${group.mo}</div>`;
-    group.items.forEach(it=>{
-      html += `<div class="tl-item"><span class="tl-ico">${it.ico}</span><div>
-        <div class="tl-title">${it.title}</div>
-        <div class="tl-meta">${it.meta}</div>
-        ${it.snip?`<div class="tl-snip">${it.snip}</div>`:""}
-      </div></div>`;
-    });
-  });
-  el.innerHTML = html;
-}
-
-/* ============================================================
-   Deals board + stage automation popovers
-   ============================================================ */
-function renderBoard(){
-  const board = $("#board");
-  let total = 0, count = 0;
-  board.innerHTML = STAGES.map((st,si)=>{
-    const sum = st.deals.reduce((a,d)=>a+(state.audit&&d.noamt?0:d.amt),0);
-    if(!st.deals[0].won){ total += sum; count += st.deals.length; }
-    return `<div class="stage-col">
-      <div class="stage-head">
-        <div class="st-top"><h4>${st.name}</h4>
-          <button class="zap-btn" data-zap="${si}" title="What happens automatically at this stage">⚡</button></div>
-        <div class="st-sub">${st.deals.length} deal${st.deals.length>1?"s":""} · ${money(sum)}</div>
-      </div>
-      ${st.deals.map(d=>{
-        const showStall = state.audit && d.stall;
-        const showNoAmt = state.audit && d.noamt;
-        const showPast  = state.audit && d.pastdue;
-        return `<div class="deal-card ${showStall?"stalled":""}">
-          <div class="dl-name">${d.name}</div>
-          <div class="dl-co">${d.co}</div>
-          <div class="dl-amt">${showNoAmt?'<span class="cell-missing">— No amount</span>':money(d.amt)}</div>
-          <div class="dl-foot">
-            <span class="${showPast?"date-bad":""}">${d.won?"✓ ":""}${d.date}${showPast?" ⚠":""}</span>
-            <span class="avatar ${d.av}">${d.ownerI}</span>
-          </div>
-          ${(showStall||showNoAmt||showPast)?`<div class="deal-chips">
-            ${showStall?`<span class="flag-chip">⏸ Stalled ${d.days} days</span>`:""}
-            ${showNoAmt?`<span class="flag-chip">Missing amount</span>`:""}
-            ${showPast?`<span class="warn-chip">Close date passed</span>`:""}
-          </div>`:""}
-        </div>`;
-      }).join("")}
-    </div>`;
-  }).join("");
-  $("#deal-total").textContent = `· ${count} open deals · ${money(total)} in pipeline`;
-  board.querySelectorAll(".zap-btn").forEach(b=>{
-    b.addEventListener("click", e=>{ e.stopPropagation(); showZapPopover(b, +b.dataset.zap); });
-  });
-}
-
-function showZapPopover(btn, si){
-  const pop = $("#popover");
-  $("#popover-content").innerHTML =
-    `<h5>⚡ Automated at this stage</h5><div>${STAGES[si].zap}</div>`;
-  pop.classList.add("show");
-  const r = btn.getBoundingClientRect();
-  let left = r.left + window.scrollX - 16;
-  left = Math.min(left, window.scrollX + document.documentElement.clientWidth - 340);
-  left = Math.max(left, 8);
-  pop.style.left = left + "px";
-  pop.style.top  = (r.bottom + window.scrollY + 10) + "px";
-  pop.querySelector(".pop-arrow").style.left = Math.max(12, r.left + window.scrollX - left + 4) + "px";
-}
-function hidePopover(){ $("#popover").classList.remove("show"); }
-document.addEventListener("click", e=>{
-  if(!e.target.closest("#popover") && !e.target.closest(".zap-btn")) hidePopover();
-});
-
-/* ============================================================
-   Automation map
-   ============================================================ */
-function renderMap(){
-  $("#map-lanes").innerHTML = MAP_LANES.map(lane=>`
-    <div><div class="lane-title">${lane.title}</div><div class="lane">
-      ${lane.nodes.map(n=>`
-        <div class="node ${n.diamond?"diamond":""}" data-node="${n.id}">
-          <span class="n-ico">${n.ico}</span>
-          <div class="n-title">${n.t}</div>
-          <div class="n-sub">${n.s}</div>
-          ${n.auditFlag?`<span class="n-badge audit-only flex"><span class="flag-chip">⚠ broken</span></span>`:""}
-        </div>`).join("")}
-    </div></div>`).join("");
-  $$("#map-lanes .node").forEach(nd=>{
-    nd.addEventListener("click", ()=>selectNode(nd.dataset.node));
-  });
-}
-function findNodeData(id){
-  for(const lane of MAP_LANES){ const n = lane.nodes.find(n=>n.id===id); if(n) return n; }
-}
-function selectNode(id){
-  $$("#map-lanes .node").forEach(n=>n.classList.toggle("sel", n.dataset.node===id));
-  const n = findNodeData(id);
-  $("#map-explain").innerHTML = `
-    <h4>${n.ico} ${n.t} ${n.auditFlag&&state.audit?'<span class="flag-chip">⚠ Broken</span>':""}</h4>
-    <div class="ex-what"><b>What it does:</b> ${n.what}</div>
-    <div class="ex-why"><b>Why it matters:</b> ${n.why}</div>
-    ${n.auditFlag&&state.audit?`<div class="audit-banner" style="margin:10px 0 0;">⚠️ <span><b>Audit finding:</b> ${n.auditFlag}.</span></div>`:""}`;
-}
-function drawEdges(){
-  const svg = $("#edge-svg");
-  const canvas = $("#map-canvas");
-  const cr = canvas.getBoundingClientRect();
-  svg.setAttribute("width", canvas.scrollWidth);
-  svg.setAttribute("height", canvas.scrollHeight);
-  let defs = `<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-    <path d="M0,0 L10,5 L0,10 z" fill="#9fb3c8"/></marker></defs>`;
-  let paths = "";
-  MAP_EDGES.forEach(([a,b])=>{
-    const na = canvas.querySelector(`[data-node="${a}"]`), nb = canvas.querySelector(`[data-node="${b}"]`);
-    if(!na||!nb) return;
-    const ra = na.getBoundingClientRect(), rb = nb.getBoundingClientRect();
-    const ax = ra.left-cr.left, ay = ra.top-cr.top, bx = rb.left-cr.left, by = rb.top-cr.top;
-    let d, dash = "";
-    if(bx > ax + ra.width - 6){                       // forward: right edge → left edge
-      const sx = ax+ra.width, sy = ay+ra.height/2, tx = bx-2, ty = by+rb.height/2;
-      const c = Math.max(24,(tx-sx)/2);
-      d = `M${sx},${sy} C${sx+c},${sy} ${tx-c},${ty} ${tx},${ty}`;
-    } else if(Math.abs(bx-ax) < 40 && by > ay){        // same lane, downward
-      const sx = ax+ra.width/2, sy = ay+ra.height, tx = bx+rb.width/2, ty = by-2;
-      d = `M${sx},${sy} C${sx},${sy+16} ${tx},${ty-16} ${tx},${ty}`;
-    } else if(Math.abs(bx-ax) < 40){                   // same lane, loop back upward
-      const sx = ax, sy = ay+ra.height/2, tx = bx-2, ty = by+rb.height/2;
-      d = `M${sx},${sy} C${sx-52},${sy} ${tx-52},${ty} ${tx},${ty}`;
-      dash = ' stroke-dasharray="5 4"';
-    } else {                                           // backward across lanes
-      const sx = ax, sy = ay+ra.height/2, tx = bx+rb.width, ty = by+rb.height/2;
-      d = `M${sx},${sy} C${sx-60},${sy} ${tx+60},${ty} ${tx},${ty}`;
-      dash = ' stroke-dasharray="5 4"';
-    }
-    paths += `<path d="${d}" fill="none" stroke="#9fb3c8" stroke-width="1.6"${dash} marker-end="url(#arr)"/>`;
-  });
-  svg.innerHTML = defs + paths;
-  state.edgesDrawn = true;
-}
-window.addEventListener("resize", ()=>{ if(state.view==="automation") drawEdges(); });
-
-/* ============================================================
-   Lead scoring replay
-   ============================================================ */
-let journeyTimers = [];
-function playJourney(){
-  journeyTimers.forEach(clearTimeout); journeyTimers = [];
-  const feed = $("#feed"); feed.innerHTML = "";
-  const scoreEl = $("#score-num"), fill = $("#thresh-fill"), flip = $("#stage-flip");
-  scoreEl.textContent = "0"; scoreEl.classList.remove("hot");
-  fill.style.width = "0%";
-  flip.innerHTML = '<span class="pill lead">Lead</span>';
-  let score = 0, crossed = false;
-  JOURNEY.forEach((ev,i)=>{
-    journeyTimers.push(setTimeout(()=>{
-      score += ev.pts;
-      const item = document.createElement("div");
-      item.className = "feed-item";
-      item.innerHTML = `<span class="f-ico">${ev.ico}</span>
-        <div class="f-txt"><div class="f-title">${ev.t}</div><div class="f-meta">${ev.m}</div></div>
-        <span class="pts-chip ${ev.pts<0?"neg":""}">${ev.pts>0?"+":""}${ev.pts}</span>`;
-      feed.appendChild(item);
-      requestAnimationFrame(()=>requestAnimationFrame(()=>item.classList.add("in")));
-      scoreEl.textContent = score;
-      fill.style.width = Math.min(100,score) + "%";
-      if(score>=50 && !crossed){
-        crossed = true;
-        scoreEl.classList.add("hot");
-        flip.innerHTML = '<span class="pill mql">★ Marketing Qualified Lead</span>';
-        journeyTimers.push(setTimeout(()=>{
-          const ms = document.createElement("div");
-          ms.className = "feed-item milestone";
-          ms.innerHTML = `<span class="f-ico">⭐</span>
-            <div class="f-txt"><div class="f-title">Crossed 50 points → lifecycle stage set to MQL automatically</div>
-            <div class="f-meta">Round-robin assigned to Marcus Webb · task created · Slack alert sent</div></div>
-            <span class="pts-chip">MQL</span>`;
-          feed.appendChild(ms);
-          requestAnimationFrame(()=>requestAnimationFrame(()=>ms.classList.add("in")));
-          toast("<b>Marcus Webb</b> was just notified in Slack: “Hot lead: Sarah Chen (75 pts) — booked demo Thursday.”", "🔔");
-        }, 450));
-      }
-    }, 650*(i+1)));
-  });
-}
-
-/* ============================================================
-   Reports — inline SVG charts (validated teal ramp)
-   ============================================================ */
-const RAMP = ["#33a9bd","#0091ae","#00758c","#005a6b"];   // ordinal, light→dark (validated)
-const ACCENT = "#0091ae";
-
-function roundedRightBar(x,y,w,h,r){
-  w = Math.max(w, r+1);
-  return `M${x},${y} h${w-r} a${r},${r} 0 0 1 ${r},${r} v${h-2*r} a${r},${r} 0 0 1 -${r},${r} h${-(w-r)} z`;
-}
-const vizTip = {
-  el:null,
-  show(html,x,y){ this.el.innerHTML = html; this.el.style.display="block"; this.move(x,y); },
-  move(x,y){ this.el.style.left = Math.min(x+14, innerWidth-170)+"px"; this.el.style.top = (y-34)+"px"; },
-  hide(){ this.el.style.display="none"; }
+/* ---------- services (rendered so icons stay tidy) ---------- */
+const ICON = {
+  box:'<path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8"/>',
+  bot:'<rect x="4" y="8" width="16" height="11" rx="2"/><path d="M12 8V4M9 4h6"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/>',
+  flow:'<circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M6 8.4v3a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-3M12 13.4v2.2"/>',
+  funnel:'<path d="M3 4h18l-7 8v7l-4 2v-9L3 4z"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/>',
+  phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+  pay:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  migrate:'<path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+  saas:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'
 };
+const SERVICES = [
+  ["box","var(--violet)","Industry snapshots","Complete niche setups — med spa, dental, real estate, home services — loaded into your sub-accounts."],
+  ["bot","var(--coral)","AI Employee & Conversation AI","Missed-call text-back, booking bots, review responses — with guardrails owners trust."],
+  ["flow","var(--azure)","Workflows & automation","Lead routing, nurture, reminders, pipeline automation that runs itself."],
+  ["funnel","var(--emerald)","Funnels & websites","Landing pages wired to calendars, forms and payments — not just pretty pages."],
+  ["cal","var(--pink)","Calendars & booking","Staff calendars, round-robin, durations, buffers, deposits at booking time."],
+  ["phone","var(--amber)","A2P 10DLC & phone setup","Registration, numbers, call tracking and compliant SMS that actually delivers."],
+  ["pay","var(--emerald)","Payments & invoicing","Text-to-pay, deposits, subscriptions and invoices inside the same conversation."],
+  ["migrate","var(--azure)","Migrations into GHL","Contacts, pipelines and automations moved in cleanly from HubSpot, Mailchimp, sheets."],
+  ["saas","var(--violet)","White-label SaaS setup","Agency view: SaaS configurator, sub-account templates, rebilling, onboarding."]
+];
+document.querySelector("#svc-grid").innerHTML = SERVICES.map(([ic,c,t,d])=>`
+  <div class="svc reveal">
+    <div class="svc-ico" style="background:linear-gradient(135deg,${c},color-mix(in srgb,${c} 55%,#fff))">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICON[ic]}</svg></div>
+    <b>${t}</b><span>${d}</span></div>`).join("");
 
-function renderKpis(){
-  $("#kpi-row").innerHTML = REPORTS.kpis.map(k=>`
-    <div class="card kpi">
-      <div class="k-label">${k.label}</div>
-      <div class="k-value">${k.value}</div>
-      <div class="k-delta ${k.dir}">${k.delta} <span class="vs">${k.vs}</span></div>
-    </div>`).join("");
+/* ---------- live feed in the hero console ---------- */
+const EVENTS = [
+  ["Missed call","Glow Aesthetics — texted back in 9s","2:47p","var(--coral)","M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"],
+  ["Booked","Lip filler · $50 deposit paid","2:53p","var(--emerald)","M20 6L9 17l-5-5"],
+  ["New lead","$99 dental funnel — reminders armed","9:14a","var(--azure)","M12 3v18M3 12h18"],
+  ["No-show","Rescue text sent · patient rebooked","11:05a","var(--amber)","M12 8v4l3 2M12 3a9 9 0 1 0 9 9"],
+  ["5★ review","Referral ask sent automatically","—","var(--violet)","M12 2l3 6 6 .9-4.5 4.3 1 6.3-5.5-3-5.5 3 1-6.3L3 8.9 9 8z"],
+  ["Recall due","6-month sequence started","—","var(--azure)","M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14"]
+];
+const feed = document.querySelector("#live-feed");
+let evi = 0;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function pushEvent(){
+  const [tag,sub,time,color,path] = EVENTS[evi % EVENTS.length]; evi++;
+  const el = document.createElement("div");
+  el.className = "feed-item";
+  el.innerHTML = `<div class="fi-ico" style="background:${color}">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${path}</svg></div>
+    <div class="fi-txt"><div class="fi-tag" style="color:${color}">${tag}</div><div class="fi-sub">${sub}</div></div>
+    <div class="fi-time">${time}</div>`;
+  feed.prepend(el);
+  while(feed.children.length > 4) feed.lastChild.remove();
+}
+if(reduce){ for(let i=0;i<4;i++) pushEvent(); }
+else { pushEvent(); pushEvent(); setInterval(pushEvent, 2100); }
+
+/* ---------- marquee ---------- */
+const CHIPS = ["Snapshots","AI Employee","Missed-call text-back","Funnels","Workflows","Calendars & booking","Text-to-pay","A2P 10DLC","Review engine","Recall & reactivation","Pipelines","White-label SaaS"];
+document.querySelector("#strip-track").innerHTML =
+  [...CHIPS, ...CHIPS].map(c=>`<span class="strip-chip"><span style="width:6px;height:6px;border-radius:50%;background:var(--azure);display:inline-block"></span>${c}</span>`).join("");
+
+/* ---------- hero network animation (canvas) ---------- */
+(function(){
+  const cv = document.querySelector("#net"); if(!cv) return;
+  const ctx = cv.getContext("2d");
+  let W,H,DPR,nodes,edges,pulses,raf;
+  const COLORS = ["#2f6bf6","#6d5ae6","#10b5a0","#ff6a5a","#f7a63b"];
+  function size(){
+    DPR = Math.min(devicePixelRatio||1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W*DPR; cv.height = H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  function build(){
+    const n = Math.max(9, Math.round(W/48));
+    nodes = Array.from({length:n},(_,i)=>({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.18, vy:(Math.random()-.5)*.18,
+      r:i%5===0?4:2.4, c:COLORS[i%COLORS.length]
+    }));
+    edges = [];
+    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
+      const d=Math.hypot(nodes[i].x-nodes[j].x, nodes[i].y-nodes[j].y);
+      if(d<90) edges.push([i,j]);
+    }
+    pulses = [];
+    for(let k=0;k<4;k++) spawnPulse();
+  }
+  function spawnPulse(){
+    if(!edges.length) return;
+    const e = edges[Math.floor(Math.random()*edges.length)];
+    pulses.push({a:e[0], b:e[1], t:Math.random(), sp:.006+Math.random()*.01, c:nodes[e[0]].c});
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    // edges
+    ctx.lineWidth = 1;
+    for(const [i,j] of edges){
+      const a=nodes[i], b=nodes[j];
+      const d=Math.hypot(a.x-b.x,a.y-b.y);
+      ctx.strokeStyle = `rgba(47,107,246,${Math.max(0,.16*(1-d/90))})`;
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    }
+    // nodes
+    for(const nd of nodes){
+      nd.x+=nd.vx; nd.y+=nd.vy;
+      if(nd.x<0||nd.x>W) nd.vx*=-1;
+      if(nd.y<0||nd.y>H) nd.vy*=-1;
+      ctx.beginPath(); ctx.fillStyle = nd.c+"cc"; ctx.arc(nd.x,nd.y,nd.r,0,7); ctx.fill();
+    }
+    // pulses
+    for(const p of pulses){
+      p.t += p.sp;
+      const a=nodes[p.a], b=nodes[p.b];
+      if(p.t>=1){ p.t=0; const e=edges[Math.floor(Math.random()*edges.length)]; p.a=e[0]; p.b=e[1]; p.c=nodes[e[0]].c; continue; }
+      const x=a.x+(b.x-a.x)*p.t, y=a.y+(b.y-a.y)*p.t;
+      ctx.beginPath(); ctx.fillStyle=p.c; ctx.arc(x,y,2.6,0,7); ctx.fill();
+      ctx.beginPath(); ctx.fillStyle=p.c+"33"; ctx.arc(x,y,6,0,7); ctx.fill();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function start(){ size(); build(); if(reduce){ frame(); cancelAnimationFrame(raf); ctx.clearRect(0,0,W,H); frame(); cancelAnimationFrame(raf);} else { cancelAnimationFrame(raf); frame(); } }
+  let rt; addEventListener("resize", ()=>{ clearTimeout(rt); rt=setTimeout(start,150); });
+  start();
+})();
+
+/* ---------- count-up on reveal ---------- */
+function countUp(el){
+  const target = +el.dataset.count, suffix = el.dataset.suffix||"";
+  if(reduce){ el.textContent = target+suffix; return; }
+  let v=0; const step = Math.max(1, Math.round(target/28));
+  const tick=()=>{ v=Math.min(target, v+step); el.textContent=v+suffix; if(v<target) requestAnimationFrame(tick); };
+  tick();
 }
 
-function renderFunnel(){
-  const data = REPORTS.funnel.filter(d=>d.stage!=="Sessions");
-  const max = data[0].v, W = 560, rowH = 46, labW = 96, barH = 20, plotW = W - labW - 78;
-  let rows = "";
-  data.forEach((d,i)=>{
-    const y = 8 + i*rowH;
-    const w = Math.max(4, d.v/max*plotW);
-    rows += `<text x="${labW-8}" y="${y+barH/2+4}" text-anchor="end" font-size="12" fill="#33475b" font-weight="600">${d.stage}</text>`;
-    rows += `<path d="${roundedRightBar(labW,y,w,barH,4)}" fill="${RAMP[i]}" class="hovmark" data-tip="<b>${d.stage}</b><br>${d.v.toLocaleString()} contacts"/>`;
-    rows += `<text x="${labW+w+8}" y="${y+barH/2+4}" font-size="12" fill="#33475b" font-weight="700" font-variant-numeric="tabular-nums">${d.v.toLocaleString()}</text>`;
-    if(i<data.length-1){
-      const conv = (data[i+1].v/d.v*100).toFixed(1);
-      rows += `<text x="${labW+2}" y="${y+barH+15}" font-size="10.5" fill="#7c98b6">↳ ${conv}% convert to ${data[i+1].stage}</text>`;
+/* ---------- scroll reveal ---------- */
+const io = new IntersectionObserver((ents)=>{
+  ents.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add("in");
+      e.target.querySelectorAll?.("[data-count]").forEach(countUp);
+      if(e.target.dataset && e.target.dataset.count) countUp(e.target);
+      io.unobserve(e.target);
     }
   });
-  $("#chart-funnel").innerHTML = `<svg viewBox="0 0 ${W} ${8+data.length*rowH}" role="img" aria-label="Lifecycle funnel">${rows}</svg>`;
-  $("#dt-funnel").innerHTML = `<table><tr><th>Stage</th><th class="num">Contacts</th><th class="num">Conv. from previous</th></tr>
-    ${data.map((d,i)=>`<tr><td>${d.stage}</td><td class="num">${d.v.toLocaleString()}</td>
-      <td class="num">${i? (d.v/data[i-1].v*100).toFixed(1)+"%" : "—"}</td></tr>`).join("")}</table>
-    <div style="font-size:11px;color:var(--hs-text-3);padding:6px 8px;">From 48,200 website sessions in Q2 → 2,140 leads captured.</div>`;
-}
-
-function renderSources(){
-  const data = REPORTS.sources, max = Math.max(...data.map(d=>d.v));
-  const W = 560, rowH = 37, labW = 120, barH = 18, plotW = W - labW - 74;
-  let rows = "";
-  data.forEach((d,i)=>{
-    const y = 8 + i*rowH, w = Math.max(4, d.v/max*plotW);
-    rows += `<text x="${labW-8}" y="${y+barH/2+4}" text-anchor="end" font-size="12" fill="#33475b">${d.name}</text>`;
-    rows += `<path d="${roundedRightBar(labW,y,w,barH,4)}" fill="${ACCENT}" class="hovmark" data-tip="<b>${d.name}</b><br>$${d.v}K closed revenue"/>`;
-    rows += `<text x="${labW+w+8}" y="${y+barH/2+4}" font-size="12" fill="#33475b" font-weight="700" font-variant-numeric="tabular-nums">$${d.v}K</text>`;
-  });
-  $("#chart-source").innerHTML = `<svg viewBox="0 0 ${W} ${10+data.length*rowH}" role="img" aria-label="Revenue by source">${rows}</svg>`;
-  $("#dt-source").innerHTML = `<table><tr><th>Source</th><th class="num">Closed revenue</th><th class="num">Share</th></tr>
-    ${data.map(d=>`<tr><td>${d.name}</td><td class="num">$${d.v}K</td><td class="num">${(d.v/486*100).toFixed(0)}%</td></tr>`).join("")}</table>`;
-}
-
-function renderTrend(){
-  const data = REPORTS.trend, W = 560, H = 225, L = 48, R = 62, T = 16, B = 30, yMax = 200;
-  const x = i => L + i*(W-L-R)/(data.length-1);
-  const y = v => T + (1 - v/yMax)*(H-T-B);
-  let grid = "", pts = "", hits = "";
-  [0,50,100,150,200].forEach(v=>{
-    grid += `<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" stroke="#e5ebf1" stroke-width="1"/>`;
-    grid += `<text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#516f90" font-variant-numeric="tabular-nums">$${v}K</text>`;
-  });
-  data.forEach((d,i)=>{
-    grid += `<text x="${x(i)}" y="${H-9}" text-anchor="middle" font-size="11" fill="#516f90">${d.m}</text>`;
-    hits += `<rect x="${x(i)-24}" y="${T}" width="48" height="${H-T-B}" fill="transparent" class="hovpt"
-      data-tip="<b>${d.m} 2026</b><br>$${d.v}K closed" data-cx="${x(i)}" data-cy="${y(d.v)}"/>`;
-  });
-  const line = data.map((d,i)=>`${i?"L":"M"}${x(i)},${y(d.v)}`).join(" ");
-  const last = data[data.length-1];
-  pts = `<circle cx="${x(data.length-1)}" cy="${y(last.v)}" r="5" fill="${ACCENT}" stroke="#fff" stroke-width="2"/>
-    <text x="${x(data.length-1)+10}" y="${y(last.v)+4}" font-size="12" font-weight="700" fill="#33475b">$${last.v}K</text>`;
-  $("#chart-trend").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Revenue by month">
-    ${grid}
-    <line id="trend-xhair" x1="0" y1="${T}" x2="0" y2="${H-B}" stroke="#9fb3c8" stroke-width="1" style="display:none;"/>
-    <path d="${line}" fill="none" stroke="${ACCENT}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle id="trend-dot" r="5" fill="${ACCENT}" stroke="#fff" stroke-width="2" style="display:none;"/>
-    ${pts}${hits}</svg>`;
-  $("#dt-trend").innerHTML = `<table><tr><th>Month</th><th class="num">Closed revenue</th></tr>
-    ${data.map(d=>`<tr><td>${d.m} 2026</td><td class="num">$${d.v}K</td></tr>`).join("")}</table>`;
-}
-
-function renderLeaderboard(){
-  $("#leaderboard").innerHTML = `<table class="hs-table" style="font-size:13px;">
-    <thead><tr><th>Rep</th><th>Deals won</th><th>Revenue</th><th style="width:38%;">Quota attainment</th></tr></thead>
-    <tbody>${REPORTS.reps.map(r=>`
-      <tr style="cursor:default;">
-        <td><span style="display:flex;align-items:center;gap:9px;">
-          <span class="avatar ${r.av}" style="width:26px;height:26px;font-size:10px;">${r.init}</span>${r.name}</span></td>
-        <td>${r.won}</td><td><b>${r.rev}</b></td>
-        <td><span style="display:flex;align-items:center;gap:10px;">
-          <span class="lb-bar" style="flex:1;"><div style="width:${Math.min(100,r.quota)}%;"></div></span>
-          <b style="font-variant-numeric:tabular-nums;">${r.quota}%</b></span></td>
-      </tr>`).join("")}</tbody></table>`;
-}
-
-function bindChartInteractions(){
-  vizTip.el = $("#viz-tip");
-  $$(".hovmark").forEach(m=>{
-    m.addEventListener("mousemove", e=>vizTip.show(m.dataset.tip, e.clientX, e.clientY));
-    m.addEventListener("mouseleave", ()=>vizTip.hide());
-  });
-  $$(".hovpt").forEach(m=>{
-    m.addEventListener("mousemove", e=>{
-      vizTip.show(m.dataset.tip, e.clientX, e.clientY);
-      const xh = $("#trend-xhair"), dot = $("#trend-dot");
-      xh.style.display = "block"; xh.setAttribute("x1", m.dataset.cx); xh.setAttribute("x2", m.dataset.cx);
-      dot.style.display = "block"; dot.setAttribute("cx", m.dataset.cx); dot.setAttribute("cy", m.dataset.cy);
-    });
-    m.addEventListener("mouseleave", ()=>{
-      vizTip.hide(); $("#trend-xhair").style.display = "none"; $("#trend-dot").style.display = "none";
-    });
-  });
-  $$(".data-toggle").forEach(b=>{
-    b.addEventListener("click", ()=>{
-      const t = $("#"+b.dataset.target);
-      t.classList.toggle("show");
-      b.textContent = t.classList.contains("show") ? "hide data" : "view data";
-    });
-  });
-}
+},{threshold:.15});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+document.querySelectorAll(".metric b[data-count]").forEach(el=>io.observe(el));
+/* safety net: never let a reveal element stay invisible if the observer never fires */
+setTimeout(()=>document.querySelectorAll(".reveal:not(.in)").forEach(el=>{
+  el.classList.add("in");
+  el.querySelectorAll?.("[data-count]").forEach(countUp);
+}), 2600);
 
 /* ============================================================
-   Audit report
+   URL personalization — ?for=Business  &by=Name  &type=dental
    ============================================================ */
-function renderAuditReport(){
-  const C = 2*Math.PI*58;
-  const barColor = s => s<50 ? "var(--hs-red)" : s<65 ? "var(--hs-yellow)" : "var(--hs-green)";
-  $("#audit-report").innerHTML = `
-    <div class="card audit-head">
-      <div class="grade-ring">
-        <svg width="140" height="140" viewBox="0 0 140 140">
-          <circle cx="70" cy="70" r="58" fill="none" stroke="#eaf0f6" stroke-width="11"/>
-          <circle cx="70" cy="70" r="58" fill="none" stroke="var(--hs-red)" stroke-width="11"
-            stroke-linecap="round" stroke-dasharray="${(AUDIT.score/100*C).toFixed(1)} ${C.toFixed(1)}"/>
-        </svg>
-        <div class="g-txt"><div class="g-num">${AUDIT.score}</div><div class="g-of">/ 100</div></div>
-      </div>
-      <div>
-        <h2>Portal audit — ${BRAND.clientName} <span class="grade-letter">${AUDIT.letter}</span></h2>
-        <div class="a-sub">${AUDIT.summary}</div>
-      </div>
-    </div>
-    <div class="cat-grid">
-      ${AUDIT.cats.map(c=>`
-        <div class="card cat-card">
-          <div class="cat-top"><h4>${c.name}</h4><span class="cat-score" style="color:${c.score<50?"#c02b33":c.score<65?"#b88217":"var(--hs-green-dark)"};">${c.score}</span></div>
-          <div class="cat-bar"><div style="width:${c.score}%;background:${barColor(c.score)};"></div></div>
-          ${c.finds.map(([sev,txt])=>`<div class="cat-find"><span class="sev ${sev}"></span><span>${txt}</span></div>`).join("")}
-        </div>`).join("")}
-    </div>
-    <div class="card">
-      <div class="rc-head"><h4>The fix list — in the order I'd do it</h4><span style="font-size:12px;color:var(--hs-text-2);">30-day plan</span></div>
-      <table class="hs-table fix-table">
-        <thead><tr><th>Fix</th><th>Impact</th><th>Effort</th><th>When</th></tr></thead>
-        <tbody>${AUDIT.fixes.map((f,i)=>`
-          <tr style="cursor:default;"><td><b>${i+1}.</b> ${f.fix}</td>
-          <td class="impact-${f.impact}">${f.impact==="hi"?"High":"Medium"}</td>
-          <td class="effort">${f.effort}</td><td><b>${f.when}</b></td></tr>`).join("")}</tbody>
-      </table>
-    </div>
-    <div class="cta-band">
-      <div><h3>Want this report for your actual portal?</h3>
-      <p>${BRAND.ctaLine}</p></div>
-      <button class="btn" id="cta-book">Book a walkthrough with ${BRAND.consultant.split(" ")[0]}</button>
-    </div>`;
-  $("#cta-book").addEventListener("click", ()=>toast("In your live version this button links to your real meeting scheduler.", "📅"));
+function cleanParam(v, max){
+  if(!v) return "";
+  return v.replace(/<[^>]*>/g,"").replace(/[^\p{L}\p{N} &'’.\-]/gu,"").trim().slice(0, max||48);
 }
+function personalize(){
+  const p = new URLSearchParams(location.search);
+  const forName = cleanParam(p.get("for"), 48);
+  const byName  = cleanParam(p.get("by"), 40);
+  const type    = cleanParam(p.get("type") || p.get("niche"), 30).toLowerCase();
+  const consultant = byName || "Gurmeet Singh";
 
-/* ============================================================
-   Audit mode toggle
-   ============================================================ */
-function setAudit(on, silent){
-  state.audit = on;
-  document.body.classList.toggle("audit", on);
-  $("#audit-switch").classList.toggle("on", on);
-  renderContacts(); renderBoard(); renderTimeline();
-  if(state.view==="automation") requestAnimationFrame(drawEdges);
-  const sel = $("#map-lanes .node.sel"); if(sel) selectNode(sel.dataset.node);
-  if(!silent){
-    toast(on
-      ? "<b>Audit mode on.</b> Same portal — now shown the way most portals really look. Red flags are everywhere; the Audit tab has the full graded report."
-      : "<b>Audit mode off.</b> Back to the clean build.", on ? "🔍" : "✨");
+  if(byName){
+    document.querySelectorAll(".swap-consultant").forEach(el=>el.textContent = consultant.split(" ")[0]);
+    document.querySelectorAll(".swap-consultant-sub").forEach(el=>el.textContent = "GoHighLevel Systems");
+    const brandName = document.querySelector(".brand div");
+    if(brandName) brandName.childNodes[0].textContent = consultant;
+    const b2 = document.querySelector("#book-btn2");
+    if(b2) b2.innerHTML = "Book a call with <span class='swap-consultant'>"+consultant.split(" ")[0]+"</span>";
+  }
+
+  if(forName){
+    const rib = document.createElement("div");
+    rib.className = "for-ribbon";
+    rib.innerHTML = `Prepared for <b></b> — a live preview by <span class="c-name"></span>. Everything below is interactive.`;
+    rib.querySelector("b").textContent = forName;
+    rib.querySelector(".c-name").textContent = consultant;
+    document.body.insertBefore(rib, document.body.firstChild);
+    const eb = document.querySelector("#hero-eyebrow");
+    if(eb) eb.innerHTML = `<span class="live-dot"></span> Prepared for ${forName}`;
+    const lede = document.querySelector("#hero-lede");
+    if(lede) lede.innerHTML = `<b>${forName}</b> — here's what I'd build for you, not a pitch about it. I'm <b>${consultant}</b>, and every system below is live and clickable, each with a two-minute guided tour. Open the one closest to your business.`;
+    document.title = `${forName} — GoHighLevel demos by ${consultant}`;
+  }
+
+  if(location.search){
+    document.querySelectorAll('.demo-card a[href$=".html"]').forEach(a=>{
+      a.href = a.getAttribute("href").split("?")[0] + location.search;
+    });
+  }
+
+  const hint = (type + " " + forName).toLowerCase();
+  if(hint.trim()){
+    const cards = [...document.querySelectorAll(".demo-card")];
+    let best=null, bestScore=0;
+    cards.forEach(card=>{
+      const words = (card.dataset.niche||"").split(/\s+/);
+      let score = 0;
+      words.forEach(w=>{ if(w && hint.includes(w)) score++; });
+      if(score>bestScore){ bestScore=score; best=card; }
+    });
+    if(best && bestScore>0) best.classList.add("match");
   }
 }
+personalize();
 
-/* ============================================================
-   Guided tour
-   ============================================================ */
-const TOUR = [
-  {center:true, title:"Welcome to a complete HubSpot build 👋",
-   body:`This is a fully built-out HubSpot portal for <b>BrightDesk</b>, a fictional B2B software company — exactly the way I deliver it to real clients. In the next two minutes you'll see the CRM, the pipeline, every automation, lead scoring and reporting.<br><br>Use <b>Next</b> to move through, or explore freely afterwards.`},
-  {view:"contacts", target:"#contacts-table", title:"Clean data, automatically",
-   body:"Every contact has an owner, a lifecycle stage and a score — kept accurate by automation, not by discipline. This is the foundation everything else stands on."},
-  {view:"record", target:"#rec-left", title:"The 360° contact record",
-   body:"One glance tells a rep everything: who Sarah is, where she came from (organic search → pricing page), her score, and her stage. No spreadsheet archaeology before a call."},
-  {view:"record", target:"#stripe-card", title:"Custom cards — developer-level work",
-   body:"These two cards don't exist in a default HubSpot portal. They're <b>custom UI extensions</b> I build: live Stripe billing and product usage, shown right on the record so reps never tab-switch. This is what separates a configured portal from an engineered one."},
-  {view:"deals", target:".stage-col:nth-child(4) .stage-head", title:"A pipeline that works by itself",
-   body:"Each stage carries automation — see the ⚡ on every column. In <b>Contract Sent</b>, for example: the e-sign envelope goes out instantly, and unsigned contracts trigger polite reminders automatically. Click any ⚡ after the tour.",
-   pre:()=>{ const b = $$('.zap-btn')[3]; if(b) setTimeout(()=>showZapPopover(b,3), 400); }},
-  {view:"automation", target:"#map-canvas", title:"Your entire system on one page",
-   body:"Every workflow in the portal, drawn as one map — from first website visit to the QuickBooks invoice. HubSpot itself can't show you this view. Every client of mine gets one, so you always know exactly what your system does."},
-  {view:"automation", target:"#map-explain", title:"Plain English, not jargon",
-   body:"Click any step and it explains itself — what it does, and why it exists in business terms. You should never have to take a consultant's word for what your own automation does.",
-   pre:()=>selectNode("rr")},
-  {view:"scoring", target:".score-hero", title:"Watch a lead become an MQL",
-   body:"This is Sarah's real 11-day journey replayed: every pricing-page visit and email click adds points, and the moment she crosses 50, sales gets pinged — while her interest is hot.",
-   pre:()=>playJourney()},
-  {view:"reports", target:"#kpi-row", title:"Numbers a founder actually opens",
-   body:"Revenue, MQLs, win rate, sales cycle — with quarter-over-quarter movement. Every chart below is hoverable and has a “view data” table behind it."},
-  {view:"reports", target:"#chart-funnel-card", title:"The funnel — powered by clean data",
-   body:"Remember the lifecycle stages from the Contacts screen? This funnel is why they matter: leads → MQLs → SQLs → customers with conversion at every step. Garbage stages = garbage funnel. Clean stages = this."},
-  {view:"contacts", target:"#contacts-table", title:"Now — the same portal, unmaintained 🔍",
-   body:"I've flipped on <b>Audit mode</b>. Duplicates, orphaned contacts, blank stages — this is what most portals look like when I first open them. Browse any tab and you'll find red flags everywhere.",
-   pre:()=>{ if(!state.audit) setAudit(true, true); }},
-  {view:"audit", target:"#audit-report", title:"…and the audit that fixes it",
-   body:"Every problem found, graded across five areas, with a prioritized 30-day fix plan. This is the exact deliverable I produce for real portals in week one."},
-  {center:true, title:"That's the demo — thanks for the two minutes 🙌",
-   body:`Everything you just clicked through — the clean CRM, custom cards, pipeline automation, the map, scoring, reporting and the audit — is what I build for clients on real portals.<br><br><b>Keep exploring:</b> flip Audit mode on and off in the top bar, click the ⚡ icons, replay Sarah's journey.`,
-   pre:()=>{ if(state.audit) setAudit(false, true); }}
-];
-let tourIdx = -1;
-const hl = $("#tour-hl"), tip = $("#tour-tip");
+/* ---------- CONFIG-driven buttons ---------- */
+const ca = document.querySelector("#clientapp-btn");
+if(CONFIG.clientAppUrl){ ca.href = CONFIG.clientAppUrl; if(location.search) ca.href += (CONFIG.clientAppUrl.includes("?")?"&":"?")+location.search.slice(1); }
+else ca.addEventListener("click", e=>{ e.preventDefault();
+  toast("Paste your existing client-app demo URL into <b>CONFIG.clientAppUrl</b> at the bottom of this file and this button goes live.", "🔧"); });
 
-function tourShow(i){
-  if(i<0 || i>=TOUR.length) return tourEnd();
-  tourIdx = i;
-  const st = TOUR[i];
-  if(st.view && state.view!==st.view) switchView(st.view);
-  if(st.pre) st.pre();
-  setTimeout(()=>{
-    const btns = `<div class="t-btns">
-      <button class="t-skip" id="t-skip">End tour</button>
-      ${i>0?'<button class="btn secondary sm" id="t-back">Back</button>':""}
-      <button class="btn sm" id="t-next">${i===TOUR.length-1?"Finish ✓":"Next →"}</button></div>`;
-    tip.innerHTML = `<div class="t-step">Step ${i+1} of ${TOUR.length}</div><h4>${st.title}</h4><p>${st.body}</p>${btns}`;
-    if(st.center){
-      hl.style.display = "block";
-      hl.style.boxShadow = "0 0 0 9999px rgba(24,42,58,.62)";
-      hl.style.left = "50%"; hl.style.top = "40%"; hl.style.width = "0"; hl.style.height = "0";
-      tip.classList.add("centered");
-      tip.style.left = ""; tip.style.top = "";
-      tip.style.display = "block";
-    } else {
-      tip.classList.remove("centered");
-      const el = document.querySelector(st.target);
-      if(!el){ return tourShow(i+1); }
-      el.scrollIntoView({block:"center", behavior:"instant"});
-      const r = el.getBoundingClientRect();
-      hl.style.display = "block";
-      hl.style.boxShadow = "0 0 0 4px rgba(255,122,89,.9), 0 0 0 9999px rgba(24,42,58,.62)";
-      hl.style.left = (r.left+scrollX-6)+"px"; hl.style.top = (r.top+scrollY-6)+"px";
-      hl.style.width = (r.width+12)+"px"; hl.style.height = (r.height+12)+"px";
-      tip.style.display = "block";
-      const tw = 330, th = tip.offsetHeight || 200;
-      let tx = Math.min(Math.max(12, r.left+scrollX), scrollX+document.documentElement.clientWidth-tw-16);
-      let ty = r.bottom + scrollY + 16;
-      if(r.bottom + th + 30 > innerHeight){ // not enough room below → place above
-
-        ty = r.top + scrollY - th - 16;
-        if(ty < scrollY + 8) ty = r.bottom + scrollY + 16;
-      }
-      tip.style.left = tx+"px"; tip.style.top = ty+"px";
-    }
-    $("#t-next").onclick = ()=>tourShow(tourIdx+1===TOUR.length?-1:tourIdx+1);
-    const bb = $("#t-back"); if(bb) bb.onclick = ()=>tourShow(tourIdx-1);
-    $("#t-skip").onclick = tourEnd;
-  }, st.view ? 350 : 60);
-}
-function tourEnd(){
-  tourIdx = -1;
-  hl.style.display = "none"; tip.style.display = "none";
-  hidePopover();
-}
-document.addEventListener("keydown", e=>{
-  if(tourIdx<0) return;
-  if(e.key==="Escape") tourEnd();
-  if(e.key==="ArrowRight") tourShow(Math.min(tourIdx+1, TOUR.length-1));
-  if(e.key==="ArrowLeft") tourShow(Math.max(tourIdx-1, 0));
+["#book-btn","#book-btn-hero","#book-btn2"].forEach(sel=>{
+  const b = document.querySelector(sel); if(!b) return;
+  b.addEventListener("click", ()=>{
+    if(CONFIG.bookingUrl) window.open(CONFIG.bookingUrl, "_blank");
+    else toast("Paste your real calendar link into <b>CONFIG.bookingUrl</b> and this button opens your live booking page.", "📅");
+  });
 });
-window.addEventListener("resize", ()=>{ if(tourIdx>=0) tourShow(tourIdx); });
-
-/* ============================================================
-   Init
-   ============================================================ */
-function init(){
-  $("#db-by").textContent = `— prepared by ${BRAND.consultant} · ${BRAND.title}`;
-  $("#foot-brand").textContent = ` Demo prepared by ${BRAND.consultant}, ${BRAND.title}.`;
-  document.title = `${BRAND.clientName} — Interactive HubSpot Portal Demo by ${BRAND.consultant}`;
-
-  $$(".nav-item").forEach(b=>b.addEventListener("click", ()=>switchView(b.dataset.view)));
-  $$("[data-goto]").forEach(b=>b.addEventListener("click", ()=>switchView(b.dataset.goto)));
-  $("#audit-switch").addEventListener("click", ()=>setAudit(!state.audit));
-  $("#audit-cta").addEventListener("click", ()=>{ setAudit(true); });
-  $("#tour-start").addEventListener("click", ()=>tourShow(0));
-
-  renderContacts(); renderTimeline(); renderBoard(); renderMap();
-  renderKpis(); renderFunnel(); renderSources(); renderTrend(); renderLeaderboard();
-  bindChartInteractions(); renderAuditReport();
-
-  setTimeout(()=>toast(`Welcome! This is a live demo — click anything. For the full story, hit <b>“▶ Start guided tour”</b> in the top bar.`, "👋"), 900);
-}
-init();
 </script>
 </body>
 </html>
